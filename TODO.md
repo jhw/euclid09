@@ -1,5 +1,8 @@
 ### short
 
+- parse_line should support default values
+- randomise_arrangement should have default values 0-f
+
 - implement checkout at cli level
 
 ### medium
