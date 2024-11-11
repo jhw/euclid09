@@ -1,7 +1,5 @@
 ### short
 
-- github project
-
 - tests
 
 ### medium
@@ -37,5 +35,6 @@
 
 ### done
 
+- github project
 - setup.py
 
