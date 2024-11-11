@@ -1,8 +1,8 @@
 ### short
 
-### medium
+- implement checkout at cli level
 
-- git checkout
+### medium
 
 ### sv
 
@@ -34,6 +34,7 @@
 
 ### done
 
+- git checkout
 - fix failing tests
 - tests
 - github project

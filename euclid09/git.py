@@ -62,6 +62,21 @@ class Git:
         logging.info(f"HEAD is {new_commit.commit_id}")
         return new_commit.commit_id
 
+    def checkout(self, commit_id_str):
+        for commit in self.commits:
+            if str(commit.commit_id) == commit_id_str:
+                new_commit = Commit(commit_id=CommitId.randomise(),
+                                    content=commit.content.clone())
+                self.commits = self.commits[:self.head_index + 1]
+                self.commits.append(new_commit)
+                self.head_index += 1
+                self.redo_stack.clear()
+                logging.info(f"Checked out to new commit at HEAD: {new_commit.commit_id}")
+                return new_commit.commit_id
+
+        # Log a warning if the commit is not found
+        logging.warning(f"Commit {commit_id_str} not found.")
+    
     def undo(self):
         if self.head_index > 0:
             self.redo_stack.append(self.commits[self.head_index])

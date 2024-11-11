@@ -3,6 +3,7 @@ from euclid09.git import Git, CommitId
 
 from unittest.mock import patch, mock_open
 
+import itertools
 import json
 import os
 import shutil
@@ -35,6 +36,25 @@ class GitTest(unittest.TestCase):
         self.assertEqual(self.git.head.commit_id, commit_id)
         self.assertIn("random-slug", str(commit_id))
 
+    def unique_slug_generator():
+        for i in itertools.count(1):
+            yield f"slug-{i}"
+
+    @patch("euclid09.git.random_name", side_effect=unique_slug_generator())
+    @patch("euclid09.model.Patches.clone", return_value=Patches([]))
+    def test_checkout(self, mock_clone, mock_random_name):
+        first_commit_id = self.git.commit(content=self.sample_content)
+        second_commit_id = self.git.commit(content=self.sample_content)
+        with self.assertLogs(level="INFO") as log:
+            new_commit_id = self.git.checkout(str(first_commit_id))
+            self.assertIsNotNone(new_commit_id)
+            self.assertEqual(len(self.git.commits), 3)
+            self.assertEqual(self.git.head.commit_id, new_commit_id)
+            self.assertIn("Checked out to new commit at HEAD", log.output[0])
+        with self.assertLogs(level="WARNING") as log:
+            self.git.checkout("non-existent-id")
+            self.assertIn("Commit non-existent-id not found", log.output[0])
+        
     def test_undo(self):
         self.git.commit(content=self.sample_content)
         self.git.commit(content=self.sample_content)
