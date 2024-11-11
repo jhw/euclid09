@@ -1,11 +1,10 @@
 ### short
 
-- tests
+- fix failing tests
 
 ### medium
 
 - git checkout
-- include action as commit message
 
 ### sv
 
@@ -15,12 +14,17 @@
 - pool tag_mapping arg should be renamed tag_patterns
 - update sample909 demo
 
+### thoughts
+
+- include action as commit message?
+- blind/unrendered commits?
+
 ### gists
 
 - pico glitch samples
 - decompiler
 - freezing
-- polly vocoder
+- polly vocals + sv vocoder
 - resampling
 - 303 slide
 
@@ -29,12 +33,10 @@
 - kicker
 - city dreams bass
 
-### thoughts
-
-- blind/unrendered commits?
 
 ### done
 
+- tests
 - github project
 - setup.py
 

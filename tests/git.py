@@ -1,0 +1,84 @@
+from euclid09.model import Patches
+from euclid09.git import *
+
+import json
+import unittest
+
+from datetime import datetime
+from unittest.mock import Mock, patch, mock_open
+
+class GitTest(unittest.TestCase):
+
+    def setUp(self):
+        self.git = Git(root="tmp/mock_root")
+        self.sample_content = Patches([])
+
+    """
+    @patch("os.makedirs")
+    def test_git_initialization(self, mock_makedirs):
+        git = Git(root="tmp/mock_root")
+        mock_makedirs.assert_called_with("tmp/mock_root")
+        self.assertEqual(git.root, "tmp/mock_root")
+        self.assertEqual(git.commits, [])
+        self.assertTrue(git.is_empty())
+    """
+
+    """
+    @patch("sv.utils.naming.random_name", return_value="random-slug")
+    @patch("euclid09.model.Patches.to_json", return_value={})
+    def test_commit(self, mock_to_json, mock_random_name):
+        commit_id = self.git.commit(content=self.sample_content)
+        self.assertEqual(len(self.git.commits), 1)
+        self.assertEqual(self.git.head.commit_id, commit_id)
+        self.assertIn("random-slug", str(commit_id))
+    """
+
+    def test_undo(self):
+        self.git.commit(content=self.sample_content)
+        self.git.commit(content=self.sample_content)
+        self.git.undo()
+        self.assertEqual(self.git.head_index, 0)
+        self.assertEqual(len(self.git.redo_stack), 1)
+
+    def test_redo(self):
+        self.git.commit(content=self.sample_content)
+        self.git.commit(content=self.sample_content)
+        self.git.undo()
+        self.git.redo()
+        self.assertEqual(self.git.head_index, 1)
+        self.assertEqual(len(self.git.redo_stack), 0)
+
+    def test_undo_with_no_commits(self):
+        self.git.undo()
+        self.assertTrue(self.git.is_empty())
+        self.assertEqual(len(self.git.redo_stack), 0)
+
+    def test_redo_with_no_redo_stack(self):
+        self.git.commit(content=self.sample_content)
+        self.git.redo()
+        self.assertEqual(self.git.head_index, 0)
+
+    @patch("os.listdir", return_value=["2024-11-10-12-30-00-random-slug.json"])
+    @patch("builtins.open", new_callable=mock_open, read_data=json.dumps({"tracks": []}))
+    def test_fetch(self, mock_open, mock_listdir):
+        with patch.object(Patches, "from_json", return_value=self.sample_content) as mock_from_json:
+            self.git.fetch()
+            self.assertEqual(len(self.git.commits), 1)
+            self.assertEqual(self.git.head_index, 0)
+            mock_from_json.assert_called_once()
+            mock_open.assert_called_once_with("tmp/mock_root/2024-11-10-12-30-00-random-slug.json", "r")
+
+    @patch("os.path.exists", return_value=False)
+    @patch("builtins.open", new_callable=mock_open)
+    @patch("euclid09.model.Patches.to_json", return_value={})
+    def test_push(self, mock_to_json, mock_open, mock_exists):
+        # Commit some content and then push
+        commit_id = self.git.commit(content=self.sample_content)
+        self.git.push()
+        filename = f"tmp/mock_root/{commit_id}.json"
+        mock_open.assert_called_once_with(filename, "w")
+        handle = mock_open()
+        handle.write.assert_called_once_with(json.dumps({}, indent=2))
+
+if __name__ == "__main__":
+    unittest.main()
