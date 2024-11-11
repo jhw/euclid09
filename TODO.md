@@ -1,7 +1,5 @@
 ### short
 
-- fix failing tests
-
 ### medium
 
 - git checkout
@@ -36,6 +34,7 @@
 
 ### done
 
+- fix failing tests
 - tests
 - github project
 - setup.py

@@ -4,7 +4,6 @@ from unittest.mock import Mock
 
 import unittest
 
-
 class ParseTest(unittest.TestCase):
 
     def test_is_abbrev(self):

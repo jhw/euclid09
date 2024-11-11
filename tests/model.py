@@ -81,26 +81,5 @@ class ModelTest(unittest.TestCase):
         for p1, p2 in zip(patches, deserialized):
             self.assertEqual(len(p1.tracks), len(p2.tracks))
 
-    """
-    def test_render(self):
-        container = Mock()
-        tracks = Tracks.randomise(self.pool, self.tracks, self.tag_mapping)
-        patches = Patches.randomise(self.pool, self.tracks, self.tag_mapping, n=3)
-        tracks.render(container=container, levels=self.levels)
-        patches.render(banks=Mock(), levels=self.levels)
-        container.spawn_patch.assert_called()
-    """
-
-    """
-    @patch("euclid09.generators.Beat", return_value=iter([Mock()]))
-    def test_render(self, mock_beat):
-        container = Mock()
-        tracks = Tracks.randomise(self.pool, self.tracks, self.tag_mapping)
-        patches = Patches.randomise(self.pool, self.tracks, self.tag_mapping, n=3)
-        tracks.render(container=container, levels=self.levels)
-        patches.render(banks=Mock(), levels=self.levels)
-        container.spawn_patch.assert_called()
-    """
-    
 if __name__ == "__main__":
     unittest.main()
