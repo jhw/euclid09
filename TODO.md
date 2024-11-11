@@ -1,7 +1,7 @@
 ### short
 
 - github project
-- setup.py
+
 - tests
 
 ### medium
@@ -36,4 +36,6 @@
 - blind/unrendered commits?
 
 ### done
+
+- setup.py
 
