@@ -2,11 +2,11 @@
 
 - github project
 - setup.py
-- git checkout
 - tests
 
 ### medium
 
+- git checkout
 - include action as commit message
 
 ### sv
@@ -22,7 +22,7 @@
 - pico glitch samples
 - decompiler
 - freezing
-- polly vocals
+- polly vocoder
 - resampling
 - 303 slide
 
@@ -32,6 +32,8 @@
 - city dreams bass
 
 ### thoughts
+
+- blind/unrendered commits?
 
 ### done
 
