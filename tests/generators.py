@@ -10,7 +10,6 @@ import unittest
 class GeneratorTest(unittest.TestCase):
     
     def setUp(self):
-        # Set up any constants or sample data
         self.n_steps = 16
         self.rand = {"volume": random.Random(), "sample": random.Random(), "beat": random.Random(), "fx": random.Random()}
         self.dry_level = 0.8
