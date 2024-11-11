@@ -279,7 +279,7 @@ if __name__ == "__main__":
         bucket_name = env_value("SV_BANKS_HOME")
         init_banks(s3=s3, bucket_name=bucket_name)
         banks = SVBanks.load_zip()
-        pool, _ = banks.spawn_pool(tag_mapping=Terms)
+        pool, _ = banks.spawn_pool(tag_patterns=Terms)
         tag_mapping = {track["name"]: track["name"] for track in Tracks}
         EuclidCLI(banks=banks,
                   pool=pool,

@@ -4,14 +4,6 @@
 
 ### medium
 
-### sv
-
-- per- phrase colours
-- model tests
-- init_banks needs to create tmp
-- pool tag_mapping arg should be renamed tag_patterns
-- update sample909 demo
-
 ### thoughts
 
 - include action as commit message?
