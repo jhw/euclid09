@@ -1,11 +1,12 @@
 ### short
 
-- parse_line should support default values
-- randomise_arrangement should have default values 0-f
-
-- implement checkout at cli level
+- random_arrangement should take default hex value of 0-f
+- flatten cli method names 
+- track freeze functionality
 
 ### medium
+
+- implement checkout at cli level
 
 ### thoughts
 
