@@ -1,5 +1,6 @@
 ### short
 
+- tagging and purging [notes]
 - random_arrangement should take default hex value of 0-f
 - flatten cli method names 
 - track freeze functionality
