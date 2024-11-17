@@ -4,6 +4,9 @@
 - random_arrangement should take default hex value of 0-f
 - flatten cli method names 
 - track freeze functionality
+- rename tracks as lo/mid/hi
+- see if randomisation code can be abstracted from model
+  - consider setting up a base template 
 
 ### medium
 
@@ -12,7 +15,6 @@
 ### thoughts
 
 - include action as commit message?
-- blind/unrendered commits?
 
 ### gists
 
