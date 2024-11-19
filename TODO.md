@@ -1,15 +1,12 @@
 ### short
 
-- tagging and purging [notes]
-- random_arrangement should take default hex value of 0-f
-- flatten cli method names 
-- track freeze functionality
 - rename tracks as lo/mid/hi
-- see if randomisation code can be abstracted from model
-  - consider setting up a base template 
+- random_arrangement should take default hex value of 0-f
 
 ### medium
 
+- tagging and purging [notes]
+- track freeze functionality
 - implement checkout at cli level
 
 ### thoughts
@@ -18,21 +15,24 @@
 
 ### gists
 
-- pico glitch samples
-- decompiler
+- reverse/retrig
+
 - freezing
-- polly vocals + sv vocoder
-- resampling
+- polly vocals/ vocoder
 - 303 slide
+- pico plat modes
+- resampling
 
 - granular
 - sv drum
 - kicker
-- city dreams bass
-
 
 ### done
 
+- rename randomise_ as rand_
+- rename rand_patches as rand_project
+- change model to serialise/deserialise SVSampleRef
+- upgrade to latest version of sv
 - git checkout
 - fix failing tests
 - tests

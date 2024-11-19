@@ -4,6 +4,7 @@ from unittest.mock import Mock, patch
 
 import unittest
 
+
 class ModelTest(unittest.TestCase):
 
     def setUp(self):
@@ -16,6 +17,15 @@ class ModelTest(unittest.TestCase):
         self.tag_mapping = {"kick": "sample", "clap": "sample"}
         self.levels = {"kick": 1, "clap": 0.5}
 
+        # Mock for SVSampleRef
+        self.mock_sample = {
+            "bank_name": "drums",
+            "file_path": "kick.wav",
+            "note": 36,
+            "tags": ["kick"]
+        }
+        self.mock_samples = [SVSample(**self.mock_sample) for _ in range(2)]  # Create valid SVSampleRef instances
+
     def test_track_creation(self):
         track = Track.randomise(self.pool, self.tracks[0], self.tag_mapping)
         self.assertIsInstance(track, Track)
@@ -26,14 +36,16 @@ class ModelTest(unittest.TestCase):
 
     def test_track_clone(self):
         track = Track.randomise(self.pool, self.tracks[0], self.tag_mapping)
+        track.samples = self.mock_samples  # Assign valid samples
         clone = track.clone()
         self.assertEqual(track.name, clone.name)
         self.assertEqual(track.samples, clone.samples)
         self.assertEqual(track.pattern, clone.pattern)
         self.assertEqual(track.groove, clone.groove)
-        
+
     def test_track_serialization(self):
         track = Track.randomise(self.pool, self.tracks[0], self.tag_mapping)
+        track.samples = self.mock_samples  # Assign valid samples
         serialized = track.to_json()
         deserialized = Track.from_json(serialized)
         self.assertEqual(track.name, deserialized.name)
@@ -51,6 +63,8 @@ class ModelTest(unittest.TestCase):
 
     def test_tracks_serialization(self):
         tracks = Tracks.randomise(self.pool, self.tracks, self.tag_mapping)
+        for track in tracks:
+            track.samples = self.mock_samples  # Assign valid samples
         serialized = tracks.to_json()
         deserialized = Tracks.from_json(serialized)
         self.assertEqual(len(tracks), len(deserialized))
@@ -59,7 +73,9 @@ class ModelTest(unittest.TestCase):
 
     def test_patch_creation(self):
         patch = Patch.randomise(self.pool, self.tracks, self.tag_mapping)
-        self.assertIsInstance(patch, Patch)        
+        for track in patch.tracks:
+            track.samples = self.mock_samples  # Assign valid samples
+        self.assertIsInstance(patch, Patch)
         clone = patch.clone()
         self.assertEqual(len(clone.tracks), len(patch.tracks))
         serialized = patch.to_json()
@@ -68,6 +84,9 @@ class ModelTest(unittest.TestCase):
 
     def test_patches_randomisation(self):
         patches = Patches.randomise(self.pool, self.tracks, self.tag_mapping, n=3)
+        for patch in patches:
+            for track in patch.tracks:
+                track.samples = self.mock_samples  # Assign valid samples
         self.assertIsInstance(patches, Patches)
         self.assertEqual(len(patches), 3)
         clone = patches.clone()
@@ -75,11 +94,15 @@ class ModelTest(unittest.TestCase):
 
     def test_patches_serialization(self):
         patches = Patches.randomise(self.pool, self.tracks, self.tag_mapping, n=3)
+        for patch in patches:
+            for track in patch.tracks:
+                track.samples = self.mock_samples  # Assign valid samples
         serialized = patches.to_json()
         deserialized = Patches.from_json(serialized)
         self.assertEqual(len(deserialized), len(patches))
         for p1, p2 in zip(patches, deserialized):
             self.assertEqual(len(p1.tracks), len(p2.tracks))
+
 
 if __name__ == "__main__":
     unittest.main()

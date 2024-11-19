@@ -99,21 +99,21 @@ class EuclidCLI(cmd.Cmd):
     ### env
 
     @parse_line([{"name": "n", "type": "int"}])
-    def do_set_n_patches(self, n):
+    def do_set_npatches(self, n):
         self.n_patches = n
     
     ### tags
 
-    def do_tags(self, _):
+    def do_show_tags(self, _):
         logging.info(yaml.safe_dump(self.tag_mapping, default_flow_style=False))
     
     @parse_line([{"name": "key", "type": "enum", "options": [track["name"] for track in Tracks]},
                  {"name": "value", "type": "enum", "options": list(Terms.keys())}])
     def do_set_tag(self, key, value):
         self.tag_mapping[key] = value
-        self.do_tags(None)
+        self.do_show_tags(None)
 
-    def do_randomise_tags(self, _):
+    def do_rand_tags(self, _):
         tags = list(self.terms.keys())
         tag_mapping = {}
         for key in self.tag_mapping:
@@ -121,16 +121,16 @@ class EuclidCLI(cmd.Cmd):
             tag_mapping[key] = tag
             tags.remove(tag)
         self.tag_mapping = tag_mapping
-        self.do_tags(None)
+        self.do_show_tags(None)
 
     def do_reset_tags(self, _, tag_mapping={track["name"]: track["name"] for track in Tracks}):
         self.tag_mapping = tag_mapping
-        self.do_tags(None)
+        self.do_show_tags(None)
 
     ### randomise
 
     @commit_and_render
-    def do_randomise_patches(self, _):
+    def do_rand_project(self, _):
         return Patches.randomise(pool=self.pool,
                                  tracks=self.tracks,
                                  tag_mapping=self.tag_mapping,
@@ -147,7 +147,7 @@ class EuclidCLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_randomise_samples(self, n):
+    def do_rand_samples(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
@@ -157,7 +157,7 @@ class EuclidCLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_randomise_pattern(self, n):
+    def do_rand_pattern(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
@@ -167,7 +167,7 @@ class EuclidCLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_randomise_seeds(self, n):
+    def do_rand_seeds(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
@@ -179,14 +179,14 @@ class EuclidCLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "indexing", "type": "hexstr"}])
     @commit_and_render
-    def do_randomise_arrangement(self, indexing,
-                                 phrase_size = 4,
-                                 patterns = [[0, 1, 0, 0],
-                                             [0, 0, 1, 0],
-                                             [0, 0, 0, 1],
-                                             [0, 0, 0, 1],
-                                             [0, 0, 0, 1],
-                                             [0, 1, 0, 2]]):
+    def do_rand_arrangement(self, indexing,
+                            phrase_size = 4,
+                            patterns = [[0, 1, 0, 0],
+                                        [0, 0, 1, 0],
+                                        [0, 0, 0, 1],
+                                        [0, 0, 0, 1],
+                                        [0, 0, 0, 1],
+                                        [0, 1, 0, 2]]):
         patches = self.git.head.content
         roots = [patches[i % len(patches)] for i in indexing]
         n_phrases = int(self.n_patches / phrase_size)
@@ -223,20 +223,20 @@ class EuclidCLI(cmd.Cmd):
 
     ### git
 
-    def do_git_head(self, _):
+    def do_head(self, _):
         if self.git.is_empty():
             logging.warning("Git has no commits")
         else:
             logging.info(f"HEAD is {self.git.head.commit_id}")
 
-    def do_git_log(self, _):
+    def do_log(self, _):
         for commit in self.git.commits:
             logging.info(commit.commit_id)
 
-    def do_git_undo(self, _):
+    def do_undo(self, _):
         self.git.undo()
 
-    def do_git_redo(self, _):
+    def do_redo(self, _):
         self.git.redo()
 
     ### project management
