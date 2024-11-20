@@ -2,7 +2,7 @@ import sv.algos.euclid as euclid
 import sv.algos.groove.perkons as perkons
 
 from sv.container import SVContainer
-from sv.instruments.nine09.samples import Nine09
+from sv.instruments.detroit import Detroit
 from sv.sampler import SVSampleRef as SVSample
 
 from euclid09.generators import *
@@ -94,10 +94,10 @@ class Track:
         self.density = limit + random.random() * (1 - (2 * limit))
 
     def render(self, container, dry_level, wet_level = 1):
-        nine09 = Nine09(container = container,
+        detroit = Detroit(container = container,
                         namespace = self.name.capitalize(),
                         samples = self.samples)
-        container.add_instrument(nine09)
+        container.add_instrument(detroit)
         pattern = spawn_function(**self.pattern)(**self.pattern["args"])
         groove = spawn_function(**self.groove)
         env = {"dry_level": dry_level,
@@ -106,10 +106,10 @@ class Track:
                "density": self.density,
                "pattern": pattern,
                "groove": groove}
-        nine09.render(generator = Beat, 
+        detroit.render(generator = Beat, 
                       seeds = self.seeds,
                       env = env)
-        nine09.render(generator = GhostEcho,
+        detroit.render(generator = GhostEcho,
                       seeds = self.seeds,
                       env = env)
         
