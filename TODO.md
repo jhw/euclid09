@@ -1,7 +1,7 @@
 ### short
 
-- remove arranging
-- remove hex support
+- pass generators from cli to model
+- pass machine class/name from cli to model
 
 - kit abstraction
 - mutes and freezes
@@ -26,4 +26,8 @@
 - kicker
 
 ### done
+
+- remove arranging
+- remove hex support
+
 

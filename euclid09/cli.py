@@ -76,7 +76,7 @@ def commit_and_render(fn):
 
 class EuclidCLI(cmd.Cmd):
     prompt = ">>> "
-    intro = "Welcome to the Euclid 909 CLI ;)"
+    intro = "Welcome to the Euclid09 CLI ;)"
 
     def __init__(self, banks, pool, tracks, tag_mapping, terms, n_patches = 16):
         super().__init__()
@@ -95,12 +95,6 @@ class EuclidCLI(cmd.Cmd):
     def postloop(self):
         logging.info("Pushing commits ...")
         self.git.push()
-
-    ### env
-
-    @parse_line([{"name": "n", "type": "int"}])
-    def do_set_npatches(self, n):
-        self.n_patches = n
     
     ### tags
 
@@ -173,31 +167,6 @@ class EuclidCLI(cmd.Cmd):
             for _ in range(n):
                 patch.randomise_attr(attr="seeds")
         return patches
-
-    ### arrange
-    
-    @assert_head
-    @parse_line([{"name": "indexing", "type": "hexstr"}])
-    @commit_and_render
-    def do_rand_arrangement(self, indexing,
-                            phrase_size = 4,
-                            patterns = [[0, 1, 0, 0],
-                                        [0, 0, 1, 0],
-                                        [0, 0, 0, 1],
-                                        [0, 0, 0, 1],
-                                        [0, 0, 0, 1],
-                                        [0, 1, 0, 2]]):
-        patches = self.git.head.content
-        roots = [patches[i % len(patches)] for i in indexing]
-        n_phrases = int(self.n_patches / phrase_size)
-        arrangement = Patches()
-        for i in range(n_phrases):
-            pattern = random.choice(patterns)
-            random.shuffle(roots)
-            for j in pattern:
-                patch = roots[j].clone()
-                arrangement.append(patch)
-        return arrangement
            
     ### export
     
