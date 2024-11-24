@@ -4,17 +4,23 @@ from unittest.mock import Mock, patch
 
 import unittest
 
-
 class ModelTest(unittest.TestCase):
 
     def setUp(self):
         self.pool = Mock()
         self.pool.match = Mock(return_value=[Mock(tag='sample') for _ in range(5)])
         self.tracks = [
-            {"name": "kick", "temperature": 0.5, "density": 0.5},
-            {"name": "clap", "temperature": 0.25, "density": 0.25}
+            {"name": "kick",
+             "machine": "sv.machines.beats.detroit.Detroit",
+             "temperature": 0.5,
+             "density": 0.5},
+            {"name": "clap",
+             "machine": "sv.machines.beats.detroit.Detroit",
+             "temperature": 0.25,
+             "density": 0.25}
         ]
-        self.tag_mapping = {"kick": "sample", "clap": "sample"}
+        self.tag_mapping = {"kick": "sample",
+                            "clap": "sample"}
         self.levels = {"kick": 1, "clap": 0.5}
 
         # Mock for SVSampleRef

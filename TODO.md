@@ -1,15 +1,17 @@
 ### short
 
-- abstract tracks to yaml
+- refactor rand.sample as rand.sound
+- simplify tag mapping
+- clean doesn't need user input
 
 - separate synth, sample tracks
   - need to incude type info in JSON persistence
-  
-- [sv] rename toggle|randomise|increment|decrement_sample as *_sound
 
-- refactor rand.sample as rand.sound
+### sv
 
-- [sv] DrumSynth as polymorphic beat machine
+- refactor fx sz parameter as global cutoff_ticks or similar
+- rename toggle|randomise|increment|decrement_sample as *_sound
+- DrumSynth machine
 
 ### medium
 
@@ -33,6 +35,7 @@
 
 ### done
 
+- abstract tracks to yaml
 - pass machine name from cli
 - pass generators from cli to model
 - remove arranging

@@ -23,26 +23,12 @@ logging.basicConfig(stream=sys.stdout,
                     level=logging.INFO,
                     format="%(levelname)s: %(message)s")
 
-Tracks = yaml.safe_load("""
-- name: kick
-  machine: sv.machines.beats.detroit.Detroit
-  temperature: 0.5
-  density: 0.5
-- name: clap
-  machine: sv.machines.beats.detroit.Detroit
-  temperature: 0.25
-  density: 0.25
-- name: hat
-  machine: sv.machines.beats.detroit.Detroit
-  temperature: 0.75
-  density: 0.75
-""")
-
-Terms = yaml.safe_load(open("/".join(__file__.split("/")[:-1] + ["terms.yaml"])).read())
+def load_yaml(file_name):
+    return yaml.safe_load(open("/".join(__file__.split("/")[:-1] + [file_name])).read())
 
 class Levels(OrderedDict):
 
-    def __init__(self, tracks=Tracks):
+    def __init__(self, tracks):
         OrderedDict.__init__(self, {track["name"]: 1 for track in tracks})
 
     def mute(self, key):
@@ -111,12 +97,6 @@ class Euclid09CLI(cmd.Cmd):
     def do_show_tags(self, _):
         logging.info(yaml.safe_dump(self.tag_mapping, default_flow_style=False))
     
-    @parse_line([{"name": "key", "type": "enum", "options": [track["name"] for track in Tracks]},
-                 {"name": "value", "type": "enum", "options": list(Terms.keys())}])
-    def do_set_tag(self, key, value):
-        self.tag_mapping[key] = value
-        self.do_show_tags(None)
-
     def do_rand_tags(self, _):
         tags = list(self.terms.keys())
         tag_mapping = {}
@@ -127,7 +107,8 @@ class Euclid09CLI(cmd.Cmd):
         self.tag_mapping = tag_mapping
         self.do_show_tags(None)
 
-    def do_reset_tags(self, _, tag_mapping={track["name"]: track["name"] for track in Tracks}):
+    def do_reset_tags(self, _):
+        tag_mapping={track["name"]: track["name"] for track in self.tracks}
         self.tag_mapping = tag_mapping
         self.do_show_tags(None)
 
@@ -187,10 +168,10 @@ class Euclid09CLI(cmd.Cmd):
         commit_id = self.git.head.commit_id
         zip_name = f"tmp/wav/{commit_id.slug}.zip"
         with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-            levels = [Levels()]
+            levels = [Levels(self.tracks)]
             for track in self.tracks:
-                levels.append(Levels().solo(track["name"]))
-                levels.append(Levels().mute(track["name"]))
+                levels.append(Levels(self.tracks).solo(track["name"]))
+                levels.append(Levels(self.tracks).mute(track["name"]))
             patches = self.git.head.content
             for levels_ in levels:
                 container = patches.render(banks = self.banks,
@@ -260,13 +241,15 @@ if __name__ == "__main__":
         bucket_name = env_value("SV_BANKS_HOME")
         init_banks(s3=s3, bucket_name=bucket_name)
         banks = SVBanks.load_zip()
-        pool, _ = banks.spawn_pool(tag_patterns=Terms)
-        tag_mapping = {track["name"]: track["name"] for track in Tracks}
+        terms = load_yaml("terms.yaml")
+        pool, _ = banks.spawn_pool(tag_patterns = terms)
+        tracks = load_yaml("tracks.yaml")
+        tag_mapping = {track["name"]: track["name"] for track in tracks}
         Euclid09CLI(banks = banks,
                     pool = pool,
                     generators = [Beat, GhostEcho],
-                    tracks = Tracks,
+                    tracks = tracks,
                     tag_mapping = tag_mapping,
-                    terms = Terms).cmdloop()
+                    terms = terms).cmdloop()
     except RuntimeError as error:
         logging.error(str(error))
