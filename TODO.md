@@ -1,8 +1,15 @@
 ### short
 
-- abstract tracks
+- abstract tracks to yaml
 
-- model to handle samples polymorphically
+- separate synth, sample tracks
+  - need to incude type info in JSON persistence
+  
+- [sv] rename toggle|randomise|increment|decrement_sample as *_sound
+
+- refactor rand.sample as rand.sound
+
+- [sv] DrumSynth as polymorphic beat machine
 
 ### medium
 
