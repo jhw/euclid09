@@ -25,12 +25,15 @@ logging.basicConfig(stream=sys.stdout,
 
 Tracks = yaml.safe_load("""
 - name: kick
+  machine: sv.machines.beats.detroit.Detroit
   temperature: 0.5
   density: 0.5
 - name: clap
+  machine: sv.machines.beats.detroit.Detroit
   temperature: 0.25
   density: 0.25
 - name: hat
+  machine: sv.machines.beats.detroit.Detroit
   temperature: 0.75
   density: 0.75
 """)

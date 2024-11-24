@@ -2,8 +2,8 @@ import sv.algos.euclid as euclid
 import sv.algos.groove.perkons as perkons
 
 from sv.container import SVContainer
-from sv.machines.beats.detroit import Detroit
 from sv.sampler import SVSampleRef as SVSample
+from sv.project import load_class
 
 import copy
 import inspect
@@ -38,6 +38,7 @@ class Track:
         seeds = {key: random_seed()
                  for key in seed_keys}
         return Track(name = track["name"],
+                     machine = track["machine"],
                      samples = samples[:n_samples],
                      pattern = random_pattern(),
                      groove = random_groove(),
@@ -50,8 +51,9 @@ class Track:
         track["samples"] = [SVSample(**sample) for sample in track["samples"]]
         return Track(**track)
 
-    def __init__(self, name, samples, pattern, groove, seeds, temperature, density):
+    def __init__(self, name, machine, samples, pattern, groove, seeds, temperature, density):
         self.name = name
+        self.machine = machine
         self.samples = samples
         self.pattern = pattern
         self.groove = groove
@@ -61,6 +63,7 @@ class Track:
 
     def clone(self):
         return Track(name = self.name,
+                     machine = self.machine,
                      samples = list(self.samples),
                      pattern = copy.deepcopy(self.pattern),
                      groove = copy.deepcopy(self.groove),
@@ -92,9 +95,10 @@ class Track:
         self.density = limit + random.random() * (1 - (2 * limit))
 
     def render(self, container, generators, dry_level, wet_level = 1):
-        machine = Detroit(container = container,
-                          namespace = self.name.capitalize(),
-                          samples = self.samples)
+        machine_class = load_class(self.machine)
+        machine = machine_class(container = container,
+                                namespace = self.name.capitalize(),
+                                samples = self.samples)
         container.add_machine(machine)
         pattern = spawn_function(**self.pattern)(**self.pattern["args"])
         groove = spawn_function(**self.groove)
@@ -111,6 +115,7 @@ class Track:
         
     def to_json(self):
         return {"name": self.name,
+                "machine": self.machine,
                 "samples": self.samples,
                 "pattern": self.pattern,
                 "groove": self.groove,

@@ -1,9 +1,8 @@
 ### short
 
-- pass machine name from cli
-- abstract track config as kit
+- abstract tracks
 
-- model to handle samples polymorphically?
+- model to handle samples polymorphically
 
 ### medium
 
@@ -27,6 +26,7 @@
 
 ### done
 
+- pass machine name from cli
 - pass generators from cli to model
 - remove arranging
 - remove hex support
