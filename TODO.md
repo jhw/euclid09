@@ -1,5 +1,7 @@
 ### short
 
+- add clean check
+
 - separate synth, sample tracks
 - add track type
 - initialise track based on track type
@@ -15,6 +17,8 @@
 - DrumSynth machine
 
 ### medium
+
+- add back randomise, mutate nomenclature
 
 - refactor export muting to remove levels
   - render project without muted tracks 
