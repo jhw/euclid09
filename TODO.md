@@ -1,12 +1,13 @@
 ### short
 
+- pass machine name from cli
+- abstract track config as kit
 
-
-- kit abstraction
-- mutes and freezes
+- model to handle samples polymorphically?
 
 ### medium
 
+- mutes and freezes
 - track mixing levels
 - tagging and purging
 
