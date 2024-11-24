@@ -3,11 +3,13 @@ from sv.utils.banks import init_banks
 from sv.utils.export import export_wav
 from sv.utils.naming import random_name
 
+from euclid09.generators import Beat, GhostEcho
 from euclid09.git import Git
 from euclid09.model import Patches, Track
 from euclid09.parse import parse_line
 
 from collections import OrderedDict
+
 import boto3
 import cmd
 import logging
@@ -36,6 +38,7 @@ Tracks = yaml.safe_load("""
 Terms = yaml.safe_load(open("/".join(__file__.split("/")[:-1] + ["terms.yaml"])).read())
 
 class Levels(OrderedDict):
+
     def __init__(self, tracks=Tracks):
         OrderedDict.__init__(self, {track["name"]: 1 for track in tracks})
 
@@ -67,22 +70,26 @@ def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
         patches = fn(self, *args, **kwargs)
         levels = Levels(self.tracks)
-        container = patches.render(banks=self.banks, levels=levels)
+        container = patches.render(banks=self.banks,
+                                   generators = self.generators,
+                                   levels=levels)
         commit_id = self.git.commit(patches)
         if not os.path.exists("tmp/sunvox"):
             os.makedirs("tmp/sunvox")
         container.write_project(f"tmp/sunvox/{commit_id}.sunvox")
     return wrapped
 
-class EuclidCLI(cmd.Cmd):
+class Euclid09CLI(cmd.Cmd):
+
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, banks, pool, tracks, tag_mapping, terms, n_patches = 16):
+    def __init__(self, banks, pool, tracks, generators, tag_mapping, terms, n_patches = 16):
         super().__init__()
         self.banks = banks
         self.pool = pool
         self.tracks = tracks
+        self.generators = generators                
         self.tag_mapping = dict(tag_mapping)
         self.terms = terms
         self.n_patches = n_patches
@@ -183,7 +190,9 @@ class EuclidCLI(cmd.Cmd):
                 levels.append(Levels().mute(track["name"]))
             patches = self.git.head.content
             for levels_ in levels:
-                container = patches.render(banks=self.banks, levels=levels_)
+                container = patches.render(banks = self.banks,
+                                           generators = self.generators,
+                                           levels = levels_)
                 project = container.render_project()
                 wav_io = export_wav(project=project)
                 wav_name = f"{commit_id.short_name}-{levels_.short_code}.wav"
@@ -250,10 +259,11 @@ if __name__ == "__main__":
         banks = SVBanks.load_zip()
         pool, _ = banks.spawn_pool(tag_patterns=Terms)
         tag_mapping = {track["name"]: track["name"] for track in Tracks}
-        EuclidCLI(banks=banks,
-                  pool=pool,
-                  tracks=Tracks,
-                  tag_mapping=tag_mapping,
-                  terms=Terms).cmdloop()
+        Euclid09CLI(banks = banks,
+                    pool = pool,
+                    generators = [Beat, GhostEcho],
+                    tracks = Tracks,
+                    tag_mapping = tag_mapping,
+                    terms = Terms).cmdloop()
     except RuntimeError as error:
         logging.error(str(error))

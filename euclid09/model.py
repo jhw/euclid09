@@ -5,8 +5,6 @@ from sv.container import SVContainer
 from sv.machines.beats.detroit import Detroit
 from sv.sampler import SVSampleRef as SVSample
 
-from euclid09.generators import *
-
 import copy
 import inspect
 import random
@@ -93,7 +91,7 @@ class Track:
     def shuffle_density(self, limit = 0.25, **kwargs):
         self.density = limit + random.random() * (1 - (2 * limit))
 
-    def render(self, container, dry_level, wet_level = 1):
+    def render(self, container, generators, dry_level, wet_level = 1):
         machine = Detroit(container = container,
                           namespace = self.name.capitalize(),
                           samples = self.samples)
@@ -106,12 +104,10 @@ class Track:
                "density": self.density,
                "pattern": pattern,
                "groove": groove}
-        machine.render(generator = Beat, 
-                      seeds = self.seeds,
-                      env = env)
-        machine.render(generator = GhostEcho,
-                      seeds = self.seeds,
-                      env = env)
+        for generator in generators:
+            machine.render(generator = generator,
+                           seeds = self.seeds,
+                           env = env)
         
     def to_json(self):
         return {"name": self.name,
@@ -145,9 +141,10 @@ class Tracks(list):
         track = random.choice(self)
         getattr(track, f"shuffle_{attr}")(**kwargs)
 
-    def render(self, container, levels):                
+    def render(self, container, generators, levels):                
         for track in self:
             track.render(container = container,
+                         generators = generators,
                          dry_level = levels[track.name])
         
     def to_json(self):
@@ -175,9 +172,10 @@ class Patch:
     def randomise_attr(self, attr, **kwargs):
         self.tracks.randomise_attr(attr, **kwargs)
 
-    def render(self, container, levels):
+    def render(self, container, generators, levels):
         container.spawn_patch()
         self.tracks.render(container = container,
+                           generators = generators,
                            levels = levels)
         
     def to_json(self):
@@ -202,14 +200,15 @@ class Patches(list):
     def clone(self):
         return Patches([patch.clone() for patch in self])
         
-    def render(self, banks, levels,
+    def render(self, banks, generators, levels,
                bpm = 120,
                n_ticks = 16):
         container = SVContainer(banks = banks,
                                 bpm = bpm,
                                 n_ticks = n_ticks)
         for patch in self:
-            patch.render(container,
+            patch.render(container = container,
+                         generators = generators,
                          levels = levels)
         return container
     

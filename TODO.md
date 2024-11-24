@@ -1,7 +1,6 @@
 ### short
 
-- pass generators from cli to model
-- pass machine class/name from cli to model
+
 
 - kit abstraction
 - mutes and freezes
@@ -27,6 +26,7 @@
 
 ### done
 
+- pass generators from cli to model
 - remove arranging
 - remove hex support
 
