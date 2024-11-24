@@ -29,10 +29,10 @@ def spawn_function(mod, fn, **kwargs):
 class Track:
 
     @staticmethod
-    def randomise(pool, track, tag_mapping,
+    def randomise(pool, track, tags,
                   n_samples = 2,
                   seed_keys = "fx|volume|sample|beat".split("|")):
-        tag = tag_mapping[track["name"]]
+        tag = tags[track["name"]]
         samples = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(samples)
         seeds = {key: random_seed()
@@ -71,8 +71,8 @@ class Track:
                      temperature = self.temperature,
                      density = self.density)
 
-    def shuffle_samples(self, pool, tag_mapping, **kwargs):
-        tag = tag_mapping[self.name]
+    def shuffle_samples(self, pool, tags, **kwargs):
+        tag = tags[self.name]
         samples = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(samples)
         i = int(random.random() > 0.5)
@@ -126,10 +126,10 @@ class Track:
 class Tracks(list):
 
     @staticmethod
-    def randomise(pool, tracks, tag_mapping):
+    def randomise(pool, tracks, tags):
         return Tracks([Track.randomise(pool = pool,
                                        track = track,
-                                       tag_mapping = tag_mapping)
+                                       tags = tags)
                        for track in tracks])
 
     @staticmethod
@@ -159,10 +159,10 @@ class Tracks(list):
 class Patch:
 
     @staticmethod
-    def randomise(pool, tracks, tag_mapping):
+    def randomise(pool, tracks, tags):
         return Patch(tracks = Tracks.randomise(pool = pool,
                                                tracks = tracks,
-                                               tag_mapping = tag_mapping))
+                                               tags = tags))
 
     @staticmethod
     def from_json(patch):
@@ -189,10 +189,10 @@ class Patch:
 class Patches(list):
 
     @staticmethod
-    def randomise(pool, tracks, tag_mapping, n):
+    def randomise(pool, tracks, tags, n):
         return Patches([Patch.randomise(pool = pool,
                                         tracks = tracks,
-                                        tag_mapping = tag_mapping)
+                                        tags = tags)
                         for i in range(n)])
 
     @staticmethod

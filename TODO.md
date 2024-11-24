@@ -1,11 +1,12 @@
 ### short
 
-- refactor rand.sample as rand.sound
-- simplify tag mapping
-- clean doesn't need user input
-
 - separate synth, sample tracks
-  - need to incude type info in JSON persistence
+- add track type
+- initialise track based on track type
+
+- base cli
+- rename cli as randomiser
+- new arranger cli
 
 ### sv
 
@@ -15,7 +16,10 @@
 
 ### medium
 
-- mutes and freezes
+- refactor export muting to remove levels
+  - render project without muted tracks 
+
+- muting and freezing
 - track mixing levels
 - tagging and purging
 
@@ -35,6 +39,8 @@
 
 ### done
 
+- simplify tag mapping
+- clean doesn't need user input
 - abstract tracks to yaml
 - pass machine name from cli
 - pass generators from cli to model

@@ -73,13 +73,13 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, banks, pool, tracks, generators, tag_mapping, terms, n_patches = 16):
+    def __init__(self, banks, pool, tracks, generators, tags, terms, n_patches = 16):
         super().__init__()
         self.banks = banks
         self.pool = pool
         self.tracks = tracks
         self.generators = generators                
-        self.tag_mapping = dict(tag_mapping)
+        self.tags = dict(tags)
         self.terms = terms
         self.n_patches = n_patches
         self.git = Git("tmp/git")
@@ -95,30 +95,30 @@ class Euclid09CLI(cmd.Cmd):
     ### tags
 
     def do_show_tags(self, _):
-        logging.info(yaml.safe_dump(self.tag_mapping, default_flow_style=False))
+        logging.info(yaml.safe_dump(self.tags, default_flow_style=False))
     
     def do_rand_tags(self, _):
-        tags = list(self.terms.keys())
-        tag_mapping = {}
-        for key in self.tag_mapping:
-            tag = random.choice(tags)
-            tag_mapping[key] = tag
-            tags.remove(tag)
-        self.tag_mapping = tag_mapping
+        term_keys = list(self.terms.keys())
+        tags = {}
+        for key in self.tags:
+            tag = random.choice(term_keys)
+            tags[key] = tag
+            term_keys.remove(tag)
+        self.tags = tags
         self.do_show_tags(None)
 
     def do_reset_tags(self, _):
-        tag_mapping={track["name"]: track["name"] for track in self.tracks}
-        self.tag_mapping = tag_mapping
+        tags={track["name"]: track["name"] for track in self.tracks}
+        self.tags = tags
         self.do_show_tags(None)
 
     ### randomise
 
     @commit_and_render
-    def do_rand_project(self, _):
+    def do_rand_patches(self, _):
         return Patches.randomise(pool=self.pool,
                                  tracks=self.tracks,
-                                 tag_mapping=self.tag_mapping,
+                                 tags=self.tags,
                                  n=self.n_patches)
 
     @assert_head
@@ -136,7 +136,7 @@ class Euclid09CLI(cmd.Cmd):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
-                patch.randomise_attr(attr="samples", pool=self.pool, tag_mapping=self.tag_mapping)
+                patch.randomise_attr(attr="samples", pool=self.pool, tags=self.tags)
         return patches
 
     @assert_head
@@ -205,21 +205,12 @@ class Euclid09CLI(cmd.Cmd):
 
     def do_clean(self, _):
         for dir_name in ["tmp/git", "tmp/sunvox", "tmp/wav"]:
-            while True:
-                answer = input(f"clean {dir_name}?: ").strip().lower()
-                if answer == "y":
-                    if os.path.exists(dir_name):
-                        for filename in os.listdir(dir_name):
-                            file_path = os.path.join(dir_name, filename)
-                            if os.path.isfile(file_path):
-                                os.remove(file_path)
-                    if dir_name == "tmp/git":
-                        self.git = Git("tmp/git")
-                    break
-                elif answer == "n":
-                    break
-                elif answer == "q":
-                    return 
+            if os.path.exists(dir_name):
+                for filename in os.listdir(dir_name):
+                    file_path = os.path.join(dir_name, filename)
+                    if os.path.isfile(file_path):
+                        os.remove(file_path)
+        self.git = Git("tmp/git")
 
     ### exit
         
@@ -244,12 +235,12 @@ if __name__ == "__main__":
         terms = load_yaml("terms.yaml")
         pool, _ = banks.spawn_pool(tag_patterns = terms)
         tracks = load_yaml("tracks.yaml")
-        tag_mapping = {track["name"]: track["name"] for track in tracks}
+        tags = {track["name"]: track["name"] for track in tracks}
         Euclid09CLI(banks = banks,
                     pool = pool,
                     generators = [Beat, GhostEcho],
                     tracks = tracks,
-                    tag_mapping = tag_mapping,
+                    tags = tags,
                     terms = terms).cmdloop()
     except RuntimeError as error:
         logging.error(str(error))
