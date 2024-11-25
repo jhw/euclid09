@@ -10,14 +10,15 @@
 
 ### medium
 
-- refactor export muting to remove levels
-  - render project without muted tracks 
-
 - track muting, freezing
 - track mixing levels
 - tagging and purging
 
 ### thoughts
+
+- replace levels with mutes?
+  - they are the same thing, int vs boolean
+  - you would still need a class to represent mute state
 
 ### gists
 
