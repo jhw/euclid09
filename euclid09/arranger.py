@@ -8,6 +8,7 @@ from euclid09.parse import parse_line
 
 import boto3
 import os
+import random
 import sys
 
 class ArrangerCLI(BaseCLI):
@@ -17,6 +18,29 @@ class ArrangerCLI(BaseCLI):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+    @assert_head
+    @parse_line([{"name": "indexing", "type": "hexstr"}])
+    @commit_and_render
+    def do_randomise(self, indexing,
+                      phrase_size = 4,
+                      patterns = [[0, 1, 0, 0],
+                                  [0, 0, 1, 0],
+                                  [0, 0, 0, 1],
+                                  [0, 0, 0, 1],
+                                  [0, 0, 0, 1],
+                                  [0, 1, 0, 2]]):
+        patches = self.git.head.content
+        roots = [patches[i % len(patches)] for i in indexing]
+        n_phrases = int(self.n_patches / phrase_size)
+        arrangement = Patches()
+        for i in range(n_phrases):
+            pattern = random.choice(patterns)
+            random.shuffle(roots)
+            for j in pattern:
+                patch = roots[j].clone()
+                arrangement.append(patch)
+        return arrangement
            
 def env_value(key):
     if key not in os.environ or os.environ[key] in ["", None]:

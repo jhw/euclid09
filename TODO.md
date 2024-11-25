@@ -1,6 +1,22 @@
-### short
+### short [01-testing]
 
-- add basic arranger
+- run tests
+- remove everything in tmp
+- start cli
+- check banks initialised
+- randomise params
+- exit
+- check git saved
+- restart
+- check git loaded
+- clone col
+- mutate samples
+- clone col
+- mutate seeds
+- exit
+- load arranger
+- arrange
+- export
 
 ### sv
 
@@ -8,6 +24,8 @@
 - refactor fx sz parameter as global cutoff_ticks or similar
 
 ### medium
+
+- default arranger args?
 
 - model tests needs to cover SynthTrack class and mutate() methods
 
@@ -34,6 +52,7 @@
 
 ### done
 
+- add basic arranger
 - add back hex support
 - refactor tracks.randomise to call track.randomise
 - call randomise_params polymorphically
