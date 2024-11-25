@@ -12,10 +12,12 @@ class ModelTest(unittest.TestCase):
         self.tracks = [
             {"name": "kick",
              "machine": "sv.machines.beats.detroit.Detroit",
+             "type": "sample",
              "temperature": 0.5,
              "density": 0.5},
             {"name": "clap",
              "machine": "sv.machines.beats.detroit.Detroit",
+             "type": "sample",
              "temperature": 0.25,
              "density": 0.25}
         ]

@@ -34,6 +34,7 @@ class SynthTrack:
                  for key in seed_keys}
         return {"name": track["name"],
                 "machine": track["machine"],
+                "type": track["type"],
                 "pattern": random_pattern(),
                 "groove": random_groove(),
                 "seeds": seeds,
@@ -44,9 +45,10 @@ class SynthTrack:
     def from_json(track):
         return SynthTrack(**track)
 
-    def __init__(self, name, machine, pattern, groove, seeds, temperature, density):
+    def __init__(self, name, machine, type, pattern, groove, seeds, temperature, density):
         self.name = name
         self.machine = machine
+        self.type = type
         self.pattern = pattern
         self.groove = groove
         self.seeds = seeds
@@ -96,6 +98,7 @@ class SynthTrack:
     def to_json(self):
         return {"name": self.name,
                 "machine": self.machine,
+                "type": self.type,
                 "pattern": self.pattern,
                 "groove": self.groove,
                 "seeds": self.seeds,
@@ -120,8 +123,8 @@ class SampleTrack(SynthTrack):
         track["samples"] = [SVSample(**sample) for sample in track["samples"]]
         return SampleTrack(**track)
 
-    def __init__(self, name, machine, samples, pattern, groove, seeds, temperature, density):
-        super().__init__(name, machine, pattern, groove, seeds, temperature, density)
+    def __init__(self, samples, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.samples = samples
 
     def clone(self):

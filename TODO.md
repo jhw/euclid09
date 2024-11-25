@@ -1,9 +1,7 @@
 ### short
 
-- add back mutate() nomenclature to model
-
-- add track type
-- initialise track based on track type
+- expand Tracks.randomise() and Tracks.__init__()
+- initialise track class based on type
 
 - base cli
 - rename cli as randomiser
@@ -17,6 +15,8 @@
 ### medium
 
 - cli git checkout
+
+- model tests needs to cover SynthTrack class and mutate() methods
 
 - refactor export muting to remove levels
   - render project without muted tracks 
@@ -41,6 +41,8 @@
 
 ### done
 
+- add track type
+- add back mutate() nomenclature to model
 - refactor test names to explicitly reference sample track
 - randomise to return dict
 - abstracy track cloning 
