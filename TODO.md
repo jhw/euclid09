@@ -1,8 +1,6 @@
 ### short
 
-
-- call randomise_params polymorphically
-- add new randomise which calls instance
+- refactor tracks.randomise to call track.randomise
 
 - add back hex support
 - add basic arranger
@@ -39,6 +37,8 @@
 
 ### done
 
+- call randomise_params polymorphically
+- add new randomise which calls instance
 - rename randomise as randomise_params
 - cli checkout 
 - to_json needs to deepcopy

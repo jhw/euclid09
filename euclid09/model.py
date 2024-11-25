@@ -42,6 +42,10 @@ class SynthTrack:
                 "density": track["density"]}
 
     @staticmethod
+    def randomise(track, **kwargs):
+        return SynthTrack(**SynthTrack.randomise_params(track, **kwargs))
+
+    @staticmethod
     def from_json(track):
         return SynthTrack(**track)
 
@@ -120,6 +124,10 @@ class SampleTrack(SynthTrack):
         base_kwargs["seeds"]["sample"] = random_seed()
         return base_kwargs
 
+    @staticmethod
+    def randomise(pool, track, tags, **kwargs):
+        return SampleTrack(**SampleTrack.randomise_params(pool, track, tags, **kwargs))
+    
     @staticmethod
     def from_json(track):
         track["samples"] = [SVSample(**sample) for sample in track["samples"]]
