@@ -1,6 +1,5 @@
 ### short
 
-- abstract track rendering
 - abstracy track cloning and serialisation
 
 - add track type
@@ -41,6 +40,7 @@
 
 ### done
 
+- abstract track rendering
 - separate synth, sample tracks
 - add back randomise, mutate nomenclature
 - add clean check

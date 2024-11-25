@@ -80,10 +80,13 @@ class SynthTrack:
     def shuffle_density(self, limit = 0.25, **kwargs):
         self.density = limit + random.random() * (1 - (2 * limit))
 
-    def render(self, container, generators, dry_level, wet_level = 1):
+    def init_machine(self, container):
         machine_class = load_class(self.machine)
-        machine = machine_class(container = container,
-                                namespace = self.name.capitalize())
+        return machine_class(container = container,
+                             namespace = self.name.capitalize())
+        
+    def render(self, container, generators, dry_level, wet_level = 1):
+        machine = self.init_machine(container)
         container.add_machine(machine)
         pattern = spawn_function(**self.pattern)(**self.pattern["args"])
         groove = spawn_function(**self.groove)
@@ -153,24 +156,11 @@ class SampleTrack(SynthTrack):
         i = int(random.random() > 0.5)
         self.samples[i] = samples[0]
 
-    def render(self, container, generators, dry_level, wet_level = 1):
+    def init_machine(self, container):
         machine_class = load_class(self.machine)
-        machine = machine_class(container = container,
-                                namespace = self.name.capitalize(),
-                                samples = self.samples)
-        container.add_machine(machine)
-        pattern = spawn_function(**self.pattern)(**self.pattern["args"])
-        groove = spawn_function(**self.groove)
-        env = {"dry_level": dry_level,
-               "wet_level": wet_level,
-               "temperature": self.temperature,
-               "density": self.density,
-               "pattern": pattern,
-               "groove": groove}
-        for generator in generators:
-            machine.render(generator = generator,
-                           seeds = self.seeds,
-                           env = env)
+        return machine_class(container = container,
+                             namespace = self.name.capitalize(),
+                             samples = self.samples)
         
     def to_json(self):
         base_json = super().to_json()
