@@ -1,7 +1,5 @@
 ### short
 
-- refactor tracks.randomise to call track.randomise
-
 - add back hex support
 - add basic arranger
 
@@ -37,6 +35,7 @@
 
 ### done
 
+- refactor tracks.randomise to call track.randomise
 - call randomise_params polymorphically
 - add new randomise which calls instance
 - rename randomise as randomise_params
