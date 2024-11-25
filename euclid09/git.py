@@ -1,12 +1,16 @@
-from sv.utils.naming import random_name
 from euclid09.model import Patches
+
+from sv.utils.naming import random_name
+
 from datetime import datetime
+
 import json
 import logging
 import os
 import re
 
 class CommitId:
+
     @staticmethod
     def randomise():
         return CommitId(slug=random_name(),
@@ -33,11 +37,13 @@ class CommitId:
         return f"{self.timestamp}-{self.slug}"
 
 class Commit:
+
     def __init__(self, commit_id, content):
         self.commit_id = commit_id
         self.content = content
 
 class Git:
+
     def __init__(self, root):
         if not os.path.exists(root):
             os.makedirs(root)
