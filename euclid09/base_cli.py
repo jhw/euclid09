@@ -139,6 +139,9 @@ class BaseCLI(cmd.Cmd):
         for commit in self.git.commits:
             logging.info(commit.commit_id)
 
+    def do_git_checkout(self, commit_id):
+        self.git.checkout(commit_id)
+            
     def do_git_undo(self, _):
         self.git.undo()
 

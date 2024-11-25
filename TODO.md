@@ -1,6 +1,5 @@
 ### short
 
-- cli checkout 
 - refactor Track.randomise as randomise_parameters/randomise|initialise
 - add back hex support
 - add basic arranger
@@ -37,6 +36,7 @@
 
 ### done
 
+- cli checkout 
 - to_json needs to deepcopy
 - base cli
 - rename cli as randomiser
