@@ -110,11 +110,13 @@ class SampleTrack(SynthTrack):
     @staticmethod
     def randomise(pool, track, tags,
                   n_samples = 2):
+        # samples
         base_kwargs = SynthTrack.randomise(track)
         tag = tags[track["name"]]
         samples = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(samples)
         base_kwargs["samples"] = samples[:n_samples]
+        # seeds
         base_kwargs["seeds"]["sample"] = random_seed()
         return base_kwargs
 
@@ -152,10 +154,18 @@ class Tracks(list):
 
     @staticmethod
     def randomise(pool, tracks, tags):
-        return Tracks([SampleTrack(**SampleTrack.randomise(pool = pool,
-                                                           track = track,
-                                                           tags = tags))
-                       for track in tracks])
+        track_instances = []
+        for track in tracks:
+            if track["type"] == "sample":
+                track_kwargs = SampleTrack.randomise(pool = pool,
+                                                     track = track,
+                                                     tags = tags)
+                track_instance = SampleTrack(**track_kwargs)
+            elif track["type"] == "synth":
+                track_kwargs = SynthTrack.randomise(track = track)
+                track_instance = SynthTrack(**track_kwargs)
+            track_instances.append(track_instance)
+        return Tracks(track_instances)
 
     @staticmethod
     def from_json(tracks):

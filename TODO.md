@@ -1,6 +1,7 @@
 ### short
 
-- expand Tracks.randomise() and Tracks.__init__()
+- expand Tracks.randomise() 
+- expand Tracks.__init__()
 - initialise track class based on type
 
 - base cli
