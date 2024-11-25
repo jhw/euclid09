@@ -56,13 +56,7 @@ class SynthTrack:
         self.density = density
 
     def clone(self):
-        return SynthTrack(name = self.name,
-                          machine = self.machine,
-                          pattern = copy.deepcopy(self.pattern),
-                          groove = copy.deepcopy(self.groove),
-                          seeds = dict(self.seeds),
-                          temperature = self.temperature,
-                          density = self.density)
+        return SynthTrack(**self.to_json())
 
     def shuffle_pattern(self, **kwargs):
         self.pattern = random_pattern()
@@ -138,16 +132,9 @@ class SampleTrack(SynthTrack):
     def __init__(self, name, machine, samples, pattern, groove, seeds, temperature, density):
         super().__init__(name, machine, pattern, groove, seeds, temperature, density)
         self.samples = samples
-    
+
     def clone(self):
-        return SampleTrack(name = self.name,
-                           machine = self.machine,
-                           samples = list(self.samples),
-                           pattern = copy.deepcopy(self.pattern),
-                           groove = copy.deepcopy(self.groove),
-                           seeds = dict(self.seeds),
-                           temperature = self.temperature,
-                           density = self.density)
+        return SampleTrack(**self.to_json())
 
     def shuffle_samples(self, pool, tags, **kwargs):
         tag = tags[self.name]

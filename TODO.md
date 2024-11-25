@@ -1,6 +1,6 @@
 ### short
 
-- abstracy track cloning and serialisation
+- randomise to return dict
 
 - add track type
 - initialise track based on track type
@@ -40,6 +40,7 @@
 
 ### done
 
+- abstracy track cloning 
 - abstract track rendering
 - separate synth, sample tracks
 - add back randomise, mutate nomenclature
