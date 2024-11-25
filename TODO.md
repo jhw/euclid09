@@ -1,6 +1,5 @@
 ### short
 
-- expand Tracks.randomise() 
 - expand Tracks.__init__()
 - initialise track class based on type
 
@@ -42,6 +41,7 @@
 
 ### done
 
+- expand Tracks.randomise() 
 - add track type
 - add back mutate() nomenclature to model
 - refactor test names to explicitly reference sample track
