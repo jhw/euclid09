@@ -99,9 +99,9 @@ class SynthTrack:
         return {"name": self.name,
                 "machine": self.machine,
                 "type": self.type,
-                "pattern": self.pattern,
-                "groove": self.groove,
-                "seeds": self.seeds,
+                "pattern": copy.deepcopy(self.pattern),
+                "groove": copy.deepcopy(self.groove),
+                "seeds": copy.deepcopy(self.seeds),
                 "temperature": self.temperature,
                 "density": self.density}
 
@@ -147,7 +147,7 @@ class SampleTrack(SynthTrack):
         
     def to_json(self):
         base_json = super().to_json()
-        base_json["samples"] = self.samples
+        base_json["samples"] = copy.deepcopy(self.samples)
         return base_json
 
 class Tracks(list):

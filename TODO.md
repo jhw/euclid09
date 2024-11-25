@@ -1,7 +1,5 @@
 ### short
 
-- mutation isn't working :(
-
 - hex support
 - basic arranger cli
 
@@ -41,6 +39,7 @@
 
 ### done
 
+- to_json needs to deepcopy
 - base cli
 - rename cli as randomiser
 - simplify tracks init
