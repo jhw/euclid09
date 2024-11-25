@@ -1,7 +1,9 @@
 ### short
 
-- hex support
-- basic arranger cli
+- cli checkout 
+- refactor Track.randomise as randomise_parameters/randomise|initialise
+- add back hex support
+- add basic arranger
 
 ### sv
 
@@ -10,11 +12,7 @@
 
 ### medium
 
-- cli git checkout
-
 - model tests needs to cover SynthTrack class and mutate() methods
-
-- consider refactoring `SampleTrack(**SampleTrack.randomise(*args, **kwargs))`
 
 - refactor export muting to remove levels
   - render project without muted tracks 
