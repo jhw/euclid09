@@ -1,8 +1,6 @@
 ### short
 
-- randomise to return dict
-
-- refactor test names to explicitly reference sample track
+- add back mutate() nomenclature to model
 
 - add track type
 - initialise track based on track type
@@ -42,6 +40,8 @@
 
 ### done
 
+- refactor test names to explicitly reference sample track
+- randomise to return dict
 - abstracy track cloning 
 - abstract track rendering
 - separate synth, sample tracks

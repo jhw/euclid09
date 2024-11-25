@@ -29,18 +29,16 @@ def spawn_function(mod, fn, **kwargs):
 class SynthTrack:
 
     @staticmethod
-    def randomise(pool, track, tags,
-                  seed_keys = "fx|volume|beat".split("|")):
-        tag = tags[track["name"]]
+    def randomise(track, seed_keys = "fx|volume|beat".split("|")):
         seeds = {key: random_seed()
                  for key in seed_keys}
-        return Track(name = track["name"],
-                     machine = track["machine"],
-                     pattern = random_pattern(),
-                     groove = random_groove(),
-                     seeds = seeds,
-                     temperature = track["temperature"],
-                     density = track["density"])
+        return {"name": track["name"],
+                "machine": track["machine"],
+                "pattern": random_pattern(),
+                "groove": random_groove(),
+                "seeds": seeds,
+                "temperature": track["temperature"],
+                "density": track["density"]}
 
     @staticmethod
     def from_json(track):
@@ -108,21 +106,14 @@ class SampleTrack(SynthTrack):
 
     @staticmethod
     def randomise(pool, track, tags,
-                  n_samples = 2,
-                  seed_keys = "fx|volume|sample|beat".split("|")):
+                  n_samples = 2):
+        base_kwargs = SynthTrack.randomise(track)
         tag = tags[track["name"]]
         samples = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(samples)
-        seeds = {key: random_seed()
-                 for key in seed_keys}
-        return SampleTrack(name = track["name"],
-                           machine = track["machine"],
-                           samples = samples[:n_samples],
-                           pattern = random_pattern(),
-                           groove = random_groove(),
-                           seeds = seeds,
-                           temperature = track["temperature"],
-                           density = track["density"])
+        base_kwargs["samples"] = samples[:n_samples]
+        base_kwargs["seeds"]["sample"] = random_seed()
+        return base_kwargs
 
     @staticmethod
     def from_json(track):
@@ -158,9 +149,9 @@ class Tracks(list):
 
     @staticmethod
     def randomise(pool, tracks, tags):
-        return Tracks([SampleTrack.randomise(pool = pool,
-                                             track = track,
-                                             tags = tags)
+        return Tracks([SampleTrack(**SampleTrack.randomise(pool = pool,
+                                                           track = track,
+                                                           tags = tags))
                        for track in tracks])
 
     @staticmethod

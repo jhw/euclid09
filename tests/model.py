@@ -32,16 +32,16 @@ class ModelTest(unittest.TestCase):
         }
         self.mock_samples = [SVSample(**self.mock_sample) for _ in range(2)]  # Create valid SVSampleRef instances
 
-    def test_track_creation(self):
-        track = SampleTrack.randomise(self.pool, self.tracks[0], self.tag_mapping)
+    def test_sample_track_creation(self):
+        track = SampleTrack(**SampleTrack.randomise(self.pool, self.tracks[0], self.tag_mapping))
         self.assertIsInstance(track, SampleTrack)
         self.assertEqual(track.name, "kick")
         self.assertEqual(len(track.samples), 2)
         self.assertIn("mod", track.pattern)
         self.assertIn("fn", track.groove)
 
-    def test_track_clone(self):
-        track = SampleTrack.randomise(self.pool, self.tracks[0], self.tag_mapping)
+    def test_sample_track_clone(self):
+        track = SampleTrack(**SampleTrack.randomise(self.pool, self.tracks[0], self.tag_mapping))
         track.samples = self.mock_samples  # Assign valid samples
         clone = track.clone()
         self.assertEqual(track.name, clone.name)
@@ -49,8 +49,8 @@ class ModelTest(unittest.TestCase):
         self.assertEqual(track.pattern, clone.pattern)
         self.assertEqual(track.groove, clone.groove)
 
-    def test_track_serialization(self):
-        track = SampleTrack.randomise(self.pool, self.tracks[0], self.tag_mapping)
+    def test_sample_track_serialization(self):
+        track = SampleTrack(**SampleTrack.randomise(self.pool, self.tracks[0], self.tag_mapping))
         track.samples = self.mock_samples  # Assign valid samples
         serialized = track.to_json()
         deserialized = SampleTrack.from_json(serialized)
