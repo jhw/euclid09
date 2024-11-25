@@ -169,7 +169,7 @@ class Tracks(list):
             track_params = params_randomiser(**{"pool": pool,
                                                 "track": track,
                                                 "tags": tags})
-            track_instance = SampleTrack(**track_params)
+            track_instance = track_class(**track_params)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
 
