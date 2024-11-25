@@ -11,16 +11,15 @@
 
 ### sv
 
+- add beats interface with xxx_sound nomenclature (not xxx_sample)
 - refactor fx sz parameter as global cutoff_ticks or similar
-- rename toggle|randomise|increment|decrement_sample as *_sound
-- DrumSynth machine
 
 ### medium
 
 - refactor export muting to remove levels
   - render project without muted tracks 
 
-- muting and freezing
+- track muting, freezing
 - track mixing levels
 - tagging and purging
 
@@ -29,7 +28,7 @@
 ### gists
 
 - 303 slide
-- freezing
+- echo freeze
 - sv drum
 - polly vocals + vocoder
 - autotune
