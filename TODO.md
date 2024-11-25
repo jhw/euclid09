@@ -1,7 +1,7 @@
 ### short
 
-- expand Tracks.__init__()
-- initialise track class based on type
+- add track type enum
+- simplify tracks init
 
 - base cli
 - rename cli as randomiser
@@ -41,6 +41,7 @@
 
 ### done
 
+- expand Tracks.__init__()
 - expand Tracks.randomise() 
 - add track type
 - add back mutate() nomenclature to model

@@ -164,12 +164,27 @@ class Tracks(list):
             elif track["type"] == "synth":
                 track_kwargs = SynthTrack.randomise(track = track)
                 track_instance = SynthTrack(**track_kwargs)
-            track_instances.append(track_instance)
+            else:
+                raise RuntimeError(f"track type {track['type']} not supported")
+            track_instances.append(track_instance)        
         return Tracks(track_instances)
 
     @staticmethod
     def from_json(tracks):
         return Tracks([SampleTrack.from_json(track) for track in tracks])
+
+    @staticmethod
+    def from_json(tracks):
+        track_instances = []
+        for track in tracks:
+            if track["type"] == "sample":
+                track_instance = SampleTrack.from_json(track)
+            elif track["type"] == "synth":
+                track_instamce = SynthTrack.from_json(track)
+            else:
+                raise RuntimeError(f"track type {track['type']} not supported")
+            track_instances.append(track_instance)        
+        return Tracks(track_instances)
     
     def __init__(self, tracks = []):
         list.__init__(self, tracks)
