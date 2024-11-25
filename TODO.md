@@ -1,11 +1,13 @@
 ### short
 
-- add track type enum
-- simplify tracks init
-
 - base cli
 - rename cli as randomiser
-- new arranger cli
+
+- hex support
+- basic arranger cli
+- cli git checkout
+- model tests needs to cover SynthTrack class and mutate() methods
+
 
 ### sv
 
@@ -14,9 +16,9 @@
 
 ### medium
 
-- cli git checkout
 
-- model tests needs to cover SynthTrack class and mutate() methods
+
+- consider refactoring `SampleTrack(**SampleTrack.randomise(*args, **kwargs))`
 
 - refactor export muting to remove levels
   - render project without muted tracks 
@@ -41,6 +43,7 @@
 
 ### done
 
+- simplify tracks init
 - expand Tracks.__init__()
 - expand Tracks.randomise() 
 - add track type

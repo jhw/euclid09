@@ -29,7 +29,7 @@ def spawn_function(mod, fn, **kwargs):
 class SynthTrack:
 
     @staticmethod
-    def randomise(track, seed_keys = "fx|volume|beat".split("|")):
+    def randomise(track, seed_keys = "fx|volume|beat".split("|"), **kwargs):
         seeds = {key: random_seed()
                  for key in seed_keys}
         return {"name": track["name"],
@@ -109,7 +109,7 @@ class SampleTrack(SynthTrack):
 
     @staticmethod
     def randomise(pool, track, tags,
-                  n_samples = 2):
+                  n_samples = 2, **kwargs):
         # samples
         base_kwargs = SynthTrack.randomise(track)
         tag = tags[track["name"]]
@@ -156,16 +156,12 @@ class Tracks(list):
     def randomise(pool, tracks, tags):
         track_instances = []
         for track in tracks:
-            if track["type"] == "sample":
-                track_kwargs = SampleTrack.randomise(pool = pool,
-                                                     track = track,
-                                                     tags = tags)
-                track_instance = SampleTrack(**track_kwargs)
-            elif track["type"] == "synth":
-                track_kwargs = SynthTrack.randomise(track = track)
-                track_instance = SynthTrack(**track_kwargs)
-            else:
-                raise RuntimeError(f"track type {track['type']} not supported")
+            track_class = SampleTrack if track["type"] == "sample" else SynthTrack
+            track_randomiser = getattr(track_class, "randomise")
+            track_kwargs = track_randomiser(pool = pool,
+                                            track = track,
+                                            tags = tags)                
+            track_instance = SampleTrack(**track_kwargs)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
 
@@ -177,12 +173,8 @@ class Tracks(list):
     def from_json(tracks):
         track_instances = []
         for track in tracks:
-            if track["type"] == "sample":
-                track_instance = SampleTrack.from_json(track)
-            elif track["type"] == "synth":
-                track_instamce = SynthTrack.from_json(track)
-            else:
-                raise RuntimeError(f"track type {track['type']} not supported")
+            track_class = SampleTrack if track["type"] == "sample" else SynthTrack
+            track_instance = getattr(track_class, "from_json")(track)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
     
