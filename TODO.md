@@ -1,7 +1,5 @@
 ### short
 
-- model tests needs to cover SynthTrack class and mutate() methods
-
 ### sv
 
 - add beats interface with xxx_sound nomenclature (not xxx_sample)
@@ -34,6 +32,7 @@
 
 ### done
 
+- model tests needs to cover SynthTrack class and mutate() methods
 - run tests
 - remove everything in tmp
 - start cli
