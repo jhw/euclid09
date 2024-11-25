@@ -1,13 +1,9 @@
 ### short
 
-- base cli
-- rename cli as randomiser
+- mutation isn't working :(
 
 - hex support
 - basic arranger cli
-- cli git checkout
-- model tests needs to cover SynthTrack class and mutate() methods
-
 
 ### sv
 
@@ -16,7 +12,9 @@
 
 ### medium
 
+- cli git checkout
 
+- model tests needs to cover SynthTrack class and mutate() methods
 
 - consider refactoring `SampleTrack(**SampleTrack.randomise(*args, **kwargs))`
 
@@ -43,6 +41,8 @@
 
 ### done
 
+- base cli
+- rename cli as randomiser
 - simplify tracks init
 - expand Tracks.__init__()
 - expand Tracks.randomise() 
