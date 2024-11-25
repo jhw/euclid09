@@ -1,6 +1,5 @@
 ### short
 
-- separate synth, sample tracks
 - add track type
 - initialise track based on track type
 
@@ -39,6 +38,7 @@
 
 ### done
 
+- separate synth, sample tracks
 - add back randomise, mutate nomenclature
 - add clean check
 - simplify tag mapping

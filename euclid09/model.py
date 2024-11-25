@@ -26,20 +26,16 @@ def random_seed():
 def spawn_function(mod, fn, **kwargs):
     return getattr(eval(mod), fn)
 
-class Track:
+class SynthTrack:
 
     @staticmethod
     def randomise(pool, track, tags,
-                  n_samples = 2,
-                  seed_keys = "fx|volume|sample|beat".split("|")):
+                  seed_keys = "fx|volume|beat".split("|")):
         tag = tags[track["name"]]
-        samples = pool.match(lambda sample: tag in sample.tags)
-        random.shuffle(samples)
         seeds = {key: random_seed()
                  for key in seed_keys}
         return Track(name = track["name"],
                      machine = track["machine"],
-                     samples = samples[:n_samples],
                      pattern = random_pattern(),
                      groove = random_groove(),
                      seeds = seeds,
@@ -48,13 +44,11 @@ class Track:
 
     @staticmethod
     def from_json(track):
-        track["samples"] = [SVSample(**sample) for sample in track["samples"]]
-        return Track(**track)
+        return SynthTrack(**track)
 
-    def __init__(self, name, machine, samples, pattern, groove, seeds, temperature, density):
+    def __init__(self, name, machine, pattern, groove, seeds, temperature, density):
         self.name = name
         self.machine = machine
-        self.samples = samples
         self.pattern = pattern
         self.groove = groove
         self.seeds = seeds
@@ -62,21 +56,13 @@ class Track:
         self.density = density
 
     def clone(self):
-        return Track(name = self.name,
-                     machine = self.machine,
-                     samples = list(self.samples),
-                     pattern = copy.deepcopy(self.pattern),
-                     groove = copy.deepcopy(self.groove),
-                     seeds = dict(self.seeds),
-                     temperature = self.temperature,
-                     density = self.density)
-
-    def shuffle_samples(self, pool, tags, **kwargs):
-        tag = tags[self.name]
-        samples = pool.match(lambda sample: tag in sample.tags)
-        random.shuffle(samples)
-        i = int(random.random() > 0.5)
-        self.samples[i] = samples[0]
+        return SynthTrack(name = self.name,
+                          machine = self.machine,
+                          pattern = copy.deepcopy(self.pattern),
+                          groove = copy.deepcopy(self.groove),
+                          seeds = dict(self.seeds),
+                          temperature = self.temperature,
+                          density = self.density)
 
     def shuffle_pattern(self, **kwargs):
         self.pattern = random_pattern()
@@ -93,6 +79,79 @@ class Track:
 
     def shuffle_density(self, limit = 0.25, **kwargs):
         self.density = limit + random.random() * (1 - (2 * limit))
+
+    def render(self, container, generators, dry_level, wet_level = 1):
+        machine_class = load_class(self.machine)
+        machine = machine_class(container = container,
+                                namespace = self.name.capitalize())
+        container.add_machine(machine)
+        pattern = spawn_function(**self.pattern)(**self.pattern["args"])
+        groove = spawn_function(**self.groove)
+        env = {"dry_level": dry_level,
+               "wet_level": wet_level,
+               "temperature": self.temperature,
+               "density": self.density,
+               "pattern": pattern,
+               "groove": groove}
+        for generator in generators:
+            machine.render(generator = generator,
+                           seeds = self.seeds,
+                           env = env)
+        
+    def to_json(self):
+        return {"name": self.name,
+                "machine": self.machine,
+                "pattern": self.pattern,
+                "groove": self.groove,
+                "seeds": self.seeds,
+                "temperature": self.temperature,
+                "density": self.density}
+
+class SampleTrack(SynthTrack):
+
+    @staticmethod
+    def randomise(pool, track, tags,
+                  n_samples = 2,
+                  seed_keys = "fx|volume|sample|beat".split("|")):
+        tag = tags[track["name"]]
+        samples = pool.match(lambda sample: tag in sample.tags)
+        random.shuffle(samples)
+        seeds = {key: random_seed()
+                 for key in seed_keys}
+        return SampleTrack(name = track["name"],
+                           machine = track["machine"],
+                           samples = samples[:n_samples],
+                           pattern = random_pattern(),
+                           groove = random_groove(),
+                           seeds = seeds,
+                           temperature = track["temperature"],
+                           density = track["density"])
+
+    @staticmethod
+    def from_json(track):
+        track["samples"] = [SVSample(**sample) for sample in track["samples"]]
+        return SampleTrack(**track)
+
+    def __init__(self, name, machine, samples, pattern, groove, seeds, temperature, density):
+        super().__init__(name, machine, pattern, groove, seeds, temperature, density)
+        self.samples = samples
+    
+    def clone(self):
+        return SampleTrack(name = self.name,
+                           machine = self.machine,
+                           samples = list(self.samples),
+                           pattern = copy.deepcopy(self.pattern),
+                           groove = copy.deepcopy(self.groove),
+                           seeds = dict(self.seeds),
+                           temperature = self.temperature,
+                           density = self.density)
+
+    def shuffle_samples(self, pool, tags, **kwargs):
+        tag = tags[self.name]
+        samples = pool.match(lambda sample: tag in sample.tags)
+        random.shuffle(samples)
+        i = int(random.random() > 0.5)
+        self.samples[i] = samples[0]
 
     def render(self, container, generators, dry_level, wet_level = 1):
         machine_class = load_class(self.machine)
@@ -114,27 +173,22 @@ class Track:
                            env = env)
         
     def to_json(self):
-        return {"name": self.name,
-                "machine": self.machine,
-                "samples": self.samples,
-                "pattern": self.pattern,
-                "groove": self.groove,
-                "seeds": self.seeds,
-                "temperature": self.temperature,
-                "density": self.density}
+        base_json = super().to_json()
+        base_json["samples"] = self.samples
+        return base_json
 
 class Tracks(list):
 
     @staticmethod
     def randomise(pool, tracks, tags):
-        return Tracks([Track.randomise(pool = pool,
-                                       track = track,
-                                       tags = tags)
+        return Tracks([SampleTrack.randomise(pool = pool,
+                                             track = track,
+                                             tags = tags)
                        for track in tracks])
 
     @staticmethod
     def from_json(tracks):
-        return Tracks([Track.from_json(track) for track in tracks])
+        return Tracks([SampleTrack.from_json(track) for track in tracks])
     
     def __init__(self, tracks = []):
         list.__init__(self, tracks)

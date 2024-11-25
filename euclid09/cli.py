@@ -5,7 +5,7 @@ from sv.utils.naming import random_name
 
 from euclid09.generators import Beat, GhostEcho
 from euclid09.git import Git
-from euclid09.model import Patches, Track
+from euclid09.model import Patches, SampleTrack
 from euclid09.parse import parse_line
 
 from collections import OrderedDict
