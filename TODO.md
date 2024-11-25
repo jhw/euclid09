@@ -1,6 +1,6 @@
 ### short
 
-- rename randomise as randomise_params
+
 - call randomise_params polymorphically
 - add new randomise which calls instance
 
@@ -39,6 +39,7 @@
 
 ### done
 
+- rename randomise as randomise_params
 - cli checkout 
 - to_json needs to deepcopy
 - base cli

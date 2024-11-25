@@ -158,9 +158,9 @@ class Tracks(list):
         for track in tracks:
             track_class = SampleTrack if track["type"] == "sample" else SynthTrack
             params_randomiser = getattr(track_class, "randomise_params")
-            track_params = params_randomiser(pool = pool,
-                                             track = track,
-                                             tags = tags)                
+            track_params = params_randomiser(**{"pool": pool,
+                                                "track": track,
+                                                "tags": tags})
             track_instance = SampleTrack(**track_params)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
