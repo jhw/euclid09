@@ -1,6 +1,5 @@
 ### short
 
-- add back hex support
 - add basic arranger
 
 ### sv
@@ -35,6 +34,7 @@
 
 ### done
 
+- add back hex support
 - refactor tracks.randomise to call track.randomise
 - call randomise_params polymorphically
 - add new randomise which calls instance
