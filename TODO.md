@@ -1,5 +1,8 @@
 ### short
 
+- abstract track rendering
+- abstracy track cloning and serialisation
+
 - add track type
 - initialise track based on track type
 
