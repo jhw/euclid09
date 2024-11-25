@@ -97,7 +97,7 @@ class Euclid09CLI(cmd.Cmd):
     def do_show_tags(self, _):
         logging.info(yaml.safe_dump(self.tags, default_flow_style=False))
     
-    def do_rand_tags(self, _):
+    def do_randomise_tags(self, _):
         term_keys = list(self.terms.keys())
         tags = {}
         for key in self.tags:
@@ -112,10 +112,10 @@ class Euclid09CLI(cmd.Cmd):
         self.tags = tags
         self.do_show_tags(None)
 
-    ### randomise
+    ### patches
 
     @commit_and_render
-    def do_rand_patches(self, _):
+    def do_randomise_patches(self, _):
         return Patches.randomise(pool=self.pool,
                                  tracks=self.tracks,
                                  tags=self.tags,
@@ -132,7 +132,7 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_rand_samples(self, n):
+    def do_mutate_samples(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
@@ -142,7 +142,7 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_rand_pattern(self, n):
+    def do_mutate_pattern(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
@@ -152,7 +152,7 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_rand_seeds(self, n):
+    def do_mutate_seeds(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
@@ -185,32 +185,40 @@ class Euclid09CLI(cmd.Cmd):
 
     ### git
 
-    def do_head(self, _):
+    def do_git_head(self, _):
         if self.git.is_empty():
             logging.warning("Git has no commits")
         else:
             logging.info(f"HEAD is {self.git.head.commit_id}")
 
-    def do_log(self, _):
+    def do_git_log(self, _):
         for commit in self.git.commits:
             logging.info(commit.commit_id)
 
-    def do_undo(self, _):
+    def do_git_undo(self, _):
         self.git.undo()
 
-    def do_redo(self, _):
+    def do_git_redo(self, _):
         self.git.redo()
 
     ### project management
 
-    def do_clean(self, _):
-        for dir_name in ["tmp/git", "tmp/sunvox", "tmp/wav"]:
-            if os.path.exists(dir_name):
-                for filename in os.listdir(dir_name):
-                    file_path = os.path.join(dir_name, filename)
-                    if os.path.isfile(file_path):
-                        os.remove(file_path)
-        self.git = Git("tmp/git")
+    def do_clean_projects(self, _):
+        while True:
+            answer = input(f"Are you sure ?: ")
+            if answer == "y":
+                for dir_name in ["tmp/git", "tmp/sunvox", "tmp/wav"]:
+                    if os.path.exists(dir_name):
+                        for filename in os.listdir(dir_name):
+                            file_path = os.path.join(dir_name, filename)
+                            if os.path.isfile(file_path):
+                                os.remove(file_path)
+                self.git = Git("tmp/git")
+                break
+            elif answer == "n":
+                break
+            elif answer == "q":
+                return 
 
     ### exit
         
