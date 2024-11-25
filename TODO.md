@@ -1,33 +1,14 @@
-### short [01-testing]
+### short
 
-- run tests
-- remove everything in tmp
-- start cli
-- check banks initialised
-- randomise params
-- exit
-- check git saved
-- restart
-- check git loaded
-- clone col
-- mutate samples
-- clone col
-- mutate seeds
-- exit
-- load arranger
-- arrange
-- export
+- model tests needs to cover SynthTrack class and mutate() methods
 
 ### sv
 
 - add beats interface with xxx_sound nomenclature (not xxx_sample)
+
 - refactor fx sz parameter as global cutoff_ticks or similar
 
 ### medium
-
-- default arranger args?
-
-- model tests needs to cover SynthTrack class and mutate() methods
 
 - refactor export muting to remove levels
   - render project without muted tracks 
@@ -51,6 +32,24 @@
 - kicker
 
 ### done
+
+- run tests
+- remove everything in tmp
+- start cli
+- check banks initialised
+- randomise params
+- exit
+- check git saved
+- restart
+- check git loaded
+- clone col
+- mutate samples
+- clone col
+- mutate seeds
+- exit
+- load arranger
+- arrange
+- export
 
 - add basic arranger
 - add back hex support

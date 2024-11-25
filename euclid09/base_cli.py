@@ -106,7 +106,7 @@ class BaseCLI(cmd.Cmd):
     ### export
     
     @assert_head
-    def do_export(self, _):
+    def do_export_stems(self, _):
         if not os.path.exists("tmp/wav"):
             os.makedirs("tmp/wav")
         commit_id = self.git.head.commit_id
