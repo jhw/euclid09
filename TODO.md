@@ -16,6 +16,8 @@
 
 ### medium
 
+- cli git checkout
+
 - refactor export muting to remove levels
   - render project without muted tracks 
 

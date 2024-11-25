@@ -164,7 +164,7 @@ class Tracks(list):
     def clone(self):
         return Tracks([track.clone() for track in self])
 
-    def randomise_attr(self, attr, **kwargs):
+    def mutate_attr(self, attr, **kwargs):
         track = random.choice(self)
         getattr(track, f"shuffle_{attr}")(**kwargs)
 
@@ -196,8 +196,8 @@ class Patch:
     def clone(self):
         return Patch(tracks = self.tracks.clone())    
 
-    def randomise_attr(self, attr, **kwargs):
-        self.tracks.randomise_attr(attr, **kwargs)
+    def mutate_attr(self, attr, **kwargs):
+        self.tracks.mutate_attr(attr, **kwargs)
 
     def render(self, container, generators, levels):
         container.spawn_patch()
