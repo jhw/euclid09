@@ -1,6 +1,9 @@
 ### short
 
-- refactor Track.randomise as randomise_parameters/randomise|initialise
+- rename randomise as randomise_params
+- call randomise_params polymorphically
+- add new randomise which calls instance
+
 - add back hex support
 - add basic arranger
 

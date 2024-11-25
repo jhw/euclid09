@@ -29,7 +29,7 @@ def spawn_function(mod, fn, **kwargs):
 class SynthTrack:
 
     @staticmethod
-    def randomise(track, seed_keys = "fx|volume|beat".split("|"), **kwargs):
+    def randomise_params(track, seed_keys = "fx|volume|beat".split("|"), **kwargs):
         seeds = {key: random_seed()
                  for key in seed_keys}
         return {"name": track["name"],
@@ -108,10 +108,10 @@ class SynthTrack:
 class SampleTrack(SynthTrack):
 
     @staticmethod
-    def randomise(pool, track, tags,
-                  n_samples = 2, **kwargs):
+    def randomise_params(pool, track, tags,
+                         n_samples = 2, **kwargs):
         # samples
-        base_kwargs = SynthTrack.randomise(track)
+        base_kwargs = SynthTrack.randomise_params(track)
         tag = tags[track["name"]]
         samples = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(samples)
@@ -157,11 +157,11 @@ class Tracks(list):
         track_instances = []
         for track in tracks:
             track_class = SampleTrack if track["type"] == "sample" else SynthTrack
-            track_randomiser = getattr(track_class, "randomise")
-            track_kwargs = track_randomiser(pool = pool,
-                                            track = track,
-                                            tags = tags)                
-            track_instance = SampleTrack(**track_kwargs)
+            params_randomiser = getattr(track_class, "randomise_params")
+            track_params = params_randomiser(pool = pool,
+                                             track = track,
+                                             tags = tags)                
+            track_instance = SampleTrack(**track_params)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
 
