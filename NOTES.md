@@ -1,4 +1,4 @@
-### tagging and purging
+### tagging and purging xx/11/24
 
 - by default patches are just saved with timestamp, but all are saved to sunvox
 - you have to call a tag() method for it to create a new commit, with a name

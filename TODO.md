@@ -3,7 +3,6 @@
 ### sv
 
 - add beats interface with xxx_sound nomenclature (not xxx_sample)
-
 - refactor fx sz parameter as global cutoff_ticks or similar
 
 ### medium
