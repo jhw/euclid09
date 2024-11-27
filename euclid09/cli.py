@@ -110,7 +110,7 @@ class Euclid09CLI(cmd.Cmd):
         self.tags = tags
         self.do_show_tags(None)
 
-    ### randomise, mutate
+    ### randomise
 
     @commit_and_render
     def do_randomise_patches(self, _):
