@@ -1,8 +1,6 @@
 ### short
 
 - explicit sample cutoff
-- only export individual tracks
-- simplify track naming
 
 ### medium
 
@@ -34,6 +32,8 @@
 
 ### done
 
+- only export individual tracks
+- simplify track naming
 - refactor cli do_mutate as do_randomise
 - sv 0.3.19
 - merge randomiser and arranger back into base cli to form single unified cli again 

@@ -41,7 +41,7 @@ class Levels(OrderedDict):
 
     @property
     def short_code(self):
-        return "".join([k[0] if v == 1 else "x" for k, v in self.items()])
+        return "".join([k[:3] if v == 1 else "" for k, v in self.items()])
 
 def assert_head(fn):
     def wrapped(self, *args, **kwargs):
@@ -202,10 +202,9 @@ class Euclid09CLI(cmd.Cmd):
         commit_id = self.git.head.commit_id
         zip_name = f"tmp/wav/{commit_id.slug}.zip"
         with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-            levels = [Levels(self.tracks)]
+            levels = []
             for track in self.tracks:
                 levels.append(Levels(self.tracks).solo(track["name"]))
-                levels.append(Levels(self.tracks).mute(track["name"]))
             patches = self.git.head.content
             for levels_ in levels:
                 container = patches.render(banks = self.banks,
