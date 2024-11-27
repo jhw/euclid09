@@ -1,14 +1,17 @@
 ### short
 
-- merge randomiser and arranger back into base cli to form single unified cli again 
 
 ### sv
 
 - add beats interface with xxx_sound nomenclature (not xxx_sample)
+
 - refactor fx sz parameter as global cutoff_ticks or similar
 
 ### medium
 
+### features
+
+- density and temperature variations
 - track muting, freezing
 - track mixing levels
 - tagging and purging
@@ -33,6 +36,7 @@
 
 ### done
 
+- merge randomiser and arranger back into base cli to form single unified cli again 
 - split existing arrangement code into arrange random (no args) and arrange custom (hex arg)
 - model tests needs to cover SynthTrack class and mutate() methods
 - run tests
