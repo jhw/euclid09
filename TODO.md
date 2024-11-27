@@ -1,8 +1,9 @@
 ### short
 
-- sv 0.3.19
-- explicit sample cutoff
 - refactor cli do_mutate as do_randomise
+- explicit sample cutoff
+- only export individual tracks
+- simplify track naming
 
 ### medium
 
@@ -34,6 +35,7 @@
 
 ### done
 
+- sv 0.3.19
 - merge randomiser and arranger back into base cli to form single unified cli again 
 - split existing arrangement code into arrange random (no args) and arrange custom (hex arg)
 - model tests needs to cover SynthTrack class and mutate() methods
