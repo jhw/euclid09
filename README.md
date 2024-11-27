@@ -37,7 +37,7 @@ INFO: HEAD is 2024-11-26-06-30-29-big-singer
 INFO: HEAD is now at 2024-11-26-06-30-20-master-leading
 >>> mutate_samples 2 # <-- re- randomise samples
 INFO: HEAD is 2024-11-26-06-30-52-empty-nail
->>> randomise_arrangement 0123456789abcdef # <-- randomises arrangements based on hex input of patches you like (this still needs a lot of work to be useful)
+>>> arrange_random # <-- randomises arrangements
 INFO: HEAD is 2024-11-26-06-37-14-pretty-program
 >>> export_stems # <-- export to wav, including all solos and mutes
 SOUND: sundog_sound_deinit() begin
