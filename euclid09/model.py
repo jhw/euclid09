@@ -2,7 +2,7 @@ import sv.algos.euclid as euclid
 import sv.algos.groove.perkons as perkons
 
 from sv.container import SVContainer
-from sv.sampler import SVSampleRef as SVSample
+from sv.sampler import SVSample
 from sv.project import load_class
 
 import copy

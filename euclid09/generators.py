@@ -2,7 +2,7 @@ def Beat(self, n, rand, pattern, groove, temperature, density, dry_level, **kwar
     for i in range(n):
         volume = groove(rand = rand["volume"], i = i)
         if rand["sample"].random() < temperature:
-            self.toggle_sample()        
+            self.toggle_sound()        
         if (pattern(i) and 
             rand["beat"].random() < density):
             trig_block = self.note(volume = volume,

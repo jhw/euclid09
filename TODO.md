@@ -1,16 +1,11 @@
 ### short
 
-### sv
-
-- add beats interface with xxx_sound nomenclature (not xxx_sample)
-
-- refactor fx sz parameter as global cutoff_ticks or similar
+- density and temperature variations
 
 ### medium
 
 ### features
 
-- density and temperature variations
 - track muting, freezing
 - track mixing levels
 - tagging and purging
