@@ -1,6 +1,5 @@
 ### short
 
-- refactor cli do_mutate as do_randomise
 - explicit sample cutoff
 - only export individual tracks
 - simplify track naming
@@ -35,6 +34,7 @@
 
 ### done
 
+- refactor cli do_mutate as do_randomise
 - sv 0.3.19
 - merge randomiser and arranger back into base cli to form single unified cli again 
 - split existing arrangement code into arrange random (no args) and arrange custom (hex arg)

@@ -130,7 +130,7 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_mutate_samples(self, n):
+    def do_randomise_samples(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
@@ -140,7 +140,7 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_mutate_pattern(self, n):
+    def do_randomise_pattern(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
@@ -150,7 +150,7 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_mutate_seeds(self, n):
+    def do_randomise_seeds(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
