@@ -1,5 +1,7 @@
 ### short
 
+- merge randomiser and arranger back into base cli to form single unified cli again 
+
 ### sv
 
 - add beats interface with xxx_sound nomenclature (not xxx_sample)
@@ -31,6 +33,7 @@
 
 ### done
 
+- split existing arrangement code into arrange random (no args) and arrange custom (hex arg)
 - model tests needs to cover SynthTrack class and mutate() methods
 - run tests
 - remove everything in tmp

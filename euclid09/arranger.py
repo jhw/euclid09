@@ -17,18 +17,16 @@ class ArrangerCLI(BaseCLI):
         super().__init__(*args, **kwargs)
 
     @assert_head
-    @parse_line([{"name": "indexing", "type": "hexstr"}])
     @commit_and_render
-    def do_randomise_arrangement(self, indexing,
-                                 phrase_size = 4,
-                                 patterns = [[0, 1, 0, 0],
-                                             [0, 0, 1, 0],
-                                             [0, 0, 0, 1],
-                                             [0, 0, 0, 1],
-                                             [0, 0, 0, 1],
-                                             [0, 1, 0, 2]]):
-        patches = self.git.head.content
-        roots = [patches[i % len(patches)] for i in indexing]
+    def do_arrange_random(self, _,
+                          phrase_size = 4,
+                          patterns = [[0, 1, 0, 0],
+                                      [0, 0, 1, 0],
+                                      [0, 0, 0, 1],
+                                      [0, 0, 0, 1],
+                                      [0, 0, 0, 1],
+                                      [0, 1, 0, 2]]):
+        roots = self.git.head.content
         n_phrases = int(self.n_patches / phrase_size)
         arrangement = Patches()
         for i in range(n_phrases):
@@ -37,6 +35,18 @@ class ArrangerCLI(BaseCLI):
             for j in pattern:
                 patch = roots[j].clone()
                 arrangement.append(patch)
+        return arrangement
+
+    @assert_head
+    @parse_line([{"name": "indexing", "type": "hexstr"}])
+    @commit_and_render
+    def do_arrange_custom(self, indexing):
+        roots = self.git.head.content
+        arrangement = Patches()
+        for i in indexing:
+            j = i % len(roots)
+            patch = roots[j].clone()
+            arrangement.append(patch)
         return arrangement
            
 if __name__ == "__main__":
