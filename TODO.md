@@ -1,8 +1,12 @@
 ### short
 
-- density and temperature variations
+- sv 0.3.19
+- explicit sample cutoff
+- refactor cli do_mutate as do_randomise
 
 ### medium
+
+- density and temperature variations
 
 ### features
 
