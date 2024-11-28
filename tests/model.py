@@ -35,7 +35,10 @@ class ModelTest(unittest.TestCase):
         self.mock_samples = [SVSample(**self.mock_sample) for _ in range(2)]
 
     def test_sample_track_creation(self):
-        track = SampleTrack.randomise(self.tracks[0], self.pool, self.tag_mapping, self.sample_cutoff)
+        track = SampleTrack.randomise(track = self.tracks[0],
+                                      pool = self.pool,
+                                      tags = self.tag_mapping,
+                                      sample_cutoff = self.sample_cutoff)
         self.assertIsInstance(track, SampleTrack)
         self.assertEqual(track.name, "kick")
         self.assertEqual(len(track.samples), 2)
@@ -43,7 +46,10 @@ class ModelTest(unittest.TestCase):
         self.assertIn("fn", track.groove)
 
     def test_sample_track_clone(self):
-        track = SampleTrack.randomise(self.tracks[0], self.pool, self.tag_mapping, self.sample_cutoff)
+        track = SampleTrack.randomise(track = self.tracks[0],
+                                      pool = self.pool,
+                                      tags = self.tag_mapping,
+                                      sample_cutoff = self.sample_cutoff)
         track.samples = self.mock_samples
         clone = track.clone()
         self.assertEqual(track.name, clone.name)
@@ -52,7 +58,10 @@ class ModelTest(unittest.TestCase):
         self.assertEqual(track.groove, clone.groove)
 
     def test_sample_track_serialization(self):
-        track = SampleTrack.randomise(self.tracks[0], self.pool, self.tag_mapping, self.sample_cutoff)
+        track = SampleTrack.randomise(track = self.tracks[0],
+                                      pool = self.pool,
+                                      tags = self.tag_mapping,
+                                      sample_cutoff = self.sample_cutoff)
         track.samples = self.mock_samples
         serialized = track.to_json()
         deserialized = SampleTrack.from_json(serialized)
@@ -61,7 +70,10 @@ class ModelTest(unittest.TestCase):
         self.assertEqual(track.groove, deserialized.groove)
 
     def test_tracks_randomisation(self):
-        tracks = Tracks.randomise(self.tracks, self.pool, self.tag_mapping, self.sample_cutoff)
+        tracks = Tracks.randomise(tracks = self.tracks,
+                                  pool = self.pool,
+                                  tags = self.tag_mapping,
+                                  sample_cutoff = self.sample_cutoff)
         self.assertIsInstance(tracks, Tracks)
         self.assertEqual(len(tracks), len(self.tracks))
         clone = tracks.clone()
@@ -70,7 +82,10 @@ class ModelTest(unittest.TestCase):
             self.assertEqual(t1.name, t2.name)
 
     def test_tracks_serialization(self):
-        tracks = Tracks.randomise(self.tracks, self.pool, self.tag_mapping, self.sample_cutoff)
+        tracks = Tracks.randomise(tracks = self.tracks,
+                                  pool = self.pool,
+                                  tags = self.tag_mapping,
+                                  sample_cutoff = self.sample_cutoff)
         for track in tracks:
             track.samples = self.mock_samples
         serialized = tracks.to_json()
@@ -80,7 +95,10 @@ class ModelTest(unittest.TestCase):
             self.assertEqual(t1.name, t2.name)
 
     def test_patch_creation(self):
-        patch = Patch.randomise(self.tracks, self.pool, self.tag_mapping, self.sample_cutoff)
+        patch = Patch.randomise(tracks = self.tracks,
+                                pool = self.pool,
+                                tags = self.tag_mapping,
+                                sample_cutoff = self.sample_cutoff)
         for track in patch.tracks:
             track.samples = self.mock_samples
         self.assertIsInstance(patch, Patch)
@@ -91,7 +109,11 @@ class ModelTest(unittest.TestCase):
         self.assertEqual(len(deserialized.tracks), len(patch.tracks))
 
     def test_patches_randomisation(self):
-        patches = Patches.randomise(self.tracks, self.pool, self.tag_mapping, self.sample_cutoff, n=3)
+        patches = Patches.randomise(tracks = self.tracks,
+                                    pool = self.pool,
+                                    tags = self.tag_mapping,
+                                    sample_cutoff = self.sample_cutoff,
+                                    n = 3)
         for patch in patches:
             for track in patch.tracks:
                 track.samples = self.mock_samples
@@ -101,7 +123,11 @@ class ModelTest(unittest.TestCase):
         self.assertEqual(len(clone), len(patches))
 
     def test_patches_serialization(self):
-        patches = Patches.randomise(self.tracks, self.pool, self.tag_mapping, self.sample_cutoff, n=3)
+        patches = Patches.randomise(tracks = self.tracks,
+                                    pool = self.pool,
+                                    tags = self.tag_mapping,
+                                    sample_cutoff = self.sample_cutoff,
+                                    n = 3)
         for patch in patches:
             for track in patch.tracks:
                 track.samples = self.mock_samples
@@ -113,7 +139,10 @@ class ModelTest(unittest.TestCase):
 
     # New Tests
     def test_mutation_tracks(self):
-        tracks = Tracks.randomise(self.tracks, self.pool, self.tag_mapping, self.sample_cutoff)
+        tracks = Tracks.randomise(tracks = self.tracks,
+                                  pool = self.pool,
+                                  tags = self.tag_mapping,
+                                  sample_cutoff = self.sample_cutoff)
         for track in tracks:
             track.samples = self.mock_samples
         tracks.mutate_attr("temperature", limit=0.1)
@@ -122,7 +151,10 @@ class ModelTest(unittest.TestCase):
             self.assertLessEqual(track.temperature, 0.9)
 
     def test_mutation_patch(self):
-        patch = Patch.randomise(self.tracks, self.pool, self.tag_mapping, self.sample_cutoff)
+        patch = Patch.randomise(tracks = self.tracks,
+                                pool = self.pool,
+                                tags = self.tag_mapping,
+                                sample_cutoff = self.sample_cutoff)
         for track in patch.tracks:
             track.samples = self.mock_samples
         patch.mutate_attr("density", limit=0.2)
@@ -131,7 +163,10 @@ class ModelTest(unittest.TestCase):
             self.assertLessEqual(track.density, 0.8)
 
     def test_init_machine(self):
-        track = SampleTrack.randomise(self.tracks[0], self.pool, self.tag_mapping, self.sample_cutoff)
+        track = SampleTrack.randomise(track = self.tracks[0],
+                                      pool = self.pool,
+                                      tags = self.tag_mapping,
+                                      sample_cutoff = self.sample_cutoff)
         track.samples = self.mock_samples  # Assign valid samples
         container = Mock()
         machine = track.init_machine(container)
