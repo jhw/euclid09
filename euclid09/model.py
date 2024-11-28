@@ -112,7 +112,7 @@ class SynthTrack:
 class SampleTrack(SynthTrack):
 
     @staticmethod
-    def randomise_params(track, pool, tags, sample_cutoff,
+    def randomise_params(track, pool, tags, cutoff,
                          n_samples = 2, **kwargs):
         # samples
         base_kwargs = SynthTrack.randomise_params(track)
@@ -120,17 +120,17 @@ class SampleTrack(SynthTrack):
         samples = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(samples)
         base_kwargs["samples"] = samples[:n_samples]
-        base_kwargs["sample_cutoff"] = sample_cutoff
+        base_kwargs["cutoff"] = cutoff
         # seeds
         base_kwargs["seeds"]["sample"] = random_seed()
         return base_kwargs
 
     @staticmethod
-    def randomise(track, pool, tags, sample_cutoff, **kwargs):
+    def randomise(track, pool, tags, cutoff, **kwargs):
         return SampleTrack(**SampleTrack.randomise_params(track = track,
                                                           pool = pool,
                                                           tags = tags,
-                                                          sample_cutoff = sample_cutoff,
+                                                          cutoff = cutoff,
                                                           **kwargs))
     
     @staticmethod
@@ -138,10 +138,10 @@ class SampleTrack(SynthTrack):
         track["samples"] = [SVSample(**sample) for sample in track["samples"]]
         return SampleTrack(**track)
 
-    def __init__(self, samples, sample_cutoff, *args, **kwargs):
+    def __init__(self, samples, cutoff, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.samples = samples
-        self.sample_cutoff = sample_cutoff
+        self.cutoff = cutoff
 
     def clone(self):
         return SampleTrack(**self.to_json())
@@ -158,18 +158,18 @@ class SampleTrack(SynthTrack):
         return machine_class(container = container,
                              namespace = self.name.capitalize(),
                              samples = self.samples,
-                             sample_cutoff = self.sample_cutoff)
+                             sample_cutoff = self.cutoff) # NB name switch
         
     def to_json(self):
         base_json = super().to_json()
         base_json["samples"] = copy.deepcopy(self.samples)
-        base_json["sample_cutoff"] = self.sample_cutoff
+        base_json["cutoff"] = self.cutoff
         return base_json
 
 class Tracks(list):
 
     @staticmethod
-    def randomise(tracks, pool, tags, sample_cutoff):
+    def randomise(tracks, pool, tags, cutoff):
         track_instances = []
         for track in tracks:
             track_class = SampleTrack if track["type"] == "sample" else SynthTrack
@@ -177,7 +177,7 @@ class Tracks(list):
             track_instance = track_randomiser(**{"track": track,
                                                  "pool": pool,
                                                  "tags": tags,
-                                                 "sample_cutoff": sample_cutoff})
+                                                 "cutoff": cutoff})
             track_instances.append(track_instance)        
         return Tracks(track_instances)
 
@@ -217,11 +217,11 @@ class Tracks(list):
 class Patch:
 
     @staticmethod
-    def randomise(tracks, pool, tags, sample_cutoff):
+    def randomise(tracks, pool, tags, cutoff):
         return Patch(tracks = Tracks.randomise(tracks = tracks,
                                                pool = pool,
                                                tags = tags,
-                                               sample_cutoff = sample_cutoff))
+                                               cutoff = cutoff))
 
     @staticmethod
     def from_json(patch):
@@ -248,11 +248,11 @@ class Patch:
 class Patches(list):
 
     @staticmethod
-    def randomise(tracks, pool, tags, sample_cutoff, n):
+    def randomise(tracks, pool, tags, cutoff, n):
         return Patches([Patch.randomise(tracks = tracks,
                                         pool = pool,
                                         tags = tags,
-                                        sample_cutoff = sample_cutoff)
+                                        cutoff = cutoff)
                         for i in range(n)])
 
     @staticmethod

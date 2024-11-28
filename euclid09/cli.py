@@ -78,7 +78,7 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the euclid09 CLI ;)"
     
-    def __init__(self, tracks, banks, pool, generators, tags, terms, n_patches = 16, sample_cutoff = 0.5):
+    def __init__(self, tracks, banks, pool, generators, tags, terms, cutoff, n_patches):
         super().__init__()
         self.tracks = tracks
         self.banks = banks
@@ -87,7 +87,7 @@ class Euclid09CLI(cmd.Cmd):
         self.tags = dict(tags)
         self.terms = terms
         self.n_patches = n_patches
-        self.sample_cutoff = sample_cutoff
+        self.cutoff = cutoff
         self.git = Git("tmp/git")
 
     def preloop(self):
@@ -125,7 +125,7 @@ class Euclid09CLI(cmd.Cmd):
         return Patches.randomise(tracks = self.tracks,
                                  pool = self.pool,
                                  tags = self.tags,
-                                 sample_cutoff = self.sample_cutoff,
+                                 cutoff = self.cutoff,
                                  n = self.n_patches)
 
     @assert_head
@@ -286,7 +286,9 @@ if __name__ == "__main__":
                     pool = pool,
                     generators = [Beat, GhostEcho],                    
                     tags = tags,
-                    terms = terms).cmdloop()
+                    terms = terms,
+                    cutoff = 0.25,
+                    n_patches = 16).cmdloop()
     except RuntimeError as error:
         logging.error(str(error))
 

@@ -1,6 +1,6 @@
 ### short
 
-- refactor cli sample_cutoff as simply cutoff
+- use argsparse to accept values for cutoff and n_patches
 
 ### medium
 
@@ -37,6 +37,7 @@
 
 ### done
 
+- refactor cli sample_cutoff as simply cutoff
 - rename tag_mapping in model test
 - pass named args to track.randomise
 - track should be first arg in model.randomise()

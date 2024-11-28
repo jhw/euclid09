@@ -22,7 +22,7 @@ class ModelTest(unittest.TestCase):
              "density": 0.25}
         ]
         self.tags = {"kick": "sample", "clap": "sample"}
-        self.sample_cutoff  = 0.5
+        self.cutoff  = 0.5
         self.levels = {"kick": 1, "clap": 0.5}
 
         # Mock for SVSampleRef
@@ -38,7 +38,7 @@ class ModelTest(unittest.TestCase):
         track = SampleTrack.randomise(track = self.tracks[0],
                                       pool = self.pool,
                                       tags = self.tags,
-                                      sample_cutoff = self.sample_cutoff)
+                                      cutoff = self.cutoff)
         self.assertIsInstance(track, SampleTrack)
         self.assertEqual(track.name, "kick")
         self.assertEqual(len(track.samples), 2)
@@ -49,7 +49,7 @@ class ModelTest(unittest.TestCase):
         track = SampleTrack.randomise(track = self.tracks[0],
                                       pool = self.pool,
                                       tags = self.tags,
-                                      sample_cutoff = self.sample_cutoff)
+                                      cutoff = self.cutoff)
         track.samples = self.mock_samples
         clone = track.clone()
         self.assertEqual(track.name, clone.name)
@@ -61,7 +61,7 @@ class ModelTest(unittest.TestCase):
         track = SampleTrack.randomise(track = self.tracks[0],
                                       pool = self.pool,
                                       tags = self.tags,
-                                      sample_cutoff = self.sample_cutoff)
+                                      cutoff = self.cutoff)
         track.samples = self.mock_samples
         serialized = track.to_json()
         deserialized = SampleTrack.from_json(serialized)
@@ -73,7 +73,7 @@ class ModelTest(unittest.TestCase):
         tracks = Tracks.randomise(tracks = self.tracks,
                                   pool = self.pool,
                                   tags = self.tags,
-                                  sample_cutoff = self.sample_cutoff)
+                                  cutoff = self.cutoff)
         self.assertIsInstance(tracks, Tracks)
         self.assertEqual(len(tracks), len(self.tracks))
         clone = tracks.clone()
@@ -85,7 +85,7 @@ class ModelTest(unittest.TestCase):
         tracks = Tracks.randomise(tracks = self.tracks,
                                   pool = self.pool,
                                   tags = self.tags,
-                                  sample_cutoff = self.sample_cutoff)
+                                  cutoff = self.cutoff)
         for track in tracks:
             track.samples = self.mock_samples
         serialized = tracks.to_json()
@@ -98,7 +98,7 @@ class ModelTest(unittest.TestCase):
         patch = Patch.randomise(tracks = self.tracks,
                                 pool = self.pool,
                                 tags = self.tags,
-                                sample_cutoff = self.sample_cutoff)
+                                cutoff = self.cutoff)
         for track in patch.tracks:
             track.samples = self.mock_samples
         self.assertIsInstance(patch, Patch)
@@ -112,7 +112,7 @@ class ModelTest(unittest.TestCase):
         patches = Patches.randomise(tracks = self.tracks,
                                     pool = self.pool,
                                     tags = self.tags,
-                                    sample_cutoff = self.sample_cutoff,
+                                    cutoff = self.cutoff,
                                     n = 3)
         for patch in patches:
             for track in patch.tracks:
@@ -126,7 +126,7 @@ class ModelTest(unittest.TestCase):
         patches = Patches.randomise(tracks = self.tracks,
                                     pool = self.pool,
                                     tags = self.tags,
-                                    sample_cutoff = self.sample_cutoff,
+                                    cutoff = self.cutoff,
                                     n = 3)
         for patch in patches:
             for track in patch.tracks:
@@ -142,7 +142,7 @@ class ModelTest(unittest.TestCase):
         tracks = Tracks.randomise(tracks = self.tracks,
                                   pool = self.pool,
                                   tags = self.tags,
-                                  sample_cutoff = self.sample_cutoff)
+                                  cutoff = self.cutoff)
         for track in tracks:
             track.samples = self.mock_samples
         tracks.mutate_attr("temperature", limit=0.1)
@@ -154,7 +154,7 @@ class ModelTest(unittest.TestCase):
         patch = Patch.randomise(tracks = self.tracks,
                                 pool = self.pool,
                                 tags = self.tags,
-                                sample_cutoff = self.sample_cutoff)
+                                cutoff = self.cutoff)
         for track in patch.tracks:
             track.samples = self.mock_samples
         patch.mutate_attr("density", limit=0.2)
@@ -166,7 +166,7 @@ class ModelTest(unittest.TestCase):
         track = SampleTrack.randomise(track = self.tracks[0],
                                       pool = self.pool,
                                       tags = self.tags,
-                                      sample_cutoff = self.sample_cutoff)
+                                      cutoff = self.cutoff)
         track.samples = self.mock_samples  # Assign valid samples
         container = Mock()
         machine = track.init_machine(container)
