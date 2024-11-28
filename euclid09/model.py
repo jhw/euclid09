@@ -112,8 +112,7 @@ class SynthTrack:
 class SampleTrack(SynthTrack):
 
     @staticmethod
-    def randomise_params(pool, track, tags,
-                         sample_cutoff = 0.5,
+    def randomise_params(pool, track, tags, sample_cutoff,
                          n_samples = 2, **kwargs):
         # samples
         base_kwargs = SynthTrack.randomise_params(track)
@@ -127,8 +126,8 @@ class SampleTrack(SynthTrack):
         return base_kwargs
 
     @staticmethod
-    def randomise(pool, track, tags, **kwargs):
-        return SampleTrack(**SampleTrack.randomise_params(pool, track, tags, **kwargs))
+    def randomise(pool, track, tags, sample_cutoff, **kwargs):
+        return SampleTrack(**SampleTrack.randomise_params(pool, track, tags, sample_cutoff, **kwargs))
     
     @staticmethod
     def from_json(track):
@@ -166,14 +165,15 @@ class SampleTrack(SynthTrack):
 class Tracks(list):
 
     @staticmethod
-    def randomise(pool, tracks, tags):
+    def randomise(pool, tracks, tags, sample_cutoff):
         track_instances = []
         for track in tracks:
             track_class = SampleTrack if track["type"] == "sample" else SynthTrack
             track_randomiser = getattr(track_class, "randomise")
             track_instance = track_randomiser(**{"pool": pool,
                                                  "track": track,
-                                                 "tags": tags})
+                                                 "tags": tags,
+                                                 "sample_cutoff": sample_cutoff})
             track_instances.append(track_instance)        
         return Tracks(track_instances)
 
@@ -213,10 +213,11 @@ class Tracks(list):
 class Patch:
 
     @staticmethod
-    def randomise(pool, tracks, tags):
+    def randomise(pool, tracks, tags, sample_cutoff):
         return Patch(tracks = Tracks.randomise(pool = pool,
                                                tracks = tracks,
-                                               tags = tags))
+                                               tags = tags,
+                                               sample_cutoff = sample_cutoff))
 
     @staticmethod
     def from_json(patch):
@@ -243,10 +244,11 @@ class Patch:
 class Patches(list):
 
     @staticmethod
-    def randomise(pool, tracks, tags, n):
+    def randomise(pool, tracks, tags, sample_cutoff, n):
         return Patches([Patch.randomise(pool = pool,
                                         tracks = tracks,
-                                        tags = tags)
+                                        tags = tags,
+                                        sample_cutoff = sample_cutoff)
                         for i in range(n)])
 
     @staticmethod

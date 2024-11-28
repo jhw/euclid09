@@ -1,10 +1,14 @@
 ### short
 
-- move sample cutoff parameter up to cli
+- track should be first arg in model.randomise()
 
 ### medium
 
 - density and temperature variations
+
+### SV
+
+- refactor sample_cutoff as simply cutoff
 
 ### features
 
@@ -31,6 +35,7 @@
 
 ### done
 
+- move sample cutoff parameter up to cli
 - sample cutoff cli variable
 - add back `all` output
 - revert randomise_xxx as mutate_xxx

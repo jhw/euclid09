@@ -78,7 +78,7 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the euclid09 CLI ;)"
     
-    def __init__(self, banks, pool, tracks, generators, tags, terms, n_patches = 16):
+    def __init__(self, banks, pool, tracks, generators, tags, terms, n_patches = 16, sample_cutoff = 0.5):
         super().__init__()
         self.banks = banks
         self.pool = pool
@@ -87,6 +87,7 @@ class Euclid09CLI(cmd.Cmd):
         self.tags = dict(tags)
         self.terms = terms
         self.n_patches = n_patches
+        self.sample_cutoff = sample_cutoff
         self.git = Git("tmp/git")
 
     def preloop(self):
@@ -121,10 +122,11 @@ class Euclid09CLI(cmd.Cmd):
 
     @commit_and_render
     def do_randomise_patches(self, _):
-        return Patches.randomise(pool=self.pool,
-                                 tracks=self.tracks,
-                                 tags=self.tags,
-                                 n=self.n_patches)
+        return Patches.randomise(pool = self.pool,
+                                 tracks = self.tracks,
+                                 tags = self.tags,
+                                 sample_cutoff = self.sample_cutoff,
+                                 n = self.n_patches)
 
     @assert_head
     @parse_line([{"name": "i", "type": "int"}])
