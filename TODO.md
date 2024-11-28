@@ -1,6 +1,5 @@
 ### short
 
-- rename tag_mapping in model test
 - refactor cli sample_cutoff as simply cutoff
 
 ### medium
@@ -38,6 +37,7 @@
 
 ### done
 
+- rename tag_mapping in model test
 - pass named args to track.randomise
 - track should be first arg in model.randomise()
 - move sample cutoff parameter up to cli
