@@ -1,14 +1,13 @@
 ### short
 
 - track should be first arg in model.randomise()
+- pass named args to track.randomise
 
 ### medium
 
 - density and temperature variations
 
 ### SV
-
-- refactor sample_cutoff as simply cutoff
 
 ### features
 
@@ -17,6 +16,10 @@
 - tagging and purging
 
 ### thoughts
+
+- refactor SV `sample_cutoff` as simply `cutoff`?
+  - no it's better as the former given the number of args being passed to detroit machine
+  - also it's called `cutoff` as the SVSamplerMachine level
 
 - replace levels with mutes?
   - they are the same thing, int vs boolean
