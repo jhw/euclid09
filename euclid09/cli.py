@@ -29,19 +29,26 @@ class Levels(OrderedDict):
     def __init__(self, tracks):
         OrderedDict.__init__(self, {track["name"]: 1 for track in tracks})
 
-    def mute(self, key):
-        for track_name in self:
-            self[track_name] = 0 if track_name == key else 1
-        return self
-        
     def solo(self, key):
         for track_name in self:
             self[track_name] = 1 if track_name == key else 0
         return self
 
     @property
+    def is_solo(self):
+        return sum(self.values()) == 1
+
+    @property
+    def solo_key(self):
+        if self.is_solo:
+            for k, v in self.items():
+                if v == 1:
+                    return k[:3]
+        return None
+    
+    @property
     def short_code(self):
-        return "".join([k[:3] if v == 1 else "" for k, v in self.items()])
+        return self.solo_key if self.is_solo else "all"
 
 def assert_head(fn):
     def wrapped(self, *args, **kwargs):
@@ -191,7 +198,6 @@ class Euclid09CLI(cmd.Cmd):
             patch = roots[j].clone()
             arrangement.append(patch)
         return arrangement
-
         
     ### export
     
@@ -202,7 +208,7 @@ class Euclid09CLI(cmd.Cmd):
         commit_id = self.git.head.commit_id
         zip_name = f"tmp/wav/{commit_id.slug}.zip"
         with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
-            levels = []
+            levels = [Levels(self.tracks)]
             for track in self.tracks:
                 levels.append(Levels(self.tracks).solo(track["name"]))
             patches = self.git.head.content

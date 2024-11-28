@@ -1,6 +1,5 @@
 ### short
 
-- add back `all` output
 - sample cutoff cli variable
 
 ### medium
@@ -32,6 +31,7 @@
 
 ### done
 
+- add back `all` output
 - revert randomise_xxx as mutate_xxx
 - only export individual tracks
 - simplify track naming
