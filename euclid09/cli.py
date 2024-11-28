@@ -9,6 +9,7 @@ from euclid09.parse import parse_line
 
 from collections import OrderedDict
 
+import argparse
 import cmd
 import logging
 import os
@@ -274,21 +275,46 @@ class Euclid09CLI(cmd.Cmd):
         logging.info("Exiting ..")
         return True
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Run Euclid09CLI with specified parameters.")
+    parser.add_argument(
+        "--cutoff",
+        type=float,
+        required=True,
+        help="A float > 0 specifying the cutoff value."
+    )
+    parser.add_argument(
+        "--n_patches",
+        type=int,
+        required=True,
+        help="An integer > 0 specifying the number of patches."
+    )    
+    args = parser.parse_args()
+    if args.cutoff <= 0:
+        raise RuntimeError("cutoff must be a float greater than 0.")
+    if args.n_patches <= 0:
+        raise RuntimeError("n_patches must be an integer greater than 0.")
+    return args
+
 if __name__ == "__main__":
     try:
+        args = parse_args()
         tracks = load_yaml("tracks.yaml")
-        banks = SVBanks.load_zip(cache_dir = "banks")
+        banks = SVBanks.load_zip(cache_dir="banks")
         terms = load_yaml("terms.yaml")
-        pool, _ = banks.spawn_pool(tag_patterns = terms)
+        pool, _ = banks.spawn_pool(tag_patterns=terms)
         tags = {track["name"]: track["name"] for track in tracks}
-        Euclid09CLI(tracks = tracks,
-                    banks = banks,
-                    pool = pool,
-                    generators = [Beat, GhostEcho],                    
-                    tags = tags,
-                    terms = terms,
-                    cutoff = 0.25,
-                    n_patches = 16).cmdloop()
+        Euclid09CLI(
+            tracks=tracks,
+            banks=banks,
+            pool=pool,
+            generators=[Beat, GhostEcho],
+            tags=tags,
+            terms=terms,
+            cutoff=args.cutoff,
+            n_patches=args.n_patches
+        ).cmdloop()
     except RuntimeError as error:
         logging.error(str(error))
+
 

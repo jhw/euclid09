@@ -1,20 +1,25 @@
 ### short
 
-- use argsparse to accept values for cutoff and n_patches
+- workflow thoughts re evolving a series of patches
 
 ### medium
 
 - density and temperature variations
 
-### SV
-
 ### features
 
-- track muting, freezing
-- track mixing levels
+- track freezing
 - tagging and purging
 
 ### thoughts
+
+- track muting?
+  - why would this be required?
+  - possibly if you wanted to build the sound up one track at a time
+  - but not clear that's what's wanted here
+
+- track mixing levels?
+  - not clear required if tracks stems are exported separately into the digitakt
 
 - refactor SV `sample_cutoff` as simply `cutoff`?
   - no it's better as the former given the number of args being passed to detroit machine
@@ -37,6 +42,7 @@
 
 ### done
 
+- use argsparse to accept values for cutoff and n_patches
 - refactor cli sample_cutoff as simply cutoff
 - rename tag_mapping in model test
 - pass named args to track.randomise
