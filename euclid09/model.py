@@ -113,6 +113,7 @@ class SampleTrack(SynthTrack):
 
     @staticmethod
     def randomise_params(pool, track, tags,
+                         sample_cutoff = 0.5,
                          n_samples = 2, **kwargs):
         # samples
         base_kwargs = SynthTrack.randomise_params(track)
@@ -120,6 +121,7 @@ class SampleTrack(SynthTrack):
         samples = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(samples)
         base_kwargs["samples"] = samples[:n_samples]
+        base_kwargs["sample_cutoff"] = sample_cutoff
         # seeds
         base_kwargs["seeds"]["sample"] = random_seed()
         return base_kwargs
@@ -133,9 +135,10 @@ class SampleTrack(SynthTrack):
         track["samples"] = [SVSample(**sample) for sample in track["samples"]]
         return SampleTrack(**track)
 
-    def __init__(self, samples, *args, **kwargs):
+    def __init__(self, samples, sample_cutoff, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.samples = samples
+        self.sample_cutoff = sample_cutoff
 
     def clone(self):
         return SampleTrack(**self.to_json())
@@ -151,11 +154,13 @@ class SampleTrack(SynthTrack):
         machine_class = load_class(self.machine)
         return machine_class(container = container,
                              namespace = self.name.capitalize(),
-                             samples = self.samples)
+                             samples = self.samples,
+                             sample_cutoff = self.sample_cutoff)
         
     def to_json(self):
         base_json = super().to_json()
         base_json["samples"] = copy.deepcopy(self.samples)
+        base_json["sample_cutoff"] = self.sample_cutoff
         return base_json
 
 class Tracks(list):

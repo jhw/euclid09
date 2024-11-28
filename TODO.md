@@ -1,6 +1,6 @@
 ### short
 
-- sample cutoff cli variable
+- move sample cutoff parameter up to cli
 
 ### medium
 
@@ -31,6 +31,7 @@
 
 ### done
 
+- sample cutoff cli variable
 - add back `all` output
 - revert randomise_xxx as mutate_xxx
 - only export individual tracks
