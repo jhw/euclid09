@@ -1,6 +1,8 @@
 ### short
 
-- explicit sample cutoff
+- revert randomise_xxx as mutate_xxx
+- add back `all` output
+- sample cutoff cli variable
 
 ### medium
 
@@ -22,7 +24,6 @@
 
 - 303 slide
 - echo freeze
-- sv drum
 - polly vocals + vocoder
 - autotune
 - resampling
