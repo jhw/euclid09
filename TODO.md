@@ -1,6 +1,5 @@
 ### short
 
-- revert randomise_xxx as mutate_xxx
 - add back `all` output
 - sample cutoff cli variable
 
@@ -33,6 +32,7 @@
 
 ### done
 
+- revert randomise_xxx as mutate_xxx
 - only export individual tracks
 - simplify track naming
 - refactor cli do_mutate as do_randomise
