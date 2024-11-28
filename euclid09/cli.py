@@ -78,11 +78,11 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the euclid09 CLI ;)"
     
-    def __init__(self, banks, pool, tracks, generators, tags, terms, n_patches = 16, sample_cutoff = 0.5):
+    def __init__(self, tracks, banks, pool, generators, tags, terms, n_patches = 16, sample_cutoff = 0.5):
         super().__init__()
+        self.tracks = tracks
         self.banks = banks
         self.pool = pool
-        self.tracks = tracks
         self.generators = generators                
         self.tags = dict(tags)
         self.terms = terms
@@ -122,8 +122,8 @@ class Euclid09CLI(cmd.Cmd):
 
     @commit_and_render
     def do_randomise_patches(self, _):
-        return Patches.randomise(pool = self.pool,
-                                 tracks = self.tracks,
+        return Patches.randomise(tracks = self.tracks,
+                                 pool = self.pool,
                                  tags = self.tags,
                                  sample_cutoff = self.sample_cutoff,
                                  n = self.n_patches)
@@ -276,15 +276,15 @@ class Euclid09CLI(cmd.Cmd):
 
 if __name__ == "__main__":
     try:
+        tracks = load_yaml("tracks.yaml")
         banks = SVBanks.load_zip(cache_dir = "banks")
         terms = load_yaml("terms.yaml")
         pool, _ = banks.spawn_pool(tag_patterns = terms)
-        tracks = load_yaml("tracks.yaml")
         tags = {track["name"]: track["name"] for track in tracks}
-        Euclid09CLI(banks = banks,
+        Euclid09CLI(tracks = tracks,
+                    banks = banks,
                     pool = pool,
-                    generators = [Beat, GhostEcho],
-                    tracks = tracks,
+                    generators = [Beat, GhostEcho],                    
                     tags = tags,
                     terms = terms).cmdloop()
     except RuntimeError as error:

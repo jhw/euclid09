@@ -127,7 +127,11 @@ class SampleTrack(SynthTrack):
 
     @staticmethod
     def randomise(track, pool, tags, sample_cutoff, **kwargs):
-        return SampleTrack(**SampleTrack.randomise_params(track, pool, tags, sample_cutoff, **kwargs))
+        return SampleTrack(**SampleTrack.randomise_params(track = track,
+                                                          pool = pool,
+                                                          tags = tags,
+                                                          sample_cutoff = sample_cutoff,
+                                                          **kwargs))
     
     @staticmethod
     def from_json(track):
@@ -170,8 +174,8 @@ class Tracks(list):
         for track in tracks:
             track_class = SampleTrack if track["type"] == "sample" else SynthTrack
             track_randomiser = getattr(track_class, "randomise")
-            track_instance = track_randomiser(**{"pool": pool,
-                                                 "track": track,
+            track_instance = track_randomiser(**{"track": track,
+                                                 "pool": pool,
                                                  "tags": tags,
                                                  "sample_cutoff": sample_cutoff})
             track_instances.append(track_instance)        
@@ -214,8 +218,8 @@ class Patch:
 
     @staticmethod
     def randomise(tracks, pool, tags, sample_cutoff):
-        return Patch(tracks = Tracks.randomise(pool = pool,
-                                               tracks = tracks,
+        return Patch(tracks = Tracks.randomise(tracks = tracks,
+                                               pool = pool,
                                                tags = tags,
                                                sample_cutoff = sample_cutoff))
 
@@ -245,8 +249,8 @@ class Patches(list):
 
     @staticmethod
     def randomise(tracks, pool, tags, sample_cutoff, n):
-        return Patches([Patch.randomise(pool = pool,
-                                        tracks = tracks,
+        return Patches([Patch.randomise(tracks = tracks,
+                                        pool = pool,
                                         tags = tags,
                                         sample_cutoff = sample_cutoff)
                         for i in range(n)])
