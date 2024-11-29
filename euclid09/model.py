@@ -3,11 +3,12 @@ import sv.algos.groove.perkons as perkons
 
 from sv.container import SVContainer
 from sv.sampler import SVSample
-from sv.project import load_class
+from sv.project import load_class, does_class_extend
 
 import copy
 import inspect
 import random
+import sv # so machine classes can be dynamically accessed
 
 def random_pattern():
     pattern_kwargs = {k:v for k, v in zip(["pulses", "steps"], random.choice(euclid.TidalPatterns)[:2])}
@@ -34,7 +35,6 @@ class SynthTrack:
                  for key in seed_keys}
         return {"name": track["name"],
                 "machine": track["machine"],
-                "type": track["type"],
                 "pattern": random_pattern(),
                 "groove": random_groove(),
                 "seeds": seeds,
@@ -49,10 +49,9 @@ class SynthTrack:
     def from_json(track):
         return SynthTrack(**track)
 
-    def __init__(self, name, machine, type, pattern, groove, seeds, temperature, density):
+    def __init__(self, name, machine, pattern, groove, seeds, temperature, density):
         self.name = name
         self.machine = machine
-        self.type = type
         self.pattern = pattern
         self.groove = groove
         self.seeds = seeds
@@ -102,7 +101,6 @@ class SynthTrack:
     def to_json(self):
         return {"name": self.name,
                 "machine": self.machine,
-                "type": self.type,
                 "pattern": copy.deepcopy(self.pattern),
                 "groove": copy.deepcopy(self.groove),
                 "seeds": copy.deepcopy(self.seeds),
@@ -172,7 +170,7 @@ class Tracks(list):
     def randomise(tracks, pool, tags, cutoff):
         track_instances = []
         for track in tracks:
-            track_class = SampleTrack if track["type"] == "sample" else SynthTrack
+            track_class = SampleTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else SynthTrack
             track_randomiser = getattr(track_class, "randomise")
             track_instance = track_randomiser(**{"track": track,
                                                  "pool": pool,
@@ -189,7 +187,7 @@ class Tracks(list):
     def from_json(tracks):
         track_instances = []
         for track in tracks:
-            track_class = SampleTrack if track["type"] == "sample" else SynthTrack
+            track_class = SampleTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else SynthTrack
             track_instance = getattr(track_class, "from_json")(track)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
