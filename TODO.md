@@ -1,6 +1,5 @@
 ### short
 
-- cli to request profile on startup
 - replace track type with check to see if track class extends SVSamplerMachine
 
 ### medium
@@ -52,6 +51,7 @@
 
 ### done
 
+- cli to request profile on startup
 - default cli args
 - remove arranger
 - use argsparse to accept values for cutoff and n_patches

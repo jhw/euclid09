@@ -240,7 +240,9 @@ class Euclid09CLI(cmd.Cmd):
         logging.info("Exiting ..")
         return True
 
-def parse_args(default_cutoff=0.5, default_n_patches=16):
+def parse_args(default_cutoff = 0.5,
+               default_n_patches = 16,
+               default_profile = "profiles/default.yaml"):
     parser = argparse.ArgumentParser(description="Run Euclid09CLI with specified parameters.")
     parser.add_argument(
         "--cutoff",
@@ -254,31 +256,38 @@ def parse_args(default_cutoff=0.5, default_n_patches=16):
         default=default_n_patches,
         help=f"An integer > 0 specifying the number of patches (default: {default_n_patches})."
     )
+    parser.add_argument(
+        "--profile",
+        type=str,
+        default=default_profile,
+        help=f"Path to the profile YAML file (default: {default_profile})."
+    )
     args = parser.parse_args()
     if args.cutoff <= 0:
         parser.error("cutoff must be a float greater than 0.")
     if args.n_patches <= 0:
         parser.error("n_patches must be an integer greater than 0.")
+    if not os.path.isfile(f"euclid09/{args.profile}"):
+        raise RuntimeError(f"The profile file '{args.profile}' does not exist.")
     return args
-
 
 if __name__ == "__main__":
     try:
         args = parse_args()
-        tracks = load_yaml("tracks.yaml")
+        tracks = load_yaml(args.profile)
         banks = SVBanks.load_zip(cache_dir="banks")
         terms = load_yaml("terms.yaml")
         pool, _ = banks.spawn_pool(tag_patterns=terms)
         tags = {track["name"]: track["name"] for track in tracks}
         Euclid09CLI(
-            tracks=tracks,
-            banks=banks,
-            pool=pool,
-            generators=[Beat, GhostEcho],
-            tags=tags,
-            terms=terms,
-            cutoff=args.cutoff,
-            n_patches=args.n_patches
+            tracks = tracks,
+            banks = banks,
+            pool = pool,
+            generators = [Beat, GhostEcho],
+            tags = tags,
+            terms = terms,
+            cutoff = args.cutoff,
+            n_patches = args.n_patches
         ).cmdloop()
     except RuntimeError as error:
         logging.error(str(error))
