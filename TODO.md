@@ -1,12 +1,20 @@
 ### short
 
-- replace track type with check to see if track class extends SVSamplerMachine
 - default cli args
 - cli to request profile on startup
+- remove arranger
+- replace track type with check to see if track class extends SVSamplerMachine
 
 ### medium
 
-- track freezing
+- refactor mutation so applied on per- track basis
+- add mutation filter_fn
+- add freeze support to cli
+
+### sv
+
+- machine tests
+- machine.is_sample_based
 
 ### thoughts
 
