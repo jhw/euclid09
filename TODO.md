@@ -1,10 +1,11 @@
 ### short
 
-- add freezing / filter_fn to cli
-
 ### medium
 
 ### thoughts
+
+- freeze tracks?
+  - seems a lot of cli work for something that happens anyway with sufficient variation
 
 - density and temperature variations?
 
