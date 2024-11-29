@@ -198,8 +198,12 @@ class Tracks(list):
     def clone(self):
         return Tracks([track.clone() for track in self])
 
-    def mutate_attr(self, attr, **kwargs):
-        track = random.choice(self)
+    def mutate_attr(self, attr, filter_fn = lambda x: True, **kwargs):
+        tracks = [track for track in self
+                  if filter_fn(track)]
+        if tracks == []:
+            raise RuntimeError("no tracks found to mutate")
+        track = random.choice(tracks)
         getattr(track, f"shuffle_{attr}")(**kwargs)
 
     def render(self, container, generators, levels):                
@@ -231,8 +235,10 @@ class Patch:
     def clone(self):
         return Patch(tracks = self.tracks.clone())    
 
-    def mutate_attr(self, attr, **kwargs):
-        self.tracks.mutate_attr(attr, **kwargs)
+    def mutate_attr(self, attr, filter_fn = lambda x: True, **kwargs):
+        self.tracks.mutate_attr(attr = attr,
+                                filter_fn = filter_fn,
+                                **kwargs)
 
     def render(self, container, generators, levels):
         container.spawn_patch()

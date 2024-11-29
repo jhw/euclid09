@@ -143,7 +143,7 @@ class ModelTest(unittest.TestCase):
                                   cutoff = self.cutoff)
         for track in tracks:
             track.samples = self.mock_samples
-        tracks.mutate_attr("temperature", limit=0.1)
+        tracks.mutate_attr(attr = "temperature", labdlimit=0.1)
         for track in tracks:
             self.assertGreaterEqual(track.temperature, 0.1)
             self.assertLessEqual(track.temperature, 0.9)

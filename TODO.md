@@ -1,18 +1,8 @@
 ### short
 
-- refactor mutation so applied on per- track basis
-- add mutation filter_fn
+- add freezing / filter_fn to cli
 
 ### medium
-
-- add freeze support to cli
-
-### sv
-
-- machine tests
-- machine.is_sample_based
-- matthew reply
-- test for name rendering
 
 ### thoughts
 
@@ -50,6 +40,8 @@
 
 ### done
 
+- refactor mutation so applied on per- track basis
+- add mutation filter_fn
 - replace track type with check to see if track class extends SVSamplerMachine
 - cli to request profile on startup
 - default cli args

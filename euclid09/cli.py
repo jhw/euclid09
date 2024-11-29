@@ -144,7 +144,10 @@ class Euclid09CLI(cmd.Cmd):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
-                patch.mutate_attr(attr="samples", pool=self.pool, tags=self.tags)
+                patch.mutate_attr(attr = "samples",
+                                  filter_fn = lambda x: True,
+                                  pool = self.pool,
+                                  tags  =self.tags)
         return patches
 
     @assert_head
@@ -154,7 +157,8 @@ class Euclid09CLI(cmd.Cmd):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
-                patch.mutate_attr(attr="pattern")
+                patch.mutate_attr(attr = "pattern",
+                                  filter_fn = lambda x: True)
         return patches
 
     @assert_head
@@ -164,7 +168,8 @@ class Euclid09CLI(cmd.Cmd):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
-                patch.mutate_attr(attr="seeds")
+                patch.mutate_attr(attr = "seeds",
+                                  filter_fn = lambda x: True)
         return patches
         
     ### export
