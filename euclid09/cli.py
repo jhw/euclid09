@@ -240,26 +240,27 @@ class Euclid09CLI(cmd.Cmd):
         logging.info("Exiting ..")
         return True
 
-def parse_args():
+def parse_args(default_cutoff=0.5, default_n_patches=16):
     parser = argparse.ArgumentParser(description="Run Euclid09CLI with specified parameters.")
     parser.add_argument(
         "--cutoff",
         type=float,
-        required=True,
-        help="A float > 0 specifying the cutoff value."
+        default=default_cutoff,
+        help=f"A float > 0 specifying the cutoff value (default: {default_cutoff})."
     )
     parser.add_argument(
         "--n_patches",
         type=int,
-        required=True,
-        help="An integer > 0 specifying the number of patches."
-    )    
+        default=default_n_patches,
+        help=f"An integer > 0 specifying the number of patches (default: {default_n_patches})."
+    )
     args = parser.parse_args()
     if args.cutoff <= 0:
-        raise RuntimeError("cutoff must be a float greater than 0.")
+        parser.error("cutoff must be a float greater than 0.")
     if args.n_patches <= 0:
-        raise RuntimeError("n_patches must be an integer greater than 0.")
+        parser.error("n_patches must be an integer greater than 0.")
     return args
+
 
 if __name__ == "__main__":
     try:

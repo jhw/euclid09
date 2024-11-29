@@ -1,6 +1,5 @@
 ### short
 
-- default cli args
 - cli to request profile on startup
 - replace track type with check to see if track class extends SVSamplerMachine
 
@@ -14,6 +13,8 @@
 
 - machine tests
 - machine.is_sample_based
+- matthew reply
+- test for name rendering
 
 ### thoughts
 
@@ -51,6 +52,7 @@
 
 ### done
 
+- default cli args
 - remove arranger
 - use argsparse to accept values for cutoff and n_patches
 - refactor cli sample_cutoff as simply cutoff
