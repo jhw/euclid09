@@ -2,7 +2,6 @@
 
 - default cli args
 - cli to request profile on startup
-- remove arranger
 - replace track type with check to see if track class extends SVSamplerMachine
 
 ### medium
@@ -52,6 +51,7 @@
 
 ### done
 
+- remove arranger
 - use argsparse to accept values for cutoff and n_patches
 - refactor cli sample_cutoff as simply cutoff
 - rename tag_mapping in model test

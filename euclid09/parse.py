@@ -42,12 +42,6 @@ def matches_enum(value, options=None, **kwargs):
             return True
     return False
 
-def matches_hexstr(value, **kwargs):
-    for c in value:
-        if c not in '0123456789abcdef':
-            return False
-    return True
-
 def parse_number(value, **kwargs):
     return int(value) if matches_int(value) else float(value)
 
@@ -59,9 +53,6 @@ def parse_float(value, **kwargs):
 
 def parse_str(value, **kwargs):
     return value
-
-def parse_hexstr(value, **kwargs):
-    return [int(c, 16) for c in value]
 
 def parse_enum(value, options=None, **kwargs):
     for option in options:

@@ -166,41 +166,6 @@ class Euclid09CLI(cmd.Cmd):
             for _ in range(n):
                 patch.mutate_attr(attr="seeds")
         return patches
-
-    ### arrange
-
-    @assert_head
-    @commit_and_render
-    def do_arrange_random(self, _,
-                          phrase_size = 4,
-                          patterns = [[0, 1, 0, 0],
-                                      [0, 0, 1, 0],
-                                      [0, 0, 0, 1],
-                                      [0, 0, 0, 1],
-                                      [0, 0, 0, 1],
-                                      [0, 1, 0, 2]]):
-        roots = self.git.head.content
-        n_phrases = int(self.n_patches / phrase_size)
-        arrangement = Patches()
-        for i in range(n_phrases):
-            pattern = random.choice(patterns)
-            random.shuffle(roots)
-            for j in pattern:
-                patch = roots[j].clone()
-                arrangement.append(patch)
-        return arrangement
-
-    @assert_head
-    @parse_line([{"name": "indexing", "type": "hexstr"}])
-    @commit_and_render
-    def do_arrange_custom(self, indexing):
-        roots = self.git.head.content
-        arrangement = Patches()
-        for i in indexing:
-            j = i % len(roots)
-            patch = roots[j].clone()
-            arrangement.append(patch)
-        return arrangement
         
     ### export
     
