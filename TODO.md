@@ -1,17 +1,19 @@
 ### short
 
-- workflow thoughts re evolving a series of patches
+- replace track type with check to see if track class extends SVSamplerMachine
+- default cli args
+- cli to request profile on startup
 
 ### medium
 
-- density and temperature variations
-
-### features
-
 - track freezing
-- tagging and purging
 
 ### thoughts
+
+- density and temperature variations?
+
+- tagging and purging?
+  - unclear it has value, esp as you can "tag" stuff with export
 
 - track muting?
   - why would this be required?
