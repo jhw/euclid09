@@ -1,9 +1,10 @@
 ### short
 
-- new select_patch based on arrange_custom
-  - fills as well
-
-- remove clone_col
+- split patches into fixed and floating
+  - selection pushes into fixed and resets floating
+  - rand_patches removes fixed and randomises floating
+  - rand_xxx mutates floating only
+  - patches is a property which concatenates fixed and floating
 
 ### medium
 
@@ -41,6 +42,9 @@
 
 ### done
 
+- new select_patch based on arrange_custom
+  - fills as well
+- remove clone_col
 - stop old mutate_ methods from preserving
 - add back hex support
 - rename randomise_ and mutate_ as rand_

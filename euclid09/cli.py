@@ -119,7 +119,21 @@ class Euclid09CLI(cmd.Cmd):
         self.tags = tags
         self.do_show_tags(None)
 
-    ### randomise
+    ### selection
+
+    @assert_head
+    @parse_line([{"name": "I", "type": "hexstr"}])
+    @commit_and_render
+    def do_select_patches(self, I):
+        roots = self.git.head.content
+        patches = Patches()
+        for i in range(self.n_patches):
+            j = I[i % len(I)]
+            patch = roots[j].clone()
+            patches.append(patch)
+        return patches
+    
+    ### randomisation
 
     @commit_and_render
     def do_rand_patches(self, _):
@@ -128,14 +142,6 @@ class Euclid09CLI(cmd.Cmd):
                                  tags = self.tags,
                                  cutoff = self.cutoff,
                                  n = self.n_patches)
-
-    @assert_head
-    @parse_line([{"name": "i", "type": "int"}])
-    @commit_and_render
-    def do_clone_patch(self, i):
-        patches = self.git.head.content
-        root = patches[i % len(patches)]
-        return Patches([root.clone() for i in range(self.n_patches)])
         
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
@@ -148,7 +154,7 @@ class Euclid09CLI(cmd.Cmd):
                                      filter_fn = lambda x: True,
                                      pool = self.pool,
                                      tags  =self.tags)
-                return patches
+        return patches
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
