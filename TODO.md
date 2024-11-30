@@ -1,10 +1,6 @@
 ### short
 
-- split patches into fixed and floating
-  - selection pushes into fixed and resets floating
-  - rand_patches removes fixed and randomises floating
-  - rand_xxx mutates floating only
-  - patches is a property which concatenates fixed and floating
+- PatchCommit wrapper [notes]
 
 ### medium
 
