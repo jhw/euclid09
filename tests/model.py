@@ -135,7 +135,6 @@ class ModelTest(unittest.TestCase):
         for p1, p2 in zip(patches, deserialized):
             self.assertEqual(len(p1.tracks), len(p2.tracks))
 
-    # New Tests
     def test_mutation_tracks(self):
         tracks = Tracks.randomise(tracks = self.tracks,
                                   pool = self.pool,
@@ -170,6 +169,15 @@ class ModelTest(unittest.TestCase):
         machine = track.init_machine(container)
         self.assertEqual(machine.namespace, track.name.capitalize())
         self.assertEqual(machine.samples, self.mock_samples)
-            
+
+    def test_track_polymorphism(self):
+        for klass in [SampleTrack,
+                      SynthTrack]:
+            track = klass.randomise(track = self.tracks[0],
+                                    pool = self.pool,
+                                    tags = self.tags,
+                                    cutoff = self.cutoff)
+            self.assertEqual(track.name, "kick")
+        
 if __name__ == "__main__":
     unittest.main()
