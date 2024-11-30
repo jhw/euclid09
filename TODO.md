@@ -1,16 +1,15 @@
 ### short
 
-- stop old mutate_ methods from preserving
 - new select_patch based on arrange_custom
   - fills as well
+
 - remove clone_col
 
 ### medium
 
-### thoughts
+- track freezing
 
-- freeze tracks?
-  - seems a lot of cli work for something that happens anyway with sufficient variation
+### thoughts
 
 - density and temperature variations?
 
@@ -24,10 +23,6 @@
 
 - track mixing levels?
   - not clear required if tracks stems are exported separately into the digitakt
-
-- refactor SV `sample_cutoff` as simply `cutoff`?
-  - no it's better as the former given the number of args being passed to detroit machine
-  - also it's called `cutoff` as the SVSamplerMachine level
 
 - replace levels with mutes?
   - they are the same thing, int vs boolean
@@ -46,6 +41,7 @@
 
 ### done
 
+- stop old mutate_ methods from preserving
 - add back hex support
 - rename randomise_ and mutate_ as rand_
 - test model polymorphism

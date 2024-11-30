@@ -142,23 +142,23 @@ class Euclid09CLI(cmd.Cmd):
     @commit_and_render
     def do_rand_samples(self, n):
         patches = self.git.head.content.clone()
-        for patch in patches[1:]:
+        for patch in patches:
             for _ in range(n):
                 patch.randomise_attr(attr = "samples",
-                                  filter_fn = lambda x: True,
-                                  pool = self.pool,
-                                  tags  =self.tags)
-        return patches
+                                     filter_fn = lambda x: True,
+                                     pool = self.pool,
+                                     tags  =self.tags)
+                return patches
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_rand_pattern(self, n):
         patches = self.git.head.content.clone()
-        for patch in patches[1:]:
+        for patch in patches:
             for _ in range(n):
                 patch.randomise_attr(attr = "pattern",
-                                  filter_fn = lambda x: True)
+                                     filter_fn = lambda x: True)
         return patches
 
     @assert_head
@@ -166,10 +166,10 @@ class Euclid09CLI(cmd.Cmd):
     @commit_and_render
     def do_rand_seeds(self, n):
         patches = self.git.head.content.clone()
-        for patch in patches[1:]:
+        for patch in patches:
             for _ in range(n):
                 patch.randomise_attr(attr = "seeds",
-                                  filter_fn = lambda x: True)
+                                     filter_fn = lambda x: True)
         return patches
         
     ### export
