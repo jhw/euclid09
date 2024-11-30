@@ -198,7 +198,7 @@ class Tracks(list):
     def clone(self):
         return Tracks([track.clone() for track in self])
 
-    def mutate_attr(self, attr, filter_fn = lambda x: True, **kwargs):
+    def randomise_attr(self, attr, filter_fn = lambda x: True, **kwargs):
         tracks = [track for track in self
                   if filter_fn(track)]
         if tracks == []:
@@ -235,8 +235,8 @@ class Patch:
     def clone(self):
         return Patch(tracks = self.tracks.clone())    
 
-    def mutate_attr(self, attr, filter_fn = lambda x: True, **kwargs):
-        self.tracks.mutate_attr(attr = attr,
+    def randomise_attr(self, attr, filter_fn = lambda x: True, **kwargs):
+        self.tracks.randomise_attr(attr = attr,
                                 filter_fn = filter_fn,
                                 **kwargs)
 

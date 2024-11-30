@@ -104,7 +104,7 @@ class Euclid09CLI(cmd.Cmd):
     def do_show_tags(self, _):
         logging.info(yaml.safe_dump(self.tags, default_flow_style=False))
     
-    def do_randomise_tags(self, _):
+    def do_rand_tags(self, _):
         term_keys = list(self.terms.keys())
         tags = {}
         for key in self.tags:
@@ -122,7 +122,7 @@ class Euclid09CLI(cmd.Cmd):
     ### randomise
 
     @commit_and_render
-    def do_randomise_patches(self, _):
+    def do_rand_patches(self, _):
         return Patches.randomise(tracks = self.tracks,
                                  pool = self.pool,
                                  tags = self.tags,
@@ -140,11 +140,11 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_mutate_samples(self, n):
+    def do_rand_samples(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
-                patch.mutate_attr(attr = "samples",
+                patch.randomise_attr(attr = "samples",
                                   filter_fn = lambda x: True,
                                   pool = self.pool,
                                   tags  =self.tags)
@@ -153,22 +153,22 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_mutate_pattern(self, n):
+    def do_rand_pattern(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
-                patch.mutate_attr(attr = "pattern",
+                patch.randomise_attr(attr = "pattern",
                                   filter_fn = lambda x: True)
         return patches
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_mutate_seeds(self, n):
+    def do_rand_seeds(self, n):
         patches = self.git.head.content.clone()
         for patch in patches[1:]:
             for _ in range(n):
-                patch.mutate_attr(attr = "seeds",
+                patch.randomise_attr(attr = "seeds",
                                   filter_fn = lambda x: True)
         return patches
         
