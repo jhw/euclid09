@@ -1,6 +1,11 @@
 ### short
 
-- test model polymorphism
+- rename randomise_ and mutate_ as rand_
+- add back hex support
+- stop old mutate_ methods from preserving
+- new select_patch based on arrange_custom
+  - fills as well
+- remove clone_col
 
 ### medium
 
@@ -43,6 +48,7 @@
 
 ### done
 
+- test model polymorphism
 - refactor mutation so applied on per- track basis
 - add mutation filter_fn
 - replace track type with check to see if track class extends SVSamplerMachine
