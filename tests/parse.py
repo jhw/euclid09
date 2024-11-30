@@ -34,6 +34,10 @@ class ParseTest(unittest.TestCase):
         self.assertTrue(matches_enum("pri", options=options))  # Test abbreviation
         self.assertFalse(matches_enum("warning", options=options))
 
+    def test_matches_hexstr(self):
+        self.assertTrue(matches_hexstr("1a2b3c"))
+        self.assertFalse(matches_hexstr("1g2h"))
+
     def test_parse_number(self):
         self.assertEqual(parse_number("123"), 123)
         self.assertEqual(parse_number("123.456"), 123.456)
@@ -47,6 +51,9 @@ class ParseTest(unittest.TestCase):
 
     def test_parse_str(self):
         self.assertEqual(parse_str("test string"), "test string")
+
+    def test_parse_hexstr(self):
+        self.assertEqual(parse_hexstr("1a2b3c"), [1, 10, 2, 11, 3, 12])
 
     def test_parse_enum(self):
         options = ["primary", "secondary", "success"]

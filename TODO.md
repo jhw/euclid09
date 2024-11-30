@@ -1,6 +1,5 @@
 ### short
 
-- add back hex support
 - stop old mutate_ methods from preserving
 - new select_patch based on arrange_custom
   - fills as well
@@ -47,6 +46,7 @@
 
 ### done
 
+- add back hex support
 - rename randomise_ and mutate_ as rand_
 - test model polymorphism
 - refactor mutation so applied on per- track basis
