@@ -241,7 +241,7 @@ class Patch:
     def from_json(patch):
         return Patch(tracks = Tracks.from_json(patch["tracks"]))
     
-    def __init__(self, tracks = []):
+    def __init__(self, tracks = Tracks()):
         self.tracks = tracks
 
     def clone(self):
@@ -304,7 +304,7 @@ class Project:
     def from_json(project):
         return Project(patches = Patches.from_json(project["patches"]))
     
-    def __init__(self, patches = []):
+    def __init__(self, patches = Patches()):
         self.patches = patches
 
     def render(self, banks, generators, levels,

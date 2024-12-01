@@ -1,15 +1,15 @@
 ### short [01-project-class]
 
-- test cli lifecycle
 - test for new project class
 
 ### 02-fixed-float
 
 - split patch commit into fixed and floating
-  - rand_patches to clear fixed and randomise floating
-  - select patches to copy selected into fixed and clear floating
-  - fill patches to copy fixed into floating
-  - rand xxx to randomise floating
+
+- rand_patches to clear fixed and randomise floating
+- select patches to copy selected into fixed and clear floating
+- fill patches to copy fixed into floating
+- rand xxx to randomise floating
 
 - colour fixed as green or blue, floating as red
 - separate cli fill from select
@@ -54,6 +54,8 @@
 
 ### done
 
+- replace initialisation of empty lists
+- test cli lifecycle
 - replace refs to patches with project
 - new project class w/ patches attr, copying patch w/ tracks
 - randomise patch colours
