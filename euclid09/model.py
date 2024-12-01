@@ -253,7 +253,7 @@ class Patch:
                                 **kwargs)
 
     def render(self, container, generators, levels):
-        container.spawn_patch()
+        container.spawn_patch(random_colour())
         self.tracks.render(container = container,
                            generators = generators,
                            levels = levels)

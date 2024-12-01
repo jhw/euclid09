@@ -1,7 +1,5 @@
 ### short
 
-- randomise patch colours
-
 - separate fill from select
 
 ### 01-patch-commit
@@ -54,6 +52,7 @@
 
 ### done
 
+- randomise patch colours
 - randomise module colours
 - upgrade to sv 0.3.22
 - check machines can be instantiated polymorphically with **kwargs
