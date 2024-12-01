@@ -4,7 +4,7 @@ from sv.utils.export import export_wav
 
 from euclid09.generators import Beat, GhostEcho
 from euclid09.git import Git
-from euclid09.model import Patches
+from euclid09.model import Project
 from euclid09.parse import parse_line
 
 from collections import OrderedDict
@@ -63,12 +63,12 @@ def assert_head(fn):
     
 def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
-        patches = fn(self, *args, **kwargs)
+        project = fn(self, *args, **kwargs)
         levels = Levels(self.tracks)
-        container = patches.render(banks=self.banks,
+        container = project.render(banks=self.banks,
                                    generators = self.generators,
                                    levels=levels)
-        commit_id = self.git.commit(patches)
+        commit_id = self.git.commit(project)
         if not os.path.exists("tmp/sunvox"):
             os.makedirs("tmp/sunvox")
         container.write_project(f"tmp/sunvox/{commit_id}.sunvox")
@@ -125,19 +125,19 @@ class Euclid09CLI(cmd.Cmd):
     @parse_line([{"name": "I", "type": "hexstr"}])
     @commit_and_render
     def do_select_patches(self, I):
-        roots = self.git.head.content
-        patches = Patches()
+        roots = self.git.head.content.patches
+        project = Project()
         for i in range(self.n_patches):
             j = I[i % len(I)]
             patch = roots[j].clone()
-            patches.append(patch)
-        return patches
+            project.patches.append(patch)
+        return project
     
     ### randomisation
 
     @commit_and_render
-    def do_rand_patches(self, _):
-        return Patches.randomise(tracks = self.tracks,
+    def do_rand_project(self, _):
+        return Project.randomise(tracks = self.tracks,
                                  pool = self.pool,
                                  tags = self.tags,
                                  cutoff = self.cutoff,
@@ -147,36 +147,36 @@ class Euclid09CLI(cmd.Cmd):
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_rand_samples(self, n):
-        patches = self.git.head.content.clone()
-        for patch in patches:
+        project = self.git.head.content.clone()
+        for patch in project.patches:
             for _ in range(n):
                 patch.randomise_attr(attr = "samples",
                                      filter_fn = lambda x: True,
                                      pool = self.pool,
                                      tags  =self.tags)
-        return patches
+        return project
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_rand_pattern(self, n):
-        patches = self.git.head.content.clone()
-        for patch in patches:
+        project = self.git.head.content.clone()
+        for patch in project.patches:
             for _ in range(n):
                 patch.randomise_attr(attr = "pattern",
                                      filter_fn = lambda x: True)
-        return patches
+        return project
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_rand_seeds(self, n):
-        patches = self.git.head.content.clone()
-        for patch in patches:
+        project = self.git.head.content.clone()
+        for patch in project.patches:
             for _ in range(n):
                 patch.randomise_attr(attr = "seeds",
                                      filter_fn = lambda x: True)
-        return patches
+        return project
         
     ### export
     
@@ -190,11 +190,11 @@ class Euclid09CLI(cmd.Cmd):
             levels = [Levels(self.tracks)]
             for track in self.tracks:
                 levels.append(Levels(self.tracks).solo(track["name"]))
-            patches = self.git.head.content
+            project = self.git.head.content
             for levels_ in levels:
-                container = patches.render(banks = self.banks,
-                                           generators = self.generators,
-                                           levels = levels_)
+                container = project.patches.render(banks = self.banks,
+                                                   generators = self.generators,
+                                                   levels = levels_)
                 project = container.render_project()
                 wav_io = export_wav(project=project)
                 wav_name = f"{commit_id.short_name}-{levels_.short_code}.wav"

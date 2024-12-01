@@ -1,4 +1,4 @@
-from euclid09.model import Patches
+from euclid09.model import Project
 from euclid09.git import Git, CommitId
 
 from unittest.mock import patch, mock_open
@@ -16,7 +16,7 @@ class GitTest(unittest.TestCase):
         if os.path.exists(self.root_dir):
             shutil.rmtree(self.root_dir)
         self.git = Git(root=self.root_dir)
-        self.sample_content = Patches([])
+        self.sample_content = Project()
 
     @patch("os.makedirs")
     @patch("os.path.exists", return_value=False)
@@ -29,7 +29,7 @@ class GitTest(unittest.TestCase):
         self.assertTrue(git.is_empty())
 
     @patch("euclid09.git.random_name", return_value="random-slug")
-    @patch("euclid09.model.Patches.to_json", return_value={})
+    @patch("euclid09.model.Project.to_json", return_value={})
     def test_commit(self, mock_to_json, mock_random_name):
         commit_id = self.git.commit(content=self.sample_content)
         self.assertEqual(len(self.git.commits), 1)
@@ -41,7 +41,7 @@ class GitTest(unittest.TestCase):
             yield f"slug-{i}"
 
     @patch("euclid09.git.random_name", side_effect=unique_slug_generator())
-    @patch("euclid09.model.Patches.clone", return_value=Patches([]))
+    @patch("euclid09.model.Project.clone", return_value=Project())
     def test_checkout(self, mock_clone, mock_random_name):
         first_commit_id = self.git.commit(content=self.sample_content)
         second_commit_id = self.git.commit(content=self.sample_content)
@@ -83,7 +83,7 @@ class GitTest(unittest.TestCase):
     @patch("os.listdir", return_value=["2024-11-10-12-30-00-random-slug.json"])
     @patch("builtins.open", new_callable=mock_open, read_data=json.dumps({"tracks": []}))
     def test_fetch(self, mock_open, mock_listdir):
-        with patch.object(Patches, "from_json", return_value=self.sample_content) as mock_from_json:
+        with patch.object(Project, "from_json", return_value=self.sample_content) as mock_from_json:
             self.git.fetch()
             self.assertEqual(len(self.git.commits), 1)
             self.assertEqual(self.git.head_index, 0)
@@ -92,7 +92,7 @@ class GitTest(unittest.TestCase):
 
     @patch("os.path.exists", return_value=False)
     @patch("builtins.open", new_callable=mock_open)
-    @patch("euclid09.model.Patches.to_json", return_value={})
+    @patch("euclid09.model.Project.to_json", return_value={})
     def test_push(self, mock_to_json, mock_open, mock_exists):
         commit_id = self.git.commit(content=self.sample_content)
         self.git.push()

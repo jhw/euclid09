@@ -281,21 +281,48 @@ class Patches(list):
     def clone(self):
         return Patches([patch.clone() for patch in self])
         
+    def render(self, container, generators, levels):
+        for patch in self:
+            patch.render(container = container,
+                         generators = generators,
+                         levels = levels)
+    
+    def to_json(self):
+        return [patch.to_json()
+                for patch in self]
+
+class Project:
+
+    @staticmethod
+    def randomise(tracks, pool, cutoff, tags, n):
+        return Project(patches = Patches.randomise(tracks = tracks,
+                                                   pool = pool,
+                                                   cutoff = cutoff,
+                                                   tags = tags,
+                                                   n = n))               
+    @staticmethod
+    def from_json(project):
+        return Project(patches = Patches.from_json(project["patches"]))
+    
+    def __init__(self, patches = []):
+        self.patches = patches
+
     def render(self, banks, generators, levels,
                bpm = 120,
                n_ticks = 16):
         container = SVContainer(banks = banks,
                                 bpm = bpm,
                                 n_ticks = n_ticks)
-        for patch in self:
-            patch.render(container = container,
-                         generators = generators,
-                         levels = levels)
+        self.patches.render(container = container,
+                            generators = generators,
+                            levels = levels)
         return container
-    
-    def to_json(self):
-        return [patch.to_json()
-                for patch in self]
+        
+    def clone(self):
+        return Project(patches = self.patches.clone())
 
+    def to_json(self):
+        return {"patches": self.patches.to_json()}
+            
 if __name__ == "__main__":
     pass

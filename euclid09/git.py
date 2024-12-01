@@ -1,4 +1,4 @@
-from euclid09.model import Patches
+from euclid09.model import Project
 
 from sv.utils.naming import random_name
 
@@ -107,8 +107,9 @@ class Git:
             file_path = os.path.join(self.root, filename)
             with open(file_path, "r") as file:
                 data_json = json.load(file)
-                patches = Patches.from_json(data_json)
-                commit = Commit(commit_id=commit_id, content=patches)
+                project = Project.from_json(data_json)
+                commit = Commit(commit_id = commit_id,
+                                content = project)
                 self.commits.append(commit)
                 logging.info(f"Fetched {filename}")
         self.head_index = len(self.commits) - 1

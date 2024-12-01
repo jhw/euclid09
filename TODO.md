@@ -1,7 +1,6 @@
 ### short [01-project-class]
 
-- new project class w/ patches attr, copying patch w/ tracks
-- replace refs to patches with project
+- test cli lifecycle
 - test for new project class
 
 ### 02-fixed-float
@@ -55,6 +54,8 @@
 
 ### done
 
+- replace refs to patches with project
+- new project class w/ patches attr, copying patch w/ tracks
 - randomise patch colours
 - randomise module colours
 - upgrade to sv 0.3.22
