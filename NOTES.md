@@ -1,4 +1,12 @@
-### fixed and floating 30/11/21
+### polymorphic machines 01/12/24
+
+- instead of profiles you want cli to select randomly from a list of machines
+- probably highly weighted towards detroit sampler
+- but including sv drum / tokyo
+- and maybe including a simplified version of berlin which just plays a single note, where variation could come from changing note, changing note length or changing filter level
+- how would you incorporate these options within the context of the existing beats machine interface?
+
+### fixed and floating 30/11/24
 
 - instead of patches you have fixed and floating, and concatenate them together for rendering
 - rand_patches randomises floating and clears fixed

@@ -1,5 +1,7 @@
 ### short
 
+- check machines can be instantiated polymorphically with **kwargs
+- rename SVTrigGroup as SVMachineTrigs
 - refactor n_patches as n_max
 - separate fill from select
 - pass patch colours to sv
@@ -15,6 +17,9 @@
 ### medium
 
 - track freezing
+- polymorphic machines [notes]
+- optional s3 bank loading
+- including fx in sample lists
 
 ### thoughts
 
