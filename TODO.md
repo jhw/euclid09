@@ -1,10 +1,10 @@
 ### short
 
-- check machines can be instantiated polymorphically with **kwargs
-- rename SVTrigGroup as SVMachineTrigs
-- refactor n_patches as n_max
+- upgrade to sv 0.3.22
 - separate fill from select
-- pass patch colours to sv
+
+### 01-patch-commit
+
 - new patch commit wrapper [notes]
 - split patch commit into fixed and floating
   - rand_patches to clear fixed and randomise floating
@@ -53,6 +53,8 @@
 
 ### done
 
+- check machines can be instantiated polymorphically with **kwargs
+- rename SVTrigGroup as SVMachineTrigs
 - new select_patch based on arrange_custom
   - fills as well
 - remove clone_col
