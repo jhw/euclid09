@@ -10,6 +10,16 @@ import inspect
 import random
 import sv # so machine classes can be dynamically accessed
 
+def random_colour(offset = 64,
+                  contrast = 128,
+                  n = 256):
+    for i in range(n):
+        color = [int(offset + random.random() * (255 - offset))
+                 for i in range(3)]
+        if (max(color) - min(color)) > contrast:
+            return color
+    raise RuntimeError("couldn't find suitable random colour")
+
 def random_pattern():
     pattern_kwargs = {k:v for k, v in zip(["pulses", "steps"], random.choice(euclid.TidalPatterns)[:2])}
     return {"mod": "euclid",
@@ -80,7 +90,8 @@ class SynthTrack:
     def init_machine(self, container):
         machine_class = load_class(self.machine)
         return machine_class(container = container,
-                             namespace = self.name.capitalize())
+                             namespace = self.name.capitalize(),
+                             colour = random_colour())
         
     def render(self, container, generators, dry_level, wet_level = 1):
         machine = self.init_machine(container)
@@ -155,6 +166,7 @@ class SampleTrack(SynthTrack):
         machine_class = load_class(self.machine)
         return machine_class(container = container,
                              namespace = self.name.capitalize(),
+                             colour = random_colour(),
                              samples = self.samples,
                              sample_cutoff = self.cutoff) # NB name switch
         

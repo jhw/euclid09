@@ -1,6 +1,5 @@
 ### short
 
-- randomise module colours
 - randomise patch colours
 
 - separate fill from select
@@ -55,6 +54,7 @@
 
 ### done
 
+- randomise module colours
 - upgrade to sv 0.3.22
 - check machines can be instantiated polymorphically with **kwargs
 - rename SVTrigGroup as SVMachineTrigs
