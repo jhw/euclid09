@@ -1,15 +1,19 @@
-### short
+### short [01-project-class]
 
-### 01-patch-commit
+- new project class w/ patches attr, copying patch w/ tracks
+- replace refs to patches with project
+- test for new project class
 
-- new patch commit wrapper [notes]
-- separate cli fill from select
+### 02-fixed-float
+
 - split patch commit into fixed and floating
   - rand_patches to clear fixed and randomise floating
   - select patches to copy selected into fixed and clear floating
   - fill patches to copy fixed into floating
   - rand xxx to randomise floating
+
 - colour fixed as green or blue, floating as red
+- separate cli fill from select
 - refactor select patches into select custom, select range
 
 ### medium
