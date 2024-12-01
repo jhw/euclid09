@@ -1,3 +1,4 @@
+from sv.machines import SVMachineTrigs
 from euclid09.model import *
 
 from unittest.mock import Mock, patch
@@ -178,6 +179,56 @@ class ModelTest(unittest.TestCase):
                                     tags = self.tags,
                                     cutoff = self.cutoff)
             self.assertEqual(track.name, "kick")
-        
+
+    def test_project_creation(self):
+        project = Project.randomise(tracks=self.tracks,
+                                    pool=self.pool,
+                                    tags=self.tags,
+                                    cutoff=self.cutoff,
+                                    n=3)
+        for patch in project.patches:
+            for track in patch.tracks:
+                track.samples = self.mock_samples
+        self.assertIsInstance(project, Project)
+        self.assertEqual(len(project.patches), 3)
+        clone = project.clone()
+        self.assertEqual(len(clone.patches), len(project.patches))
+
+    def test_project_serialization(self):
+        project = Project.randomise(tracks=self.tracks,
+                                    pool=self.pool,
+                                    tags=self.tags,
+                                    cutoff=self.cutoff,
+                                    n=3)
+        for patch in project.patches:
+            for track in patch.tracks:
+                track.samples = self.mock_samples
+        serialized = project.to_json()
+        deserialized = Project.from_json(serialized)
+        self.assertEqual(len(deserialized.patches), len(project.patches))
+        for p1, p2 in zip(project.patches, deserialized.patches):
+            self.assertEqual(len(p1.tracks), len(p2.tracks))
+
+    def test_project_render(self):
+        project = Project.randomise(tracks=self.tracks,
+                                    pool=self.pool,
+                                    tags=self.tags,
+                                    cutoff=self.cutoff,
+                                    n=2)
+        for patch in project.patches:
+            for track in patch.tracks:
+                track.samples = self.mock_samples
+        banks = Mock()
+        def mock_generator(machine, *args, **kwargs):
+            yield 0, SVMachineTrigs([])
+        generators = [mock_generator]
+        levels = {"kick": 1, "clap": 0.5}        
+        container = project.render(banks=banks,
+                                   generators=generators,
+                                   levels=levels,
+                                   bpm=120,
+                                   n_ticks=16)
+        self.assertIsNotNone(container)        
+            
 if __name__ == "__main__":
     unittest.main()

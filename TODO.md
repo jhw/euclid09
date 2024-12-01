@@ -1,8 +1,4 @@
-### short [01-project-class]
-
-- test for new project class
-
-### 02-fixed-float
+### short
 
 - split patch commit into fixed and floating
 
@@ -11,11 +7,11 @@
 - fill patches to copy fixed into floating
 - rand xxx to randomise floating
 
+### medium
+
 - colour fixed as green or blue, floating as red
 - separate cli fill from select
 - refactor select patches into select custom, select range
-
-### medium
 
 - track freezing
 - polymorphic machines [notes]
@@ -54,6 +50,7 @@
 
 ### done
 
+- test for new project class
 - replace initialisation of empty lists
 - test cli lifecycle
 - replace refs to patches with project
