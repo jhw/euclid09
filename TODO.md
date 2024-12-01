@@ -1,6 +1,8 @@
 ### short
 
-- upgrade to sv 0.3.22
+- randomise module colours
+- randomise patch colours
+
 - separate fill from select
 
 ### 01-patch-commit
@@ -53,6 +55,7 @@
 
 ### done
 
+- upgrade to sv 0.3.22
 - check machines can be instantiated polymorphically with **kwargs
 - rename SVTrigGroup as SVMachineTrigs
 - new select_patch based on arrange_custom
