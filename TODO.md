@@ -1,10 +1,9 @@
 ### short
 
-- separate fill from select
-
 ### 01-patch-commit
 
 - new patch commit wrapper [notes]
+- separate cli fill from select
 - split patch commit into fixed and floating
   - rand_patches to clear fixed and randomise floating
   - select patches to copy selected into fixed and clear floating
