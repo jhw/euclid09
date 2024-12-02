@@ -76,7 +76,7 @@ def commit_and_render(fn):
         project = fn(self, *args, **kwargs)
         levels = Levels(self.tracks)
         # START TEMP CODE
-        colours = {"modules": {key:random_colour() for key in levels},
+        colours = {"machines": {key:random_colour() for key in levels},
                    "patches": [random_colour() for i in range(len(project.patches))]}
         # END TEMP CODE
         container = project.render(banks = self.banks,

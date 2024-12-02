@@ -1,6 +1,5 @@
 ### short
 
-- rename mod|pat_colours as machine|patch_colours
 - abstract colours code inside class
 - add randomise_red|green|blue options
 - map kick/clap/hat to rgb
@@ -59,6 +58,7 @@
 
 ### done
 
+- rename mod|pat_colours as machine|patch_colours
 - move patch colour definition into cli
 - add module colour nesting
 - move module colour definition into cli

@@ -243,12 +243,12 @@ class Patch:
                                 filter_fn = filter_fn,
                                 **kwargs)
 
-    def render(self, container, generators, levels, mod_colours, pat_colour):
-        container.spawn_patch(pat_colour)
+    def render(self, container, generators, levels, machine_colours, patch_colour):
+        container.spawn_patch(patch_colour)
         self.tracks.render(container = container,
                            generators = generators,
                            levels = levels,
-                           colours = mod_colours)
+                           colours = machine_colours)
         
     def to_json(self):
         return {"tracks": self.tracks.to_json()}
@@ -278,8 +278,8 @@ class Patches(list):
             patch.render(container = container,
                          generators = generators,
                          levels = levels,
-                         mod_colours = colours["modules"],
-                         pat_colour = colours["patches"][i])
+                         machine_colours = colours["machines"],
+                         patch_colour = colours["patches"][i])
     
     def to_json(self):
         return [patch.to_json()
