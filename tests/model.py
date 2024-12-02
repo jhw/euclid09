@@ -21,10 +21,7 @@ class ModelTest(unittest.TestCase):
              "density": 0.25}
         ]
         self.tags = {"kick": "sample", "clap": "sample"}
-        self.cutoff  = 0.5
-        self.levels = {"kick": 1, "clap": 0.5}
-
-        # Mock for SVSampleRef
+        self.cutoff  = 0.5                       
         self.mock_sample = {
             "bank_name": "drums",
             "file_path": "kick.wav",
@@ -167,7 +164,7 @@ class ModelTest(unittest.TestCase):
                                       cutoff = self.cutoff)
         track.samples = self.mock_samples  # Assign valid samples
         container = Mock()
-        machine = track.init_machine(container)
+        machine = track.init_machine(container, [127, 127, 127])
         self.assertEqual(machine.namespace, track.name.capitalize())
         self.assertEqual(machine.samples, self.mock_samples)
 
@@ -222,12 +219,15 @@ class ModelTest(unittest.TestCase):
         def mock_generator(machine, *args, **kwargs):
             yield 0, SVMachineTrigs([])
         generators = [mock_generator]
-        levels = {"kick": 1, "clap": 0.5}        
-        container = project.render(banks=banks,
-                                   generators=generators,
-                                   levels=levels,
-                                   bpm=120,
-                                   n_ticks=16)
+        levels = {"kick": 1, "clap": 0.5}
+        colours = {"kick": [127, 127, 127],
+                   "clap": [127, 127, 127]}
+        container = project.render(banks = banks,
+                                   generators = generators,
+                                   levels = levels,
+                                   colours = colours,
+                                   bpm = 120,
+                                   n_ticks = 16)
         self.assertIsNotNone(container)        
             
 if __name__ == "__main__":

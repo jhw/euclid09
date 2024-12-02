@@ -60,14 +60,26 @@ def assert_head(fn):
         except RuntimeError as error:            
             logging.warning(str(error))
     return wrapped
-    
+
+def random_colour(offset = 64,
+                  contrast = 128,
+                  n = 256):
+    for i in range(n):
+        color = [int(offset + random.random() * (255 - offset))
+                 for i in range(3)]
+        if (max(color) - min(color)) > contrast:
+            return color
+    raise RuntimeError("couldn't find suitable random colour")
+
 def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
         project = fn(self, *args, **kwargs)
         levels = Levels(self.tracks)
-        container = project.render(banks=self.banks,
+        colours = {key:random_colour() for key in levels} # TEMP
+        container = project.render(banks = self.banks,
                                    generators = self.generators,
-                                   levels=levels)
+                                   levels = levels,
+                                   colours = colours)
         commit_id = self.git.commit(project)
         if not os.path.exists("tmp/sunvox"):
             os.makedirs("tmp/sunvox")

@@ -87,14 +87,14 @@ class SynthTrack:
     def shuffle_density(self, limit = 0.25, **kwargs):
         self.density = limit + random.random() * (1 - (2 * limit))
 
-    def init_machine(self, container):
+    def init_machine(self, container, colour):
         machine_class = load_class(self.machine)
         return machine_class(container = container,
                              namespace = self.name.capitalize(),
-                             colour = random_colour())
+                             colour = colour)
         
-    def render(self, container, generators, dry_level, wet_level = 1):
-        machine = self.init_machine(container)
+    def render(self, container, generators, dry_level, colour, wet_level = 1):
+        machine = self.init_machine(container, colour)
         container.add_machine(machine)
         pattern = spawn_function(**self.pattern)(**self.pattern["args"])
         groove = spawn_function(**self.groove)
@@ -162,11 +162,11 @@ class SampleTrack(SynthTrack):
         i = int(random.random() > 0.5)
         self.samples[i] = samples[0]
 
-    def init_machine(self, container):
+    def init_machine(self, container, colour):
         machine_class = load_class(self.machine)
         return machine_class(container = container,
                              namespace = self.name.capitalize(),
-                             colour = random_colour(),
+                             colour = colour,
                              samples = self.samples,
                              sample_cutoff = self.cutoff) # NB name switch
         
@@ -218,11 +218,12 @@ class Tracks(list):
         track = random.choice(tracks)
         getattr(track, f"shuffle_{attr}")(**kwargs)
 
-    def render(self, container, generators, levels):                
+    def render(self, container, generators, levels, colours):                
         for track in self:
             track.render(container = container,
                          generators = generators,
-                         dry_level = levels[track.name])
+                         dry_level = levels[track.name],
+                         colour = colours[track.name])
         
     def to_json(self):
         return [track.to_json()
@@ -252,11 +253,13 @@ class Patch:
                                 filter_fn = filter_fn,
                                 **kwargs)
 
-    def render(self, container, generators, levels):
+    def render(self, container, generators, levels, colours):
+        colour = random_colour()
         container.spawn_patch(random_colour())
         self.tracks.render(container = container,
                            generators = generators,
-                           levels = levels)
+                           levels = levels,
+                           colours = colours)
         
     def to_json(self):
         return {"tracks": self.tracks.to_json()}
@@ -281,11 +284,12 @@ class Patches(list):
     def clone(self):
         return Patches([patch.clone() for patch in self])
         
-    def render(self, container, generators, levels):
+    def render(self, container, generators, levels, colours):
         for patch in self:
             patch.render(container = container,
                          generators = generators,
-                         levels = levels)
+                         levels = levels,
+                         colours = colours)
     
     def to_json(self):
         return [patch.to_json()
@@ -307,7 +311,7 @@ class Project:
     def __init__(self, patches = Patches()):
         self.patches = patches
 
-    def render(self, banks, generators, levels,
+    def render(self, banks, generators, levels, colours,
                bpm = 120,
                n_ticks = 16):
         container = SVContainer(banks = banks,
@@ -315,7 +319,8 @@ class Project:
                                 n_ticks = n_ticks)
         self.patches.render(container = container,
                             generators = generators,
-                            levels = levels)
+                            levels = levels,
+                            colours = colours)
         return container
         
     def clone(self):
