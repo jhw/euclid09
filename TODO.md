@@ -1,7 +1,5 @@
 ### short
 
-- add module colour nesting
-
 - move patch colour definition into cli
 
 ### medium
@@ -56,6 +54,7 @@
 
 ### done
 
+- add module colour nesting
 - move module colour definition into cli
 - test for new project class
 - replace initialisation of empty lists

@@ -75,7 +75,7 @@ def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
         project = fn(self, *args, **kwargs)
         levels = Levels(self.tracks)
-        colours = {key:random_colour() for key in levels} # TEMP
+        colours = {"modules": {key:random_colour() for key in levels}} # TEMP
         container = project.render(banks = self.banks,
                                    generators = self.generators,
                                    levels = levels,

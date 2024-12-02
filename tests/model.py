@@ -220,8 +220,8 @@ class ModelTest(unittest.TestCase):
             yield 0, SVMachineTrigs([])
         generators = [mock_generator]
         levels = {"kick": 1, "clap": 0.5}
-        colours = {"kick": [127, 127, 127],
-                   "clap": [127, 127, 127]}
+        colours = {"modules": {"kick": [127, 127, 127],
+                               "clap": [127, 127, 127]}}
         container = project.render(banks = banks,
                                    generators = generators,
                                    levels = levels,

@@ -223,7 +223,7 @@ class Tracks(list):
             track.render(container = container,
                          generators = generators,
                          dry_level = levels[track.name],
-                         colour = colours[track.name])
+                         colour = colours["modules"][track.name])
         
     def to_json(self):
         return [track.to_json()
