@@ -37,7 +37,9 @@ def assert_head(fn):
 
 def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
-        project = fn(self, *args, **kwargs)
+        project, freeze = fn(self, *args, **kwargs)
+        if freeze != None:
+            self.freeze = freeze
         levels = Levels(self.tracks)
         colours = Colours.randomise(tracks = self.tracks,
                                     patches = project.patches)
@@ -66,6 +68,7 @@ class Euclid09CLI(cmd.Cmd):
         self.n_patches = n_patches
         self.cutoff = cutoff
         self.git = Git("tmp/git")
+        self.freeze = 0
 
     def preloop(self):
         logging.info("Fetching commits ...")
@@ -89,7 +92,15 @@ class Euclid09CLI(cmd.Cmd):
         self.tags = Tags(tracks = tracks, terms = self.tags.terms)
         self.do_show_tags(None)
 
-    ### selection
+    ### patch operations
+    
+    @commit_and_render
+    def do_rand_project(self, _):
+        return Project.randomise(tracks = self.tracks,
+                                 pool = self.pool,
+                                 tags = self.tags,
+                                 cutoff = self.cutoff,
+                                 n = self.n_patches), 0
 
     @assert_head
     @parse_line([{"name": "I", "type": "hexstr"}])
@@ -101,52 +112,42 @@ class Euclid09CLI(cmd.Cmd):
             j = I[i % len(I)]
             patch = roots[j].clone()
             project.patches.append(patch)
-        return project
-    
-    ### randomisation
-
-    @commit_and_render
-    def do_rand_project(self, _):
-        return Project.randomise(tracks = self.tracks,
-                                 pool = self.pool,
-                                 tags = self.tags,
-                                 cutoff = self.cutoff,
-                                 n = self.n_patches)
+        return project, len(I)
         
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_rand_samples(self, n):
         project = self.git.head.content.clone()
-        for patch in project.patches:
+        for patch in project.patches[self.freeze:]:
             for _ in range(n):
                 patch.randomise_attr(attr = "samples",
                                      filter_fn = lambda x: True,
                                      pool = self.pool,
                                      tags  =self.tags)
-        return project
+        return project, None
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_rand_pattern(self, n):
         project = self.git.head.content.clone()
-        for patch in project.patches:
+        for patch in project.patches[self.freeze:]:
             for _ in range(n):
                 patch.randomise_attr(attr = "pattern",
                                      filter_fn = lambda x: True)
-        return project
+        return project, None
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_rand_seeds(self, n):
         project = self.git.head.content.clone()
-        for patch in project.patches:
+        for patch in project.patches[self.freeze:]:
             for _ in range(n):
                 patch.randomise_attr(attr = "seeds",
                                      filter_fn = lambda x: True)
-        return project
+        return project, None
         
     ### export
     

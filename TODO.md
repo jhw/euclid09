@@ -1,13 +1,5 @@
 ### short
 
-### 01-col-freeze
-
-- freeze integer
-- rand_patches to clear fixed and randomise floating
-- select patches to copy selected into fixed and clear floating
-- fill patches to copy fixed into floating
-- rand xxx to randomise floating
-
 ### medium
 
 - test cli utility classes
@@ -57,6 +49,11 @@
 
 ### done
 
+- freeze integer
+- rand_patches to clear fixed and randomise floating
+- select patches to copy selected into fixed and clear floating
+- fill patches to copy fixed into floating
+- rand xxx to randomise floating
 - is select cols doubling the number of patches?
 - randomise tags on startup
 - protection against track not being present in tags

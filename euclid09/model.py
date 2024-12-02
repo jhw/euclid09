@@ -298,8 +298,8 @@ class Project:
     def from_json(project):
         return Project(patches = Patches.from_json(project["patches"]))
     
-    def __init__(self, patches = Patches()):
-        self.patches = patches
+    def __init__(self, patches = None):
+        self.patches = patches if patches else Patches()
 
     def render(self, banks, generators, levels, colours,
                bpm = 120,
