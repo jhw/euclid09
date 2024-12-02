@@ -12,6 +12,8 @@
 - fill patches to copy fixed into floating
 - rand xxx to randomise floating
 
+- don't render sample note/fx to json if 0/null values
+
 - colour fixed as green or blue, floating as red
 - separate cli fill from select
 - refactor select patches into select custom, select range
