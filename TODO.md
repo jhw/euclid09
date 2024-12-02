@@ -1,8 +1,8 @@
 ### short
 
-- randomise tags on startup
 - convert colours to class 
 
+- convert tags to class and randomise on startup
 
 ### medium
 
