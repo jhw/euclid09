@@ -71,14 +71,26 @@ def random_colour(offset = 64,
             return color
     raise RuntimeError("couldn't find suitable random colour")
 
+class Colours(dict):
+
+    @staticmethod
+    def randomise(tracks, patches):
+        machine_colours = {track["name"]:random_colour() for track in tracks}
+        patch_colours = [random_colour() for patch in patches]
+        return Colours(machine_colours = machine_colours,
+                       patch_colours = patch_colours)
+
+    def __init__(self, machine_colours, patch_colours):
+        dict.__init__(self)
+        self["machines"] = machine_colours
+        self["patches"] = patch_colours
+
 def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
         project = fn(self, *args, **kwargs)
         levels = Levels(self.tracks)
-        # START TEMP CODE
-        colours = {"machines": {key:random_colour() for key in levels},
-                   "patches": [random_colour() for i in range(len(project.patches))]}
-        # END TEMP CODE
+        colours = Colours.randomise(tracks = self.tracks,
+                                    patches = project.patches)
         container = project.render(banks = self.banks,
                                    generators = self.generators,
                                    levels = levels,

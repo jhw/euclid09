@@ -1,9 +1,8 @@
 ### short
 
-- abstract colours code inside class
+- add colour class
 - add randomise_red|green|blue options
 - map kick/clap/hat to rgb
-
 
 ### medium
 
@@ -58,6 +57,7 @@
 
 ### done
 
+- abstract colours code inside class
 - rename mod|pat_colours as machine|patch_colours
 - move patch colour definition into cli
 - add module colour nesting
