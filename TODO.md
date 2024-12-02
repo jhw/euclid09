@@ -1,37 +1,35 @@
 ### short
 
-### medium
+- split select_patches into separate select, fill operations
 
 - test cli utility classes
-- don't render sample note/fx to json if 0/null values
 
-- colour fixed as green or blue, floating as red
-- separate cli fill from select
-- refactor select patches into select custom, select range
+### medium
+
+- don't render sample note/fx to json if 0/null values
 
 - track freezing
 - polymorphic machines [notes]
 - optional s3 bank loading
-- including fx in sample lists
+- sample fx
 
 ### thoughts
 
+- colour fixed as green or blue, floating as red?
+  - don't see it's worth it
+- refactor select patches into select custom, select range
+  - no because there are only 16 patches; simple enough to do 01234.. etc
 - add randomise_red|green|blue options?
   - not worth it
-
 - density and temperature variations?
-
 - tagging and purging?
   - unclear it has value, esp as you can "tag" stuff with export
-
 - track muting?
   - why would this be required?
   - possibly if you wanted to build the sound up one track at a time
   - but not clear that's what's wanted here
-
 - track mixing levels?
   - not clear required if tracks stems are exported separately into the digitakt
-
 - replace levels with mutes?
   - they are the same thing, int vs boolean
   - you would still need a class to represent mute state
