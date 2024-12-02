@@ -1,10 +1,14 @@
 ### short
 
-- convert colours to class 
+- rename mod|pat_colours as machine|patch_colours
+- abstract colours code inside class
+- add randomise_red|green|blue options
+- map kick/clap/hat to rgb
 
-- convert tags to class and randomise on startup
 
 ### medium
+
+- convert tags to class and randomise on startup
 
 - split patch commit into fixed and floating
   - rand_patches to clear fixed and randomise floating
