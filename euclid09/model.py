@@ -194,8 +194,8 @@ class Tracks(list):
             track_instances.append(track_instance)        
         return Tracks(track_instances)
     
-    def __init__(self, tracks = []):
-        list.__init__(self, tracks)
+    def __init__(self, tracks = None):
+        list.__init__(self, tracks if tracks else [])
 
     def clone(self):
         return Tracks([track.clone() for track in self])
@@ -267,8 +267,8 @@ class Patches(list):
     def from_json(patches):
         return Patches([Patch.from_json(patch) for patch in patches])
     
-    def __init__(self, patches = []):
-        list.__init__(self, patches)
+    def __init__(self, patches = None):
+        list.__init__(self, patches if patches else [])
 
     def clone(self):
         return Patches([patch.clone() for patch in self])

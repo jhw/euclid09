@@ -1,6 +1,6 @@
 ### short
 
-- is select cols doubling the number of patches?
+- test cli utility classes
 
 ### 01-col-freeze
 
@@ -12,7 +12,6 @@
 
 ### medium
 
-- test cli utility classes
 - don't render sample note/fx to json if 0/null values
 
 - colour fixed as green or blue, floating as red
@@ -59,6 +58,7 @@
 
 ### done
 
+- is select cols doubling the number of patches?
 - randomise tags on startup
 - protection against track not being present in tags
 - convert terms to class
