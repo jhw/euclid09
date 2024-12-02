@@ -1,19 +1,18 @@
 ### short
 
-- convert terms to class
-- replace terms class with tags class
+- is select cols doubling the number of patches?
 
-- randomise tags on startup
-- test colours and levels
+### 01-col-freeze
+
+- freeze integer
+- rand_patches to clear fixed and randomise floating
+- select patches to copy selected into fixed and clear floating
+- fill patches to copy fixed into floating
+- rand xxx to randomise floating
 
 ### medium
 
-- split patch commit into fixed and floating
-  - rand_patches to clear fixed and randomise floating
-  - select patches to copy selected into fixed and clear floating
-  - fill patches to copy fixed into floating
-  - rand xxx to randomise floating
-
+- test cli utility classes
 - don't render sample note/fx to json if 0/null values
 
 - colour fixed as green or blue, floating as red
@@ -60,6 +59,10 @@
 
 ### done
 
+- randomise tags on startup
+- protection against track not being present in tags
+- convert terms to class
+- replace terms class with tags class
 - abstract and test colours
 - add colour class
 - map kick/clap/hat to rgb

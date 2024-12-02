@@ -4,6 +4,7 @@ from sv.utils.export import export_wav
 
 from euclid09.cli.colours import Colours
 from euclid09.cli.levels import Levels
+from euclid09.cli.tags import Tags
 from euclid09.generators import Beat, GhostEcho
 from euclid09.git import Git
 from euclid09.model import Project
@@ -13,14 +14,13 @@ import argparse
 import cmd
 import logging
 import os
-import random
 import sys
 import yaml
 import zipfile
 
-logging.basicConfig(stream=sys.stdout,
-                    level=logging.INFO,
-                    format="%(levelname)s: %(message)s")
+logging.basicConfig(stream = sys.stdout,
+                    level = logging.INFO,
+                    format = "%(levelname)s: %(message)s")
 
 def load_yaml(file_name):
     return yaml.safe_load(open("/".join(__file__.split("/")[:-1] + [file_name])).read())
@@ -50,29 +50,19 @@ def commit_and_render(fn):
             os.makedirs("tmp/sunvox")
         container.write_project(f"tmp/sunvox/{commit_id}.sunvox")
     return wrapped
-
-class Terms(dict):
-
-    def __init__(self, terms = {}):
-        dict.__init__(self, terms)
-
-    def random_keys(self, tags):
-        keys = list(self.keys())
-        return {tag:random.choice(keys) for tag in tags}
-
+                
 class Euclid09CLI(cmd.Cmd):
 
     prompt = ">>> "
     intro = "Welcome to the euclid09 CLI ;)"
     
-    def __init__(self, tracks, banks, pool, generators, tags, terms, cutoff, n_patches):
+    def __init__(self, tracks, banks, pool, generators, tags, cutoff, n_patches):
         super().__init__()
         self.tracks = tracks
         self.banks = banks
         self.pool = pool
         self.generators = generators                
         self.tags = tags
-        self.terms = terms
         self.n_patches = n_patches
         self.cutoff = cutoff
         self.git = Git("tmp/git")
@@ -80,6 +70,7 @@ class Euclid09CLI(cmd.Cmd):
     def preloop(self):
         logging.info("Fetching commits ...")
         self.git.fetch()
+        self.do_show_tags(None)
 
     def postloop(self):
         logging.info("Pushing commits ...")
@@ -88,15 +79,14 @@ class Euclid09CLI(cmd.Cmd):
     ### tags
 
     def do_show_tags(self, _):
-        logging.info(yaml.safe_dump(self.tags, default_flow_style=False))
+        logging.info(", ".join([f"{k}={v}" for k, v in self.tags.items()]))
     
     def do_rand_tags(self, _):
-        self.tags = self.terms.random_keys(list(self.tags.keys()))
+        self.tags.randomise()
         self.do_show_tags(None)
 
     def do_reset_tags(self, _):
-        tags={track["name"]: track["name"] for track in self.tracks}
-        self.tags = tags
+        self.tags = Tags(tracks = tracks, terms = self.tags.terms)
         self.do_show_tags(None)
 
     ### selection
@@ -267,19 +257,16 @@ if __name__ == "__main__":
         args = parse_args()
         tracks = load_yaml(args.profile)
         banks = SVBanks.load_zip(cache_dir="banks")
-        terms = Terms(load_yaml("terms.yaml"))
+        terms = load_yaml("terms.yaml")
         pool, _ = banks.spawn_pool(tag_patterns=terms)
-        tags = {track["name"]: track["name"] for track in tracks}
-        Euclid09CLI(
-            tracks = tracks,
-            banks = banks,
-            pool = pool,
-            generators = [Beat, GhostEcho],
-            tags = tags,
-            terms = terms,
-            cutoff = args.cutoff,
-            n_patches = args.n_patches
-        ).cmdloop()
+        tags = Tags(tracks = tracks, terms = terms).validate().randomise()
+        Euclid09CLI(tracks = tracks,
+                    banks = banks,
+                    pool = pool,
+                    generators = [Beat, GhostEcho],
+                    tags = tags,
+                    cutoff = args.cutoff,
+                    n_patches = args.n_patches).cmdloop()
     except RuntimeError as error:
         logging.error(str(error))
 
