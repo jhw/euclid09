@@ -1,7 +1,5 @@
 ### short
 
-- test cli utility classes
-
 ### 01-col-freeze
 
 - freeze integer
@@ -12,6 +10,7 @@
 
 ### medium
 
+- test cli utility classes
 - don't render sample note/fx to json if 0/null values
 
 - colour fixed as green or blue, floating as red
