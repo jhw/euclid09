@@ -2,14 +2,12 @@
   machine: sv.machines.beats.detroit.Detroit
   temperature: 0.5
   density: 0.5
-  colour_group: red
 - name: clap
   machine: sv.machines.beats.detroit.Detroit
   temperature: 0.25
   density: 0.25
-  colour_group: green
 - name: hat
   machine: sv.machines.beats.detroit.Detroit
   temperature: 0.75
   density: 0.75
-  colour_group: blue
+

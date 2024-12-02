@@ -1,9 +1,8 @@
 ### short
 
-- add randomise_red|green|blue options
 - convert tags to class
 - randomise tags on startup
-- test colours, levels, tags
+- test colours and levels
 
 ### medium
 
@@ -25,6 +24,9 @@
 - including fx in sample lists
 
 ### thoughts
+
+- add randomise_red|green|blue options?
+  - not worth it
 
 - density and temperature variations?
 
