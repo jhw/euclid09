@@ -1,11 +1,12 @@
 ### short
 
-- split select_patches into separate select, fill operations
-
-- test cli utility classes
-
 ### medium
 
+- refactor rand_sample as rand_sound
+
+- test cli utility classes
+  - why do you get git messages?
+  
 - don't render sample note/fx to json if 0/null values
 
 - track freezing
@@ -47,6 +48,7 @@
 
 ### done
 
+- split select_patches into separate select, fill operations
 - freeze integer
 - rand_patches to clear fixed and randomise floating
 - select patches to copy selected into fixed and clear floating

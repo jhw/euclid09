@@ -108,11 +108,24 @@ class Euclid09CLI(cmd.Cmd):
     def do_select_patches(self, I):
         roots = self.git.head.content.patches
         project = Project()
+        for i in I:
+            patch = roots[i].clone()
+            project.patches.append(patch)
+        return project, len(I)
+
+    @assert_head
+    @parse_line([{"name": "I", "type": "hexstr"}])
+    @commit_and_render
+    def do_clone_patches(self, I):
+        roots = self.git.head.content.patches
+        project = Project()
         for i in range(self.n_patches):
             j = I[i % len(I)]
             patch = roots[j].clone()
             project.patches.append(patch)
         return project, len(I)
+
+    
         
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
