@@ -1,6 +1,8 @@
 ### short
 
-- convert tags to class
+- convert terms to class
+- replace terms class with tags class
+
 - randomise tags on startup
 - test colours and levels
 

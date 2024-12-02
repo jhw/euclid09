@@ -51,6 +51,15 @@ def commit_and_render(fn):
         container.write_project(f"tmp/sunvox/{commit_id}.sunvox")
     return wrapped
 
+class Terms(dict):
+
+    def __init__(self, terms = {}):
+        dict.__init__(self, terms)
+
+    def random_keys(self, tags):
+        keys = list(self.keys())
+        return {tag:random.choice(keys) for tag in tags}
+
 class Euclid09CLI(cmd.Cmd):
 
     prompt = ">>> "
@@ -62,7 +71,7 @@ class Euclid09CLI(cmd.Cmd):
         self.banks = banks
         self.pool = pool
         self.generators = generators                
-        self.tags = dict(tags)
+        self.tags = tags
         self.terms = terms
         self.n_patches = n_patches
         self.cutoff = cutoff
@@ -82,13 +91,7 @@ class Euclid09CLI(cmd.Cmd):
         logging.info(yaml.safe_dump(self.tags, default_flow_style=False))
     
     def do_rand_tags(self, _):
-        term_keys = list(self.terms.keys())
-        tags = {}
-        for key in self.tags:
-            tag = random.choice(term_keys)
-            tags[key] = tag
-            term_keys.remove(tag)
-        self.tags = tags
+        self.tags = self.terms.random_keys(list(self.tags.keys()))
         self.do_show_tags(None)
 
     def do_reset_tags(self, _):
@@ -264,7 +267,7 @@ if __name__ == "__main__":
         args = parse_args()
         tracks = load_yaml(args.profile)
         banks = SVBanks.load_zip(cache_dir="banks")
-        terms = load_yaml("terms.yaml")
+        terms = Terms(load_yaml("terms.yaml"))
         pool, _ = banks.spawn_pool(tag_patterns=terms)
         tags = {track["name"]: track["name"] for track in tracks}
         Euclid09CLI(
