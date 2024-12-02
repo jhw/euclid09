@@ -220,8 +220,11 @@ class ModelTest(unittest.TestCase):
             yield 0, SVMachineTrigs([])
         generators = [mock_generator]
         levels = {"kick": 1, "clap": 0.5}
+        # START TEMP CODE
         colours = {"modules": {"kick": [127, 127, 127],
-                               "clap": [127, 127, 127]}}
+                               "clap": [127, 127, 127]},
+                   "patches": [[127, 127, 127] for i in range(len(project.patches))]}
+        # END TEMP CODE
         container = project.render(banks = banks,
                                    generators = generators,
                                    levels = levels,

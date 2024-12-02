@@ -10,16 +10,6 @@ import inspect
 import random
 import sv # so machine classes can be dynamically accessed
 
-def random_colour(offset = 64,
-                  contrast = 128,
-                  n = 256):
-    for i in range(n):
-        color = [int(offset + random.random() * (255 - offset))
-                 for i in range(3)]
-        if (max(color) - min(color)) > contrast:
-            return color
-    raise RuntimeError("couldn't find suitable random colour")
-
 def random_pattern():
     pattern_kwargs = {k:v for k, v in zip(["pulses", "steps"], random.choice(euclid.TidalPatterns)[:2])}
     return {"mod": "euclid",
@@ -223,7 +213,7 @@ class Tracks(list):
             track.render(container = container,
                          generators = generators,
                          dry_level = levels[track.name],
-                         colour = colours["modules"][track.name])
+                         colour = colours[track.name])
         
     def to_json(self):
         return [track.to_json()
@@ -253,13 +243,12 @@ class Patch:
                                 filter_fn = filter_fn,
                                 **kwargs)
 
-    def render(self, container, generators, levels, colours):
-        colour = random_colour()
-        container.spawn_patch(random_colour())
+    def render(self, container, generators, levels, mod_colours, pat_colour):
+        container.spawn_patch(pat_colour)
         self.tracks.render(container = container,
                            generators = generators,
                            levels = levels,
-                           colours = colours)
+                           colours = mod_colours)
         
     def to_json(self):
         return {"tracks": self.tracks.to_json()}
@@ -285,11 +274,12 @@ class Patches(list):
         return Patches([patch.clone() for patch in self])
         
     def render(self, container, generators, levels, colours):
-        for patch in self:
+        for i, patch in enumerate(self):
             patch.render(container = container,
                          generators = generators,
                          levels = levels,
-                         colours = colours)
+                         mod_colours = colours["modules"],
+                         pat_colour = colours["patches"][i])
     
     def to_json(self):
         return [patch.to_json()

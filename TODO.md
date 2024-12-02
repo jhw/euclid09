@@ -1,15 +1,16 @@
 ### short
 
-- move patch colour definition into cli
+- randomise tags on startup
+- convert colours to class 
+
 
 ### medium
 
 - split patch commit into fixed and floating
-
-- rand_patches to clear fixed and randomise floating
-- select patches to copy selected into fixed and clear floating
-- fill patches to copy fixed into floating
-- rand xxx to randomise floating
+  - rand_patches to clear fixed and randomise floating
+  - select patches to copy selected into fixed and clear floating
+  - fill patches to copy fixed into floating
+  - rand xxx to randomise floating
 
 - don't render sample note/fx to json if 0/null values
 
@@ -54,6 +55,7 @@
 
 ### done
 
+- move patch colour definition into cli
 - add module colour nesting
 - move module colour definition into cli
 - test for new project class
