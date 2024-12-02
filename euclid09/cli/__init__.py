@@ -2,12 +2,12 @@ from sv.banks import SVBanks
 from sv.utils.banks import init_banks
 from sv.utils.export import export_wav
 
+from euclid09.cli.colours import Colours
+from euclid09.cli.levels import Levels
 from euclid09.generators import Beat, GhostEcho
 from euclid09.git import Git
 from euclid09.model import Project
 from euclid09.parse import parse_line
-
-from collections import OrderedDict
 
 import argparse
 import cmd
@@ -25,32 +25,6 @@ logging.basicConfig(stream=sys.stdout,
 def load_yaml(file_name):
     return yaml.safe_load(open("/".join(__file__.split("/")[:-1] + [file_name])).read())
 
-class Levels(OrderedDict):
-
-    def __init__(self, tracks):
-        OrderedDict.__init__(self, {track["name"]: 1 for track in tracks})
-
-    def solo(self, key):
-        for track_name in self:
-            self[track_name] = 1 if track_name == key else 0
-        return self
-
-    @property
-    def is_solo(self):
-        return sum(self.values()) == 1
-
-    @property
-    def solo_key(self):
-        if self.is_solo:
-            for k, v in self.items():
-                if v == 1:
-                    return k[:3]
-        return None
-    
-    @property
-    def short_code(self):
-        return self.solo_key if self.is_solo else "all"
-
 def assert_head(fn):
     def wrapped(self, *args, **kwargs):
         try:
@@ -60,68 +34,6 @@ def assert_head(fn):
         except RuntimeError as error:            
             logging.warning(str(error))
     return wrapped
-
-def random_colour(offset = 64,
-                  contrast = 128,
-                  n = 256):
-    for i in range(n):
-        color = [int(offset + random.random() * (255 - offset))
-                 for i in range(3)]
-        if (max(color) - min(color)) > contrast:
-            return color
-    raise RuntimeError("couldn't find suitable random colour")
-
-class Colour(list):
-
-    @staticmethod
-    def randomise(offset = 64,
-                  contrast = 128,
-                  n = 256):
-        for i in range(n):
-            rgb = [int(offset + random.random() * (255 - offset))
-                   for i in range(3)]
-            if (max(rgb) - min(rgb)) > contrast:
-                return Colour(rgb)
-        raise RuntimeError("couldn't find suitable random colour")
-        
-    def __init__(self, rgb):
-        list.__init__(self, rgb)
-
-    def clone(self):
-        return Colour(self)
-        
-class Colours(dict):
-
-    @staticmethod
-    def randomise_machines(tracks):
-        colours = {}
-        for track in tracks:
-            colour = Colour.randomise()
-            colours[track["name"]] = colour
-        return colours
-
-    @staticmethod
-    def randomise_patches(patches, quantise = 4):
-        colours = []
-        for i, patch in enumerate(patches):
-            if 0 == i % quantise:                
-                colour = Colour.randomise()
-            else:
-                colour = colours[-1].clone()
-            colours.append(colour)
-        return colours
-    
-    @staticmethod
-    def randomise(tracks, patches):
-        machine_colours = Colours.randomise_machines(tracks)
-        patch_colours = Colours.randomise_patches(patches)
-        return Colours(machine_colours = machine_colours,
-                       patch_colours = patch_colours)
-
-    def __init__(self, machine_colours, patch_colours):
-        dict.__init__(self)
-        self["machines"] = machine_colours
-        self["patches"] = patch_colours
 
 def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
@@ -343,7 +255,7 @@ def parse_args(default_cutoff = 0.5,
         parser.error("cutoff must be a float greater than 0.")
     if args.n_patches <= 0:
         parser.error("n_patches must be an integer greater than 0.")
-    if not os.path.isfile(f"euclid09/{args.profile}"):
+    if not os.path.isfile(f"euclid09/cli/{args.profile}"):
         raise RuntimeError(f"The profile file '{args.profile}' does not exist.")
     return args
 

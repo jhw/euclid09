@@ -1,12 +1,11 @@
 ### short
 
 - add randomise_red|green|blue options
-- abstract and test colours
-
+- convert tags to class
+- randomise tags on startup
+- test colours, levels, tags
 
 ### medium
-
-- convert tags to class and randomise on startup
 
 - split patch commit into fixed and floating
   - rand_patches to clear fixed and randomise floating
@@ -57,6 +56,7 @@
 
 ### done
 
+- abstract and test colours
 - add colour class
 - map kick/clap/hat to rgb
 - abstract colours code inside class
