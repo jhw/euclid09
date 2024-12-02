@@ -1,13 +1,16 @@
 ### short
 
+- move patch colour definition into cli
+- move module colour definition into cli
+
+### medium
+
 - split patch commit into fixed and floating
 
 - rand_patches to clear fixed and randomise floating
 - select patches to copy selected into fixed and clear floating
 - fill patches to copy fixed into floating
 - rand xxx to randomise floating
-
-### medium
 
 - colour fixed as green or blue, floating as red
 - separate cli fill from select
