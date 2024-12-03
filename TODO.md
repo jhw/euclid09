@@ -1,9 +1,9 @@
 ### short
 
-- refactor model samples as sounds
-- collapse SynthTrack, SampleTrack into single class
-- move sample initialisation into cli
 - rename default profile as detroit
+- move pool/bank/tag stuff into cli
+- refactor model refs to samples as sounds
+- new sounds module containing SVSample
 - test tokyo profile
 
 ### medium
