@@ -175,12 +175,15 @@ class Euclid09CLI(cmd.Cmd):
             for track in self.tracks:
                 levels.append(Levels(self.tracks).solo(track["name"]))
             project = self.git.head.content
+            colours = Colours.randomise(tracks = self.tracks,
+                                        patches = project.patches)
             for levels_ in levels:
-                container = project.patches.render(banks = self.banks,
-                                                   generators = self.generators,
-                                                   levels = levels_)
-                project = container.render_project()
-                wav_io = export_wav(project=project)
+                container = project.render(banks = self.banks,
+                                           generators = self.generators,
+                                           levels = levels_,
+                                           colours = colours)
+                sv_project = container.render_project()
+                wav_io = export_wav(project = sv_project)
                 wav_name = f"{commit_id.short_name}-{levels_.short_code}.wav"
                 logging.info(wav_name)
                 zip_file.writestr(wav_name, wav_io.getvalue())

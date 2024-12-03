@@ -3,10 +3,13 @@
 - rename default profile as detroit
 - move pool/bank/tag stuff into cli
 - refactor model refs to samples as sounds
+
+### medium
+
 - new sounds module containing SVSample
 - test tokyo profile
 
-### medium
+- export stems shouldn't need to define colours
 
 - test cli utility classes
   - why do you get git messages?
