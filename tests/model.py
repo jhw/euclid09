@@ -166,7 +166,7 @@ class ModelTest(unittest.TestCase):
         container = Mock()
         machine = track.init_machine(container, [127, 127, 127])
         self.assertEqual(machine.namespace, track.name.capitalize())
-        self.assertEqual(machine.samples, self.mock_samples)
+        self.assertEqual(machine.sounds, self.mock_samples)
 
     def test_track_polymorphism(self):
         for klass in [SampleTrack,

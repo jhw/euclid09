@@ -1,8 +1,12 @@
 ### short
 
-### medium
+- refactor model samples as sounds
+- collapse SynthTrack, SampleTrack into single class
+- move sample initialisation into cli
+- rename default profile as detroit
+- test tokyo profile
 
-- refactor rand_sample as rand_sound
+### medium
 
 - test cli utility classes
   - why do you get git messages?

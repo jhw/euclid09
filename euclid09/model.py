@@ -157,8 +157,8 @@ class SampleTrack(SynthTrack):
         return machine_class(container = container,
                              namespace = self.name.capitalize(),
                              colour = colour,
-                             samples = self.samples,
-                             sample_cutoff = self.cutoff) # NB name switch
+                             sounds = self.samples,
+                             sound_cutoff = self.cutoff) # NB name switch
         
     def to_json(self):
         base_json = super().to_json()
