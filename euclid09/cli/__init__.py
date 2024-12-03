@@ -240,7 +240,7 @@ class Euclid09CLI(cmd.Cmd):
 
 def parse_args(default_cutoff = 0.5,
                default_n_patches = 16,
-               default_profile = "profiles/default.yaml"):
+               default_profile = "profiles/detroit.yaml"):
     parser = argparse.ArgumentParser(description="Run Euclid09CLI with specified parameters.")
     parser.add_argument(
         "--cutoff",

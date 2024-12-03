@@ -1,6 +1,5 @@
 ### short
 
-- rename default profile as detroit
 - move pool/bank/tag stuff into cli
 - refactor model refs to samples as sounds
 
@@ -55,6 +54,7 @@
 
 ### done
 
+- rename default profile as detroit
 - split select_patches into separate select, fill operations
 - freeze integer
 - rand_patches to clear fixed and randomise floating
