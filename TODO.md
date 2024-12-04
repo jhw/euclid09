@@ -1,6 +1,6 @@
 ### short
 
-- merge sample and synth tracks 
+- refactor SynthTrack/SampleTrack as BaseTrack, DetroitTrack
 - export should not require colours 
 
 ### medium
@@ -17,6 +17,8 @@
 
 ### thoughts
 
+- merge sample and synth tracks ?
+  - not clear it helps
 - colour fixed as green or blue, floating as red?
   - don't see it's worth it
 - refactor select patches into select custom, select range
@@ -49,6 +51,7 @@
 
 ### done
 
+- refactor samples as sounds
 - git operations should reset freeze
 - remove profiles and rename default yaml as machines 
 - rename default profile as detroit

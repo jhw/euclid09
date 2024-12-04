@@ -136,11 +136,11 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_rand_samples(self, n):
+    def do_rand_sounds(self, n):
         project = self.git.head.content.clone()
         for patch in project.patches[self.freeze:]:
             for _ in range(n):
-                patch.randomise_attr(attr = "samples",
+                patch.randomise_attr(attr = "sounds",
                                      filter_fn = lambda x: True,
                                      pool = self.pool,
                                      tags  =self.tags)

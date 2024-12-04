@@ -112,13 +112,13 @@ class SampleTrack(SynthTrack):
 
     @staticmethod
     def randomise_params(track, pool, tags, cutoff,
-                         n_samples = 2, **kwargs):
-        # samples
+                         n_sounds = 2, **kwargs):
+        # sounds
         base_kwargs = SynthTrack.randomise_params(track)
         tag = tags[track["name"]]
-        samples = pool.match(lambda sample: tag in sample.tags)
-        random.shuffle(samples)
-        base_kwargs["samples"] = samples[:n_samples]
+        sounds = pool.match(lambda sample: tag in sample.tags)
+        random.shuffle(sounds)
+        base_kwargs["sounds"] = sounds[:n_sounds]
         base_kwargs["cutoff"] = cutoff
         # seeds
         base_kwargs["seeds"]["sample"] = random_seed()
@@ -134,35 +134,35 @@ class SampleTrack(SynthTrack):
     
     @staticmethod
     def from_json(track):
-        track["samples"] = [SVSample(**sample) for sample in track["samples"]]
+        track["sounds"] = [SVSample(**sample) for sample in track["sounds"]]
         return SampleTrack(**track)
 
-    def __init__(self, samples, cutoff, *args, **kwargs):
+    def __init__(self, sounds, cutoff, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.samples = samples
+        self.sounds = sounds
         self.cutoff = cutoff
 
     def clone(self):
         return SampleTrack(**self.to_json())
 
-    def shuffle_samples(self, pool, tags, **kwargs):
+    def shuffle_sounds(self, pool, tags, **kwargs):
         tag = tags[self.name]
-        samples = pool.match(lambda sample: tag in sample.tags)
-        random.shuffle(samples)
+        sounds = pool.match(lambda sample: tag in sample.tags)
+        random.shuffle(sounds)
         i = int(random.random() > 0.5)
-        self.samples[i] = samples[0]
+        self.sounds[i] = sounds[0]
 
     def init_machine(self, container, colour):
         machine_class = load_class(self.machine)
         return machine_class(container = container,
                              namespace = self.name.capitalize(),
                              colour = colour,
-                             sounds = self.samples,
+                             sounds = self.sounds,
                              sound_cutoff = self.cutoff) # NB name switch
         
     def to_json(self):
         base_json = super().to_json()
-        base_json["samples"] = copy.deepcopy(self.samples)
+        base_json["sounds"] = copy.deepcopy(self.sounds)
         base_json["cutoff"] = self.cutoff
         return base_json
 
