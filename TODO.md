@@ -1,8 +1,11 @@
 ### short
 
+- couldn't Class.randomise take kwargs not pool and tag?
+- why does shuffle_sound require pool and tags to be passed? 
+  - shouldn't machine be initialised with a large number of samples and these then randomised?
+
 - export should not require colours 
 - clean up tmp colours stuff in tests
-- consider refactoring model to remove SamplerTrack and avoid passing pool, tags etc
 
 ### medium
 
