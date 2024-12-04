@@ -1,22 +1,16 @@
 ### short
 
 - mutate colours within range
-- add colours test
 
 ### medium
 
-- tokyo demo
-
+- tokyo track thoughts and demo 
 - don't render sample note/fx to json if 0/null values
-
 - track freezing
 - optional s3 bank loading
 - sample fx
 
 ### thoughts
-
-- add SynthTrack.shuffle_sounds?
-  - no; see notes
 
 ### gists
 
@@ -31,6 +25,7 @@
 
 ### done
 
+- add colours test
 - model to use default Levels
 - rename TrackBase as SynthTrack
 - export should not require colours 
