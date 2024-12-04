@@ -1,9 +1,9 @@
 ### short
 
-- continue replacement of model pool/tag/cutoff with **kwargs
-
 - why does shuffle_sound require pool and tags to be passed? 
   - shouldn't machine be initialised with a large number of samples and these then randomised?
+  
+- try and abstract pool/tag/cutoff stuff from model to cli
 
 - export should not require colours 
 - clean up tmp colours stuff in tests
@@ -56,6 +56,7 @@
 
 ### done
 
+- continue replacement of model pool/tag/cutoff with **kwargs
 - couldn't Class.randomise take kwargs not pool and tag?
 - refactor SynthTrack/SampleTrack as BaseTrack, DetroitTrack
 - refactor samples as sounds

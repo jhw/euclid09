@@ -166,15 +166,12 @@ class SamplerTrack(TrackBase):
 class Tracks(list):
 
     @staticmethod
-    def randomise(tracks, pool, tags, cutoff):
+    def randomise(tracks, **kwargs):
         track_instances = []
         for track in tracks:
             track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else TrackBase
             track_randomiser = getattr(track_class, "randomise")
-            track_instance = track_randomiser(**{"track": track,
-                                                 "pool": pool,
-                                                 "tags": tags,
-                                                 "cutoff": cutoff})
+            track_instance = track_randomiser(track = track, **kwargs)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
 
