@@ -6,6 +6,7 @@
 
 ### medium
 
+- ability to vary cli density and temperature
 - tests for cli levels and tags
 - don't render sample note/fx to json if 0/null values
 - track freezing
