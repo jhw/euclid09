@@ -1,7 +1,8 @@
 ### short
 
-- refactor SynthTrack/SampleTrack as BaseTrack, DetroitTrack
 - export should not require colours 
+- clean up tmp colours stuff in tests
+- consider refactoring model to remove SamplerTrack and avoid passing pool, tags etc
 
 ### medium
 
@@ -51,6 +52,7 @@
 
 ### done
 
+- refactor SynthTrack/SampleTrack as BaseTrack, DetroitTrack
 - refactor samples as sounds
 - git operations should reset freeze
 - remove profiles and rename default yaml as machines 

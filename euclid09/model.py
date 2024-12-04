@@ -27,7 +27,7 @@ def random_seed():
 def spawn_function(mod, fn, **kwargs):
     return getattr(eval(mod), fn)
 
-class SynthTrack:
+class TrackBase:
 
     @staticmethod
     def randomise_params(track, seed_keys = "fx|volume|beat".split("|"), **kwargs):
@@ -43,11 +43,11 @@ class SynthTrack:
 
     @staticmethod
     def randomise(track, **kwargs):
-        return SynthTrack(**SynthTrack.randomise_params(track, **kwargs))
+        return TrackBase(**TrackBase.randomise_params(track, **kwargs))
 
     @staticmethod
     def from_json(track):
-        return SynthTrack(**track)
+        return TrackBase(**track)
 
     def __init__(self, name, machine, pattern, groove, seeds, temperature, density):
         self.name = name
@@ -59,7 +59,7 @@ class SynthTrack:
         self.density = density
 
     def clone(self):
-        return SynthTrack(**self.to_json())
+        return TrackBase(**self.to_json())
 
     def shuffle_pattern(self, **kwargs):
         self.pattern = random_pattern()
@@ -108,13 +108,13 @@ class SynthTrack:
                 "temperature": self.temperature,
                 "density": self.density}
 
-class SampleTrack(SynthTrack):
+class SamplerTrack(TrackBase):
 
     @staticmethod
     def randomise_params(track, pool, tags, cutoff,
                          n_sounds = 2, **kwargs):
         # sounds
-        base_kwargs = SynthTrack.randomise_params(track)
+        base_kwargs = TrackBase.randomise_params(track)
         tag = tags[track["name"]]
         sounds = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(sounds)
@@ -126,7 +126,7 @@ class SampleTrack(SynthTrack):
 
     @staticmethod
     def randomise(track, pool, tags, cutoff, **kwargs):
-        return SampleTrack(**SampleTrack.randomise_params(track = track,
+        return SamplerTrack(**SamplerTrack.randomise_params(track = track,
                                                           pool = pool,
                                                           tags = tags,
                                                           cutoff = cutoff,
@@ -135,7 +135,7 @@ class SampleTrack(SynthTrack):
     @staticmethod
     def from_json(track):
         track["sounds"] = [SVSample(**sample) for sample in track["sounds"]]
-        return SampleTrack(**track)
+        return SamplerTrack(**track)
 
     def __init__(self, sounds, cutoff, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -143,7 +143,7 @@ class SampleTrack(SynthTrack):
         self.cutoff = cutoff
 
     def clone(self):
-        return SampleTrack(**self.to_json())
+        return SamplerTrack(**self.to_json())
 
     def shuffle_sounds(self, pool, tags, **kwargs):
         tag = tags[self.name]
@@ -172,7 +172,7 @@ class Tracks(list):
     def randomise(tracks, pool, tags, cutoff):
         track_instances = []
         for track in tracks:
-            track_class = SampleTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else SynthTrack
+            track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else TrackBase
             track_randomiser = getattr(track_class, "randomise")
             track_instance = track_randomiser(**{"track": track,
                                                  "pool": pool,
@@ -183,13 +183,13 @@ class Tracks(list):
 
     @staticmethod
     def from_json(tracks):
-        return Tracks([SampleTrack.from_json(track) for track in tracks])
+        return Tracks([SamplerTrack.from_json(track) for track in tracks])
 
     @staticmethod
     def from_json(tracks):
         track_instances = []
         for track in tracks:
-            track_class = SampleTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else SynthTrack
+            track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else TrackBase
             track_instance = getattr(track_class, "from_json")(track)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
