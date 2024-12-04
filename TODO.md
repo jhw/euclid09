@@ -3,15 +3,17 @@
 - export should not require colours 
 - clean up tmp colours stuff in tests
 
+### sv
+
+- add tokyo default sounds as range(120)
+
 ### medium
 
-- test cli utility classes
-  - why do you get git messages?
-  
+- tokyo demo
+
 - don't render sample note/fx to json if 0/null values
 
 - track freezing
-- polymorphic machines [notes]
 - optional s3 bank loading
 - sample fx
 
