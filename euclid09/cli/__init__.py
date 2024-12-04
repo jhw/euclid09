@@ -209,15 +209,13 @@ class Euclid09CLI(cmd.Cmd):
         for commit in self.git.commits:
             logging.info(commit.commit_id)
 
-    @reset_freeze
     def do_git_checkout(self, commit_id):
         self.git.checkout(commit_id)
-
-    @reset_freeze
+        self.freeze = 0 # TEMP
+        
     def do_git_undo(self, _):
         self.git.undo()
 
-    @reset_freeze
     def do_git_redo(self, _):
         self.git.redo()
 

@@ -1,8 +1,12 @@
 ### short
 
+- [unpack tokyo tracks vs models notes]
+
+- freeze needs to be part of project
+
 ### medium
 
-- tokyo track thoughts and demo 
+- tests for cli levels and tags
 - don't render sample note/fx to json if 0/null values
 - track freezing
 - optional s3 bank loading
