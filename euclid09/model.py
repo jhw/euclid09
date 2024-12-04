@@ -323,7 +323,8 @@ class Project:
     def __init__(self, patches = None):
         self.patches = patches if patches else Patches()
 
-    def render(self, banks, generators, levels,
+    def render(self, banks, generators,
+               levels = {},
                colours = {},
                bpm = 120,
                n_ticks = 16):

@@ -40,12 +40,10 @@ def commit_and_render(fn):
         project, freeze = fn(self, *args, **kwargs)
         if freeze != None:
             self.freeze = freeze
-        levels = Levels(self.tracks)
         colours = Colours.randomise(tracks = self.tracks,
                                     patches = project.patches)
         container = project.render(banks = self.banks,
                                    generators = self.generators,
-                                   levels = levels,
                                    colours = colours)
         commit_id = self.git.commit(project)
         if not os.path.exists("tmp/sunvox"):

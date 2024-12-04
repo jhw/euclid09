@@ -219,12 +219,8 @@ class ModelTest(unittest.TestCase):
         def mock_generator(machine, *args, **kwargs):
             yield 0, SVMachineTrigs([])
         generators = [mock_generator]
-        levels = {"kick": 1, "clap": 0.5}
         container = project.render(banks = banks,
-                                   generators = generators,
-                                   levels = levels,
-                                   bpm = 120,
-                                   n_ticks = 16)
+                                   generators = generators)
         self.assertIsNotNone(container)        
             
 if __name__ == "__main__":

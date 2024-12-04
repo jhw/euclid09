@@ -1,3 +1,10 @@
+### sound shuffling 04/12/24
+
+- in the sampler case the track instantiates the machine with the sounds
+- so you can change track sounds and they will reach the machine, as track and machine are instantiated each time in new project
+- but this seems incompatible with proposed idea of tokyo having default sounds of range(120)
+- (or is it? these could always be overridden)
+
 ### polymorphic machines 01/12/24
 
 - instead of profiles you want cli to select randomly from a list of machines

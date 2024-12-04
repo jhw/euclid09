@@ -1,13 +1,7 @@
 ### short
 
-- add colours test
-- add SynthTrack.shuffle_sounds
-- model to use default Levels
 - mutate colours within range
-
-### sv
-
-- add tokyo default sounds as range(120)
+- add colours test
 
 ### medium
 
@@ -21,26 +15,8 @@
 
 ### thoughts
 
-- merge sample and synth tracks ?
-  - not clear it helps
-- colour fixed as green or blue, floating as red?
-  - don't see it's worth it
-- refactor select patches into select custom, select range
-  - no because there are only 16 patches; simple enough to do 01234.. etc
-- add randomise_red|green|blue options?
-  - not worth it
-- density and temperature variations?
-- tagging and purging?
-  - unclear it has value, esp as you can "tag" stuff with export
-- track muting?
-  - why would this be required?
-  - possibly if you wanted to build the sound up one track at a time
-  - but not clear that's what's wanted here
-- track mixing levels?
-  - not clear required if tracks stems are exported separately into the digitakt
-- replace levels with mutes?
-  - they are the same thing, int vs boolean
-  - you would still need a class to represent mute state
+- add SynthTrack.shuffle_sounds?
+  - no; see notes
 
 ### gists
 
@@ -55,6 +31,7 @@
 
 ### done
 
+- model to use default Levels
 - rename TrackBase as SynthTrack
 - export should not require colours 
 - clean up tmp colours stuff in tests
