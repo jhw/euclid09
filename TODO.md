@@ -1,14 +1,11 @@
 ### short
 
-- move pool/bank/tag stuff into cli
-- refactor model refs to samples as sounds
+- remove profiles and rename default yaml as machines 
+- merge sample and synth tracks 
+- git operations should reset freeze
+- export should not require colours 
 
 ### medium
-
-- new sounds module containing SVSample
-- test tokyo profile
-
-- export stems shouldn't need to define colours
 
 - test cli utility classes
   - why do you get git messages?

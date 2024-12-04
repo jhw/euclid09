@@ -12,11 +12,11 @@ class ModelTest(unittest.TestCase):
         self.pool.match = Mock(return_value=[Mock(tag='sample') for _ in range(5)])
         self.tracks = [
             {"name": "kick",
-             "machine": "sv.machines.beats.detroit.Detroit",
+             "machine": "sv.machines.detroit.Detroit",
              "temperature": 0.5,
              "density": 0.5},
             {"name": "clap",
-             "machine": "sv.machines.beats.detroit.Detroit",
+             "machine": "sv.machines.detroit.Detroit",
              "temperature": 0.25,
              "density": 0.25}
         ]
