@@ -125,12 +125,9 @@ class SamplerTrack(TrackBase):
         return base_kwargs
 
     @staticmethod
-    def randomise(track, pool, tags, cutoff, **kwargs):
+    def randomise(track, **kwargs):
         return SamplerTrack(**SamplerTrack.randomise_params(track = track,
-                                                          pool = pool,
-                                                          tags = tags,
-                                                          cutoff = cutoff,
-                                                          **kwargs))
+                                                            **kwargs))
     
     @staticmethod
     def from_json(track):
@@ -222,11 +219,8 @@ class Tracks(list):
 class Patch:
 
     @staticmethod
-    def randomise(tracks, pool, tags, cutoff):
-        return Patch(tracks = Tracks.randomise(tracks = tracks,
-                                               pool = pool,
-                                               tags = tags,
-                                               cutoff = cutoff))
+    def randomise(tracks, **kwargs):
+        return Patch(tracks = Tracks.randomise(tracks = tracks, **kwargs))
 
     @staticmethod
     def from_json(patch):
@@ -256,11 +250,8 @@ class Patch:
 class Patches(list):
 
     @staticmethod
-    def randomise(tracks, pool, tags, cutoff, n):
-        return Patches([Patch.randomise(tracks = tracks,
-                                        pool = pool,
-                                        tags = tags,
-                                        cutoff = cutoff)
+    def randomise(tracks, n, **kwargs):
+        return Patches([Patch.randomise(tracks = tracks, **kwargs)
                         for i in range(n)])
 
     @staticmethod
@@ -288,12 +279,10 @@ class Patches(list):
 class Project:
 
     @staticmethod
-    def randomise(tracks, pool, cutoff, tags, n):
+    def randomise(tracks, n, **kwargs):
         return Project(patches = Patches.randomise(tracks = tracks,
-                                                   pool = pool,
-                                                   cutoff = cutoff,
-                                                   tags = tags,
-                                                   n = n))               
+                                                   n = n,
+                                                   **kwargs))
     @staticmethod
     def from_json(project):
         return Project(patches = Patches.from_json(project["patches"]))

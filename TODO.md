@@ -1,6 +1,7 @@
 ### short
 
-- couldn't Class.randomise take kwargs not pool and tag?
+- continue replacement of model pool/tag/cutoff with **kwargs
+
 - why does shuffle_sound require pool and tags to be passed? 
   - shouldn't machine be initialised with a large number of samples and these then randomised?
 
@@ -55,6 +56,7 @@
 
 ### done
 
+- couldn't Class.randomise take kwargs not pool and tag?
 - refactor SynthTrack/SampleTrack as BaseTrack, DetroitTrack
 - refactor samples as sounds
 - git operations should reset freeze
