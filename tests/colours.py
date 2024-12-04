@@ -29,10 +29,7 @@ class ColoursTest(unittest.TestCase):
         patch_colours = Colours.randomise_patches(patches, quantise=2)
         self.assertEqual(len(patch_colours), len(patches))
         for i in range(len(patches)):
-            if i % 2 == 0:
-                self.assertNotEqual(patch_colours[i], patch_colours[i - 1] if i > 0 else None)
-            else:
-                self.assertEqual(patch_colours[i], patch_colours[i - 1])
+            self.assertNotEqual(patch_colours[i], patch_colours[i - 1] if i > 0 else None)
 
     def test_colours_randomise(self):
         tracks = [{"name": "track1"}, {"name": "track2"}]

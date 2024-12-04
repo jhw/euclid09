@@ -1,7 +1,5 @@
 ### short
 
-- mutate colours within range
-
 ### medium
 
 - tokyo track thoughts and demo 
@@ -25,6 +23,7 @@
 
 ### done
 
+- mutate colours within range
 - add colours test
 - model to use default Levels
 - rename TrackBase as SynthTrack

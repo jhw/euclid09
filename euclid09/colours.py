@@ -18,7 +18,13 @@ class Colour(list):
 
     def clone(self):
         return Colour(self)
-        
+
+    def mutate(self, range = 32):
+        for i, v in enumerate(self):
+            q = int(2 * random.random() * range) - range
+            self[i] = max(0, min(255, v + q))
+        return self
+    
 class Colours(dict):
 
     @staticmethod
@@ -36,7 +42,7 @@ class Colours(dict):
             if 0 == i % quantise:                
                 colour = Colour.randomise()
             else:
-                colour = colours[-1].clone()
+                colour = colours[-1].clone().mutate()
             colours.append(colour)
         return colours
     
