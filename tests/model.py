@@ -170,7 +170,7 @@ class ModelTest(unittest.TestCase):
 
     def test_track_polymorphism(self):
         for klass in [SamplerTrack,
-                      TrackBase]:
+                      SynthTrack]:
             track = klass.randomise(track = self.tracks[0],
                                     pool = self.pool,
                                     tags = self.tags,

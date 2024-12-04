@@ -5,10 +5,14 @@ from sv.container import SVContainer
 from sv.sampler import SVSample
 from sv.project import load_class, does_class_extend
 
+from euclid09.colours import Colour
+
 import copy
 import inspect
 import random
 import sv # so machine classes can be dynamically accessed
+
+DefaultColour = Colour([127, 127, 127])
 
 def random_pattern():
     pattern_kwargs = {k:v for k, v in zip(["pulses", "steps"], random.choice(euclid.TidalPatterns)[:2])}
@@ -27,7 +31,7 @@ def random_seed():
 def spawn_function(mod, fn, **kwargs):
     return getattr(eval(mod), fn)
 
-class TrackBase:
+class SynthTrack:
 
     @staticmethod
     def randomise_params(track, seed_keys = "fx|volume|beat".split("|"), **kwargs):
@@ -43,11 +47,11 @@ class TrackBase:
 
     @staticmethod
     def randomise(track, **kwargs):
-        return TrackBase(**TrackBase.randomise_params(track, **kwargs))
+        return SynthTrack(**SynthTrack.randomise_params(track, **kwargs))
 
     @staticmethod
     def from_json(track):
-        return TrackBase(**track)
+        return SynthTrack(**track)
 
     def __init__(self, name, machine, pattern, groove, seeds, temperature, density):
         self.name = name
@@ -59,7 +63,7 @@ class TrackBase:
         self.density = density
 
     def clone(self):
-        return TrackBase(**self.to_json())
+        return SynthTrack(**self.to_json())
 
     def shuffle_pattern(self, **kwargs):
         self.pattern = random_pattern()
@@ -121,14 +125,21 @@ Note that a sampler makes use of "sounds" rather than "samples', in an nod towar
 Detroit unlikely to be the only sampler based class; can imagine one which uses pad/chord/drone samples as a base, and does stuttering
 Berlin is different case because the sample there is a "base sample" and not designed to be switched by a client (unless you had a series of base waveforms?)
 """
-    
-class SamplerTrack(TrackBase):
+
+"""
+Note that this implementation of SamplerTrack has n_sounds = 2
+This has the advantage of reducing the number of samples stored in git, but the disadvantage of requiring pool and tags to be passed to shuffle_sounds
+An alternative implementation might have a much larger value of n, but then not need to pass pool and tags to shuffle sounds (although track samples would then not reflect current cli tags)
+"""
+
+class SamplerTrack(SynthTrack):
 
     @staticmethod
     def randomise_params(track, pool, tags, cutoff,
-                         n_sounds = 2, **kwargs):
+                         n_sounds = 2,
+                         **kwargs):
         # sounds
-        base_kwargs = TrackBase.randomise_params(track)
+        base_kwargs = SynthTrack.randomise_params(track)
         tag = tags[track["name"]]
         sounds = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(sounds)
@@ -187,7 +198,7 @@ class Tracks(list):
     def randomise(tracks, **kwargs):
         track_instances = []
         for track in tracks:
-            track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else TrackBase
+            track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else SynthTrack
             track_randomiser = getattr(track_class, "randomise")
             track_instance = track_randomiser(track = track, **kwargs)
             track_instances.append(track_instance)        
@@ -201,7 +212,7 @@ class Tracks(list):
     def from_json(tracks):
         track_instances = []
         for track in tracks:
-            track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else TrackBase
+            track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else SynthTrack
             track_instance = getattr(track_class, "from_json")(track)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
@@ -220,10 +231,12 @@ class Tracks(list):
         track = random.choice(tracks)
         getattr(track, f"shuffle_{attr}")(**kwargs)
 
-    def render(self, container, generators, levels, colours):                
+    def render(self, container, generators, levels, colours,
+               default_colour = DefaultColour,
+               default_level = 1):
         for track in self:
-            level = levels[track.name] if track.name in levels else 1
-            colour = colours[track.name] if track.name in colours else [127, 127, 127]
+            level = levels[track.name] if track.name in levels else default_level
+            colour = colours[track.name] if track.name in colours else default_colour
             track.render(container = container,
                          generators = generators,
                          dry_level = level,
@@ -281,10 +294,11 @@ class Patches(list):
     def clone(self):
         return Patches([patch.clone() for patch in self])
         
-    def render(self, container, generators, levels, colours):
+    def render(self, container, generators, levels, colours,
+               default_colour = DefaultColour):
         for i, patch in enumerate(self):
             machine_colours = colours["machines"] if "machines" in colours else {}
-            patch_colour = colours["patches"][i] if "patches" in colours else [127, 127, 127]
+            patch_colour = colours["patches"][i] if "patches" in colours else default_colour
             patch.render(container = container,
                          generators = generators,
                          levels = levels,

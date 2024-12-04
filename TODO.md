@@ -1,7 +1,9 @@
 ### short
 
-- rename TrackBase as SynthTrack
-- add missing SynthTrack.shuffle_sounds methos
+- add colours test
+- add SynthTrack.shuffle_sounds
+- model to use default Levels
+- mutate colours within range
 
 ### sv
 
@@ -53,6 +55,7 @@
 
 ### done
 
+- rename TrackBase as SynthTrack
 - export should not require colours 
 - clean up tmp colours stuff in tests
 - why does shuffle_sound require pool and tags to be passed? 

@@ -2,9 +2,9 @@ from sv.banks import SVBanks
 from sv.utils.banks import init_banks
 from sv.utils.export import export_wav
 
-from euclid09.cli.colours import Colours
 from euclid09.cli.levels import Levels
 from euclid09.cli.tags import Tags
+from euclid09.colours import Colours
 from euclid09.generators import Beat, GhostEcho
 from euclid09.git import Git
 from euclid09.model import Project
