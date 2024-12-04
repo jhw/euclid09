@@ -90,7 +90,7 @@ class Euclid09CLI(cmd.Cmd):
     def do_show_tags(self, _):
         logging.info(", ".join([f"{k}={v}" for k, v in self.tags.items()]))
     
-    def do_rand_tags(self, _):
+    def do_shuffle_tags(self, _):
         self.tags.randomise()
         self.do_show_tags(None)
 
@@ -101,7 +101,7 @@ class Euclid09CLI(cmd.Cmd):
     ### patch operations
     
     @commit_and_render
-    def do_rand_project(self, _):
+    def do_randomise_project(self, _):
         return Project.randomise(tracks = self.tracks,
                                  pool = self.pool,
                                  tags = self.tags,
@@ -130,26 +130,24 @@ class Euclid09CLI(cmd.Cmd):
             patch = roots[j].clone()
             project.patches.append(patch)
         return project, len(I)
-
-    
-        
+            
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_rand_sounds(self, n):
+    def do_shuffle_sounds(self, n):
         project = self.git.head.content.clone()
         for patch in project.patches[self.freeze:]:
             for _ in range(n):
                 patch.randomise_attr(attr = "sounds",
                                      filter_fn = lambda x: True,
                                      pool = self.pool,
-                                     tags  =self.tags)
+                                     tags = self.tags)
         return project, None
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_rand_pattern(self, n):
+    def do_mutate_patterns(self, n):
         project = self.git.head.content.clone()
         for patch in project.patches[self.freeze:]:
             for _ in range(n):
@@ -160,7 +158,7 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_rand_seeds(self, n):
+    def do_mutate_seeds(self, n):
         project = self.git.head.content.clone()
         for patch in project.patches[self.freeze:]:
             for _ in range(n):
