@@ -9,6 +9,7 @@
 
 ### medium
 
+- persist json patches after every commit
 - patch.frozen tests
 - tests for cli levels and tags
 - don't render sample note/fx to json if 0/null values
