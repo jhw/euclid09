@@ -222,10 +222,12 @@ class Tracks(list):
 
     def render(self, container, generators, levels, colours):                
         for track in self:
+            level = levels[track.name] if track.name in levels else 1
+            colour = colours[track.name] if track.name in colours else [127, 127, 127]
             track.render(container = container,
                          generators = generators,
-                         dry_level = levels[track.name],
-                         colour = colours[track.name])
+                         dry_level = level,
+                         colour = colour)
         
     def to_json(self):
         return [track.to_json()
@@ -281,11 +283,13 @@ class Patches(list):
         
     def render(self, container, generators, levels, colours):
         for i, patch in enumerate(self):
+            machine_colours = colours["machines"] if "machines" in colours else {}
+            patch_colour = colours["patches"][i] if "patches" in colours else [127, 127, 127]
             patch.render(container = container,
                          generators = generators,
                          levels = levels,
-                         machine_colours = colours["machines"],
-                         patch_colour = colours["patches"][i])
+                         machine_colours = machine_colours,
+                         patch_colour = patch_colour)
     
     def to_json(self):
         return [patch.to_json()
@@ -305,7 +309,8 @@ class Project:
     def __init__(self, patches = None):
         self.patches = patches if patches else Patches()
 
-    def render(self, banks, generators, levels, colours,
+    def render(self, banks, generators, levels,
+               colours = {},
                bpm = 120,
                n_ticks = 16):
         container = SVContainer(banks = banks,

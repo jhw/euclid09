@@ -1,7 +1,7 @@
 ### short
 
-- export should not require colours 
-- clean up tmp colours stuff in tests
+- rename TrackBase as SynthTrack
+- add missing SynthTrack.shuffle_sounds methos
 
 ### sv
 
@@ -53,6 +53,8 @@
 
 ### done
 
+- export should not require colours 
+- clean up tmp colours stuff in tests
 - why does shuffle_sound require pool and tags to be passed? 
   - shouldn't machine be initialised with a large number of samples and these then randomised?  
 - try and abstract pool/tag/cutoff stuff from model to cli
