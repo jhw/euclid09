@@ -1,13 +1,17 @@
 ### short
 
-- patch.frozen tests
-- tests for cli levels and tags
-- don't render sample note/fx to json if 0/null values
-
-- [unpack tokyo tracks vs models notes]
+- remove sampler track cutoff 
+- all samples to be initialised with cutoff variable 
+- new sv drum synth track to extend track base 
+- this casts to sv drum sound but does not include all the pool and tag stuff 
+- refactor track initialisation stuff so it's not purely based on sv sampler machine extension
+- Tokyo demo branch 
 
 ### medium
 
+- patch.frozen tests
+- tests for cli levels and tags
+- don't render sample note/fx to json if 0/null values
 - ability to vary cli density and temperature
 - track freezing
 - optional s3 bank loading
