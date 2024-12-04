@@ -254,13 +254,16 @@ class Patch:
 
     @staticmethod
     def from_json(patch):
-        return Patch(tracks = Tracks.from_json(patch["tracks"]))
+        return Patch(tracks = Tracks.from_json(patch["tracks"]),
+                     frozen = patch["frozen"])
     
-    def __init__(self, tracks = Tracks()):
+    def __init__(self, tracks = Tracks(), frozen = False):
         self.tracks = tracks
+        self.frozen = frozen
 
     def clone(self):
-        return Patch(tracks = self.tracks.clone())    
+        return Patch(tracks = self.tracks.clone(),
+                     frozen = self.frozen)
 
     def randomise_attr(self, attr, filter_fn = lambda x: True, **kwargs):
         self.tracks.randomise_attr(attr = attr,
@@ -275,7 +278,8 @@ class Patch:
                            colours = machine_colours)
         
     def to_json(self):
-        return {"tracks": self.tracks.to_json()}
+        return {"tracks": self.tracks.to_json(),
+                "frozen": self.frozen}
 
 class Patches(list):
 
@@ -304,6 +308,10 @@ class Patches(list):
                          levels = levels,
                          machine_colours = machine_colours,
                          patch_colour = patch_colour)
+
+    def freeze(self, n):
+        for i, patch in enumerate(self):
+            patch.frozen = i < n            
     
     def to_json(self):
         return [patch.to_json()
@@ -336,6 +344,9 @@ class Project:
                             levels = levels,
                             colours = colours)
         return container
+
+    def freeze_patches(self, n):
+        self.patches.freeze(n)
         
     def clone(self):
         return Project(patches = self.patches.clone())

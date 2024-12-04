@@ -37,9 +37,7 @@ def assert_head(fn):
 
 def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
-        project, freeze = fn(self, *args, **kwargs)
-        if freeze != None:
-            self.freeze = freeze
+        project = fn(self, *args, **kwargs)
         colours = Colours.randomise(tracks = self.tracks,
                                     patches = project.patches)
         container = project.render(banks = self.banks,
@@ -49,12 +47,6 @@ def commit_and_render(fn):
         if not os.path.exists("tmp/sunvox"):
             os.makedirs("tmp/sunvox")
         container.write_project(f"tmp/sunvox/{commit_id}.sunvox")
-    return wrapped
-
-def reset_freeze(fn):
-    def wrapped(self, *args, **kwargs):
-        self.freeze = 0
-        return fn(self, *args, **kwargs)
     return wrapped
 
 class Euclid09CLI(cmd.Cmd):
@@ -72,7 +64,6 @@ class Euclid09CLI(cmd.Cmd):
         self.n_patches = n_patches
         self.cutoff = cutoff
         self.git = Git("tmp/git")
-        self.freeze = 0
 
     def preloop(self):
         logging.info("Fetching commits ...")
@@ -104,7 +95,7 @@ class Euclid09CLI(cmd.Cmd):
                                  pool = self.pool,
                                  tags = self.tags,
                                  cutoff = self.cutoff,
-                                 n = self.n_patches), 0
+                                 n = self.n_patches)
 
     @assert_head
     @parse_line([{"name": "I", "type": "hexstr"}])
@@ -115,7 +106,8 @@ class Euclid09CLI(cmd.Cmd):
         for i in I:
             patch = roots[i].clone()
             project.patches.append(patch)
-        return project, len(I)
+        project.freeze_patches(len(I))
+        return project
 
     @assert_head
     @parse_line([{"name": "I", "type": "hexstr"}])
@@ -127,42 +119,46 @@ class Euclid09CLI(cmd.Cmd):
             j = I[i % len(I)]
             patch = roots[j].clone()
             project.patches.append(patch)
-        return project, len(I)
+        project.freeze_patches(len(I))
+        return project
             
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_shuffle_sounds(self, n):
         project = self.git.head.content.clone()
-        for patch in project.patches[self.freeze:]:
-            for _ in range(n):
-                patch.randomise_attr(attr = "sounds",
-                                     filter_fn = lambda x: True,
-                                     pool = self.pool,
-                                     tags = self.tags)
-        return project, None
+        for patch in project.patches:
+            if not patch.frozen:
+                for _ in range(n):
+                    patch.randomise_attr(attr = "sounds",
+                                         filter_fn = lambda x: True,
+                                         pool = self.pool,
+                                         tags = self.tags)
+        return project
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_mutate_patterns(self, n):
         project = self.git.head.content.clone()
-        for patch in project.patches[self.freeze:]:
-            for _ in range(n):
-                patch.randomise_attr(attr = "pattern",
-                                     filter_fn = lambda x: True)
-        return project, None
+        for patch in project.patches:
+            if not patch.frozen:
+                for _ in range(n):
+                    patch.randomise_attr(attr = "pattern",
+                                         filter_fn = lambda x: True)
+        return project
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_mutate_seeds(self, n):
         project = self.git.head.content.clone()
-        for patch in project.patches[self.freeze:]:
-            for _ in range(n):
-                patch.randomise_attr(attr = "seeds",
-                                     filter_fn = lambda x: True)
-        return project, None
+        for patch in project.patches:
+            if not patch.frozen:
+                for _ in range(n):
+                    patch.randomise_attr(attr = "seeds",
+                                         filter_fn = lambda x: True)
+        return project
         
     ### export
     
@@ -187,16 +183,6 @@ class Euclid09CLI(cmd.Cmd):
                 logging.info(wav_name)
                 zip_file.writestr(wav_name, wav_io.getvalue())
 
-    ### freeze
-
-    def do_show_frozen(self, _):
-        if self.freeze == 0:
-            logging.info("There are no frozen patches currently")
-        elif self.freeze == 1:
-            logging.info("There is currently 1 frozen patch")
-        else:
-            logging.info(f"There are currently {self.freeze} frozen patches")
-                
     ### git
     
     def do_git_head(self, _):
@@ -211,7 +197,6 @@ class Euclid09CLI(cmd.Cmd):
 
     def do_git_checkout(self, commit_id):
         self.git.checkout(commit_id)
-        self.freeze = 0 # TEMP
         
     def do_git_undo(self, _):
         self.git.undo()

@@ -1,14 +1,14 @@
 ### short
 
-- [unpack tokyo tracks vs models notes]
+- patch.frozen tests
+- tests for cli levels and tags
+- don't render sample note/fx to json if 0/null values
 
-- freeze needs to be part of project
+- [unpack tokyo tracks vs models notes]
 
 ### medium
 
 - ability to vary cli density and temperature
-- tests for cli levels and tags
-- don't render sample note/fx to json if 0/null values
 - track freezing
 - optional s3 bank loading
 - sample fx
@@ -28,6 +28,7 @@
 
 ### done
 
+- freeze needs to be part of project
 - mutate colours within range
 - add colours test
 - model to use default Levels
