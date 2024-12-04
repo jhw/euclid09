@@ -1,6 +1,5 @@
 ### short
 
-- git operations should reset freeze
 - merge sample and synth tracks 
 - export should not require colours 
 
@@ -50,6 +49,7 @@
 
 ### done
 
+- git operations should reset freeze
 - remove profiles and rename default yaml as machines 
 - rename default profile as detroit
 - split select_patches into separate select, fill operations

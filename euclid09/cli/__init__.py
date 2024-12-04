@@ -52,7 +52,13 @@ def commit_and_render(fn):
             os.makedirs("tmp/sunvox")
         container.write_project(f"tmp/sunvox/{commit_id}.sunvox")
     return wrapped
-                
+
+def reset_freeze(fn):
+    def wrapped(self, *args, **kwargs):
+        self.freeze = 0
+        return fn(self, *args, **kwargs)
+    return wrapped
+
 class Euclid09CLI(cmd.Cmd):
 
     prompt = ">>> "
@@ -188,8 +194,18 @@ class Euclid09CLI(cmd.Cmd):
                 logging.info(wav_name)
                 zip_file.writestr(wav_name, wav_io.getvalue())
 
-    ### git
+    ### freeze
 
+    def do_show_frozen(self, _):
+        if self.freeze == 0:
+            logging.info("There are no frozen patches currently")
+        elif self.freeze == 1:
+            logging.info("There is currently 1 frozen patch")
+        else:
+            logging.info(f"There are currently {self.freeze} frozen patches")
+                
+    ### git
+    
     def do_git_head(self, _):
         if self.git.is_empty():
             logging.warning("Git has no commits")
@@ -200,12 +216,15 @@ class Euclid09CLI(cmd.Cmd):
         for commit in self.git.commits:
             logging.info(commit.commit_id)
 
+    @reset_freeze
     def do_git_checkout(self, commit_id):
         self.git.checkout(commit_id)
-            
+
+    @reset_freeze
     def do_git_undo(self, _):
         self.git.undo()
 
+    @reset_freeze
     def do_git_redo(self, _):
         self.git.redo()
 
