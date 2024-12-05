@@ -1,6 +1,5 @@
 ### short
 
-- tests for cli levels and tags
 - mutate pattern needs to switch tracks or otherwise change densities
 
 ### medium
@@ -27,6 +26,7 @@
 
 ### done
 
+- tests for cli levels and tags
 - rename randomise_attr as mutate_attr
 - persist json patches after every commit
 - tests for patch frozen attr
