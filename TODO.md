@@ -1,13 +1,13 @@
 ### short
 
-- persist json patches after every commit
+- rename randomise_attr as mutate_attr
 - tests for cli levels and tags
+- mutate pattern needs to switch tracks or otherwise change densities
 
 ### medium
 
 - replace global cutoff with per- sample value
 - new sv (drum?) synth track to extend track base
-- mutate pattern needs to switch tracks or otherwise change densities
 - ability to vary cli density and temperature
 - track freezing
 - optional s3 bank loading
@@ -28,6 +28,7 @@
 
 ### done
 
+- persist json patches after every commit
 - tests for patch frozen attr
 - freeze needs to be part of project
 - mutate colours within range

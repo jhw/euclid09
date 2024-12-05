@@ -65,6 +65,11 @@ class Git:
         self.commits.append(new_commit)
         self.head_index += 1
         self.redo_stack.clear()
+        filename = f"{new_commit.commit_id}.json"
+        file_path = os.path.join(self.root, filename)
+        with open(file_path, "w") as file:
+            data_json = json.dumps(new_commit.content.to_json(), indent=2)
+            file.write(data_json)
         logging.info(f"HEAD is {new_commit.commit_id}")
         return new_commit.commit_id
 
@@ -113,16 +118,6 @@ class Git:
                 self.commits.append(commit)
                 logging.info(f"Fetched {filename}")
         self.head_index = len(self.commits) - 1
-
-    def push(self):
-        for commit in self.commits:
-            filename = f"{commit.commit_id}.json"
-            file_path = os.path.join(self.root, filename)
-            if not os.path.exists(file_path):
-                with open(file_path, "w") as file:
-                    data_json = json.dumps(commit.content.to_json(), indent=2)
-                    file.write(data_json)
-                    logging.info(f"Pushed {filename}")
 
 if __name__ == "__main__":
     pass

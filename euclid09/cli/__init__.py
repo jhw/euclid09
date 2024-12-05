@@ -70,10 +70,6 @@ class Euclid09CLI(cmd.Cmd):
         self.git.fetch()
         self.do_show_tags(None)
 
-    def postloop(self):
-        logging.info("Pushing commits ...")
-        self.git.push()
-    
     ### tags
 
     def do_show_tags(self, _):
