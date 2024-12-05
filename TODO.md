@@ -1,6 +1,6 @@
 ### short
 
-- mutate pattern needs to switch tracks or otherwise change densities
+- cli help descriptions
 
 ### medium
 
@@ -26,6 +26,8 @@
 
 ### done
 
+- add shuffle temperature, shuffle density
+- mutate pattern needs to switch tracks or otherwise change densities
 - tests for cli levels and tags
 - rename randomise_attr as mutate_attr
 - persist json patches after every commit

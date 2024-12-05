@@ -121,7 +121,7 @@ class Euclid09CLI(cmd.Cmd):
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
-    def do_shuffle_sounds(self, n):
+    def do_mutate_sounds(self, n):
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
@@ -153,6 +153,30 @@ class Euclid09CLI(cmd.Cmd):
             if not patch.frozen:
                 for _ in range(n):
                     patch.mutate_attr(attr = "seeds",
+                                      filter_fn = lambda x: True)
+        return project
+
+    @assert_head
+    @parse_line([{"name": "n", "type": "int"}])
+    @commit_and_render
+    def do_mutate_density(self, n):
+        project = self.git.head.content.clone()
+        for patch in project.patches:
+            if not patch.frozen:
+                for _ in range(n):
+                    patch.mutate_attr(attr = "density",
+                                      filter_fn = lambda x: True)
+        return project
+
+    @assert_head
+    @parse_line([{"name": "n", "type": "int"}])
+    @commit_and_render
+    def do_mutate_temperature(self, n):
+        project = self.git.head.content.clone()
+        for patch in project.patches:
+            if not patch.frozen:
+                for _ in range(n):
+                    patch.mutate_attr(attr = "temperature",
                                       filter_fn = lambda x: True)
         return project
         

@@ -75,11 +75,11 @@ class SynthTrack:
         key = random.choice(list(self.seeds.keys()))
         self.seeds[key] = random_seed()
     
-    def shuffle_temperature(self, limit = 0.25, **kwargs):
-        self.temperature = limit + random.random() * (1 - (2 * limit))
+    def shuffle_temperature(self, **kwargs):
+        self.temperature = random.random()
 
-    def shuffle_density(self, limit = 0.25, **kwargs):
-        self.density = limit + random.random() * (1 - (2 * limit))
+    def shuffle_density(self, **kwargs):
+        self.density = random.random()
 
     def init_machine(self, container, colour):
         machine_class = load_class(self.machine)
