@@ -1,18 +1,14 @@
 ### short
 
-- remove sampler track cutoff 
-- all samples to be initialised with cutoff variable 
-- new sv drum synth track to extend track base 
-- this casts to sv drum sound but does not include all the pool and tag stuff 
-- refactor track initialisation stuff so it's not purely based on sv sampler machine extension
-- tokyo demo branch 
-
-### medium
-
-- mutate pattern needs to switch tracks or otherwise change densities
 - persist json patches after every commit
 - tests for patch frozen attr
 - tests for cli levels and tags
+
+### medium
+
+- replace global cutoff with per- sample value
+- new sv (drum?) synth track to extend track base
+- mutate pattern needs to switch tracks or otherwise change densities
 - ability to vary cli density and temperature
 - track freezing
 - optional s3 bank loading
