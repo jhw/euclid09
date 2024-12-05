@@ -1,7 +1,6 @@
 ### short
 
 - persist json patches after every commit
-- tests for patch frozen attr
 - tests for cli levels and tags
 
 ### medium
@@ -29,6 +28,7 @@
 
 ### done
 
+- tests for patch frozen attr
 - freeze needs to be part of project
 - mutate colours within range
 - add colours test

@@ -221,7 +221,41 @@ class ModelTest(unittest.TestCase):
         generators = [mock_generator]
         container = project.render(banks = banks,
                                    generators = generators)
-        self.assertIsNotNone(container)        
-            
+        self.assertIsNotNone(container)
+
+    def test_patches_freeze(self):
+        patches = Patches.randomise(tracks=self.tracks,
+                                    pool=self.pool,
+                                    tags=self.tags,
+                                    cutoff=self.cutoff,
+                                    n=5)
+        patches.freeze(3)
+        for i, patch in enumerate(patches):
+            if i < 3:
+                self.assertTrue(patch.frozen)
+            else:
+                self.assertFalse(patch.frozen)
+
+    def test_project_freezing(self):
+        project = Project.randomise(tracks=self.tracks,
+                                    pool=self.pool,
+                                    tags=self.tags,
+                                    cutoff=self.cutoff,
+                                    n=4)
+        project.freeze_patches(2)
+        frozen_count = sum(1 for patch in project.patches if patch.frozen)
+        self.assertEqual(frozen_count, 2)
+
+    def test_clone_maintains_frozen_state(self):
+        patches = Patches.randomise(tracks=self.tracks,
+                                    pool=self.pool,
+                                    tags=self.tags,
+                                    cutoff=self.cutoff,
+                                    n=3)
+        patches.freeze(2)
+        cloned_patches = patches.clone()
+        for i, patch in enumerate(cloned_patches):
+            self.assertEqual(patch.frozen, i < 2)
+                    
 if __name__ == "__main__":
     unittest.main()
