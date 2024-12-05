@@ -1,6 +1,5 @@
 ### short
 
-- rename randomise_attr as mutate_attr
 - tests for cli levels and tags
 - mutate pattern needs to switch tracks or otherwise change densities
 
@@ -28,6 +27,7 @@
 
 ### done
 
+- rename randomise_attr as mutate_attr
 - persist json patches after every commit
 - tests for patch frozen attr
 - freeze needs to be part of project

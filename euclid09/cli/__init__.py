@@ -126,10 +126,10 @@ class Euclid09CLI(cmd.Cmd):
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.randomise_attr(attr = "sounds",
-                                         filter_fn = lambda x: True,
-                                         pool = self.pool,
-                                         tags = self.tags)
+                    patch.mutate_attr(attr = "sounds",
+                                      filter_fn = lambda x: True,
+                                      pool = self.pool,
+                                      tags = self.tags)
         return project
 
     @assert_head
@@ -140,8 +140,8 @@ class Euclid09CLI(cmd.Cmd):
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.randomise_attr(attr = "pattern",
-                                         filter_fn = lambda x: True)
+                    patch.mutate_attr(attr = "pattern",
+                                      filter_fn = lambda x: True)
         return project
 
     @assert_head
@@ -152,8 +152,8 @@ class Euclid09CLI(cmd.Cmd):
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.randomise_attr(attr = "seeds",
-                                         filter_fn = lambda x: True)
+                    patch.mutate_attr(attr = "seeds",
+                                      filter_fn = lambda x: True)
         return project
         
     ### export

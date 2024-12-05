@@ -140,7 +140,7 @@ class ModelTest(unittest.TestCase):
                                   cutoff = self.cutoff)
         for track in tracks:
             track.sounds = self.mock_sounds
-        tracks.randomise_attr(attr = "temperature", labdlimit=0.1)
+        tracks.mutate_attr(attr = "temperature", labdlimit=0.1)
         for track in tracks:
             self.assertGreaterEqual(track.temperature, 0.1)
             self.assertLessEqual(track.temperature, 0.9)
@@ -152,7 +152,7 @@ class ModelTest(unittest.TestCase):
                                 cutoff = self.cutoff)
         for track in patch.tracks:
             track.sounds = self.mock_sounds
-        patch.randomise_attr("density", limit=0.2)
+        patch.mutate_attr("density", limit=0.2)
         for track in patch.tracks:
             self.assertGreaterEqual(track.density, 0.2)
             self.assertLessEqual(track.density, 0.8)
