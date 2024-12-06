@@ -1,10 +1,8 @@
 ### short
 
-- refactor model mutation tests as they seem to focus on density and temperature
+- cli help descriptions
 
 ### medium
-
-- cli help descriptions
 
 - new sv (drum?) synth track to extend track base
 - ability to vary cli cutoff, density, temperature
@@ -29,6 +27,7 @@
 
 ### done
 
+- refactor model mutation tests as they seem to focus on density and temperature
 - tests failing due to density and temperature mutations
 - refactor seeds.sample as seeds.sound
 - add cutoff to samples
