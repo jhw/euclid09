@@ -11,7 +11,7 @@ class GeneratorTest(unittest.TestCase):
     
     def setUp(self):
         self.n_steps = 16
-        self.rand = {"volume": random.Random(), "sample": random.Random(), "beat": random.Random(), "fx": random.Random()}
+        self.rand = {"volume": random.Random(), "sound": random.Random(), "beat": random.Random(), "fx": random.Random()}
         self.dry_level = 0.8
         self.wet_level = 0.5
         self.temperature = 0.7

@@ -145,7 +145,7 @@ class SamplerTrack(SynthTrack):
         random.shuffle(sounds)
         base_kwargs["sounds"] = sounds[:n_sounds]
         # seeds
-        base_kwargs["seeds"]["sample"] = random_seed()
+        base_kwargs["seeds"]["sound"] = random_seed()
         return base_kwargs
 
     @staticmethod

@@ -1,7 +1,7 @@
 def Beat(self, n, rand, pattern, groove, temperature, density, dry_level, **kwargs):
     for i in range(n):
         volume = groove(rand = rand["volume"], i = i)
-        if rand["sample"].random() < temperature:
+        if rand["sound"].random() < temperature:
             self.toggle_sound()        
         if (pattern(i) and 
             rand["beat"].random() < density):
