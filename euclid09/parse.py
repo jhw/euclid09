@@ -1,3 +1,5 @@
+from functools import wraps
+
 import logging
 
 """
@@ -72,6 +74,7 @@ def parse_enum(value, options=None, **kwargs):
 
 def parse_line(items = []):
     def decorator(fn):
+        @wraps(fn)
         def wrapped(self, line, **kwargs):
             try:
                 args = [tok for tok in line.split(" ") if tok != '']

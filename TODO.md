@@ -1,11 +1,10 @@
 ### short
 
-- cli help descriptions
+- ability to vary cli cutoff, density, temperature
 
 ### medium
 
 - new sv (drum?) synth track to extend track base
-- ability to vary cli cutoff, density, temperature
 - optional s3 bank loading
 - sample fx
 
@@ -27,6 +26,7 @@
 
 ### done
 
+- cli help descriptions
 - refactor model mutation tests as they seem to focus on density and temperature
 - tests failing due to density and temperature mutations
 - refactor seeds.sample as seeds.sound

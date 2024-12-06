@@ -10,6 +10,8 @@ from euclid09.git import Git
 from euclid09.model import Project
 from euclid09.parse import parse_line
 
+from functools import wraps
+
 import argparse
 import cmd
 import logging
@@ -26,6 +28,7 @@ def load_yaml(file_name):
     return yaml.safe_load(open("/".join(__file__.split("/")[:-1] + [file_name])).read())
 
 def assert_head(fn):
+    @wraps(fn)
     def wrapped(self, *args, **kwargs):
         try:
             if self.git.is_empty():
@@ -36,6 +39,7 @@ def assert_head(fn):
     return wrapped
 
 def apply_sample_cutoff(fn):
+    @wraps(fn)
     def wrapped(self, *args, **kwargs):
         for sample in self.pool:
             sample.cutoff = self.cutoff
@@ -43,6 +47,7 @@ def apply_sample_cutoff(fn):
     return wrapped
 
 def commit_and_render(fn):
+    @wraps(fn)
     def wrapped(self, *args, **kwargs):
         project = fn(self, *args, **kwargs)
         colours = Colours.randomise(tracks = self.tracks,
@@ -59,8 +64,8 @@ def commit_and_render(fn):
 class Euclid09CLI(cmd.Cmd):
 
     prompt = ">>> "
-    intro = "Welcome to the euclid09 CLI ;)"
-    
+    intro = "Welcome to the Euclid09 CLI ;)"
+
     def __init__(self, tracks, banks, pool, generators, tags, cutoff, n_patches):
         super().__init__()
         self.tracks = tracks
@@ -80,14 +85,17 @@ class Euclid09CLI(cmd.Cmd):
     ### tags
 
     def do_show_tags(self, _):
+        """Display the current tag mappings for tracks."""
         logging.info(", ".join([f"{k}={v}" for k, v in self.tags.items()]))
     
     def do_shuffle_tags(self, _):
+        """Shuffle the tags associated with tracks."""
         self.tags.randomise()
         self.do_show_tags(None)
 
     def do_reset_tags(self, _):
-        self.tags = Tags(tracks = tracks, terms = self.tags.terms)
+        """Reset the tags to their default mappings."""
+        self.tags = Tags(tracks=self.tracks, terms=self.tags.terms)
         self.do_show_tags(None)
 
     ### patch operations
@@ -95,15 +103,17 @@ class Euclid09CLI(cmd.Cmd):
     @apply_sample_cutoff
     @commit_and_render
     def do_randomise_project(self, _):
-        return Project.randomise(tracks = self.tracks,
-                                 pool = self.pool,
-                                 tags = self.tags,
-                                 n = self.n_patches)
+        """Create a randomised project with patches."""
+        return Project.randomise(tracks=self.tracks,
+                                 pool=self.pool,
+                                 tags=self.tags,
+                                 n=self.n_patches)
 
     @assert_head
     @parse_line([{"name": "I", "type": "hexstr"}])
     @commit_and_render
     def do_select_patches(self, I):
+        """Select specific patches from the latest project by index."""
         roots = self.git.head.content.patches
         project = Project()
         for i in I:
@@ -116,6 +126,7 @@ class Euclid09CLI(cmd.Cmd):
     @parse_line([{"name": "I", "type": "hexstr"}])
     @commit_and_render
     def do_clone_patches(self, I):
+        """Clone selected patches to create new ones."""
         roots = self.git.head.content.patches
         project = Project()
         for i in range(self.n_patches):
@@ -130,68 +141,74 @@ class Euclid09CLI(cmd.Cmd):
     @apply_sample_cutoff
     @commit_and_render
     def do_mutate_sounds(self, n):
+        """Mutate the sounds of unfrozen patches in the project."""
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.mutate_attr(attr = "sounds",
-                                      filter_fn = lambda x: True,
-                                      pool = self.pool,
-                                      tags = self.tags)
+                    patch.mutate_attr(attr="sounds",
+                                      filter_fn=lambda x: True,
+                                      pool=self.pool,
+                                      tags=self.tags)
         return project
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_mutate_patterns(self, n):
+        """Mutate the patterns of unfrozen patches in the project."""
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.mutate_attr(attr = "pattern",
-                                      filter_fn = lambda x: True)
+                    patch.mutate_attr(attr="pattern",
+                                      filter_fn=lambda x: True)
         return project
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_mutate_seeds(self, n):
+        """Mutate the seeds of unfrozen patches in the project."""
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.mutate_attr(attr = "seeds",
-                                      filter_fn = lambda x: True)
+                    patch.mutate_attr(attr="seeds",
+                                      filter_fn=lambda x: True)
         return project
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_mutate_density(self, n):
+        """Mutate the density values of unfrozen patches in the project."""
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.mutate_attr(attr = "density",
-                                      filter_fn = lambda x: True)
+                    patch.mutate_attr(attr="density",
+                                      filter_fn=lambda x: True)
         return project
 
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_mutate_temperature(self, n):
+        """Mutate the temperature values of unfrozen patches in the project."""
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.mutate_attr(attr = "temperature",
-                                      filter_fn = lambda x: True)
+                    patch.mutate_attr(attr="temperature",
+                                      filter_fn=lambda x: True)
         return project
         
     ### export
     
     @assert_head
     def do_export_stems(self, _):
+        """Export the current project as stems in a zip file."""
         if not os.path.exists("tmp/wav"):
             os.makedirs("tmp/wav")
         commit_id = self.git.head.commit_id
@@ -202,11 +219,11 @@ class Euclid09CLI(cmd.Cmd):
                 levels.append(Levels(self.tracks).solo(track["name"]))
             project = self.git.head.content
             for levels_ in levels:
-                container = project.render(banks = self.banks,
-                                           generators = self.generators,
-                                           levels = levels_)
+                container = project.render(banks=self.banks,
+                                           generators=self.generators,
+                                           levels=levels_)
                 sv_project = container.render_project()
-                wav_io = export_wav(project = sv_project)
+                wav_io = export_wav(project=sv_project)
                 wav_name = f"{commit_id.short_name}-{levels_.short_code}.wav"
                 logging.info(wav_name)
                 zip_file.writestr(wav_name, wav_io.getvalue())
@@ -214,27 +231,33 @@ class Euclid09CLI(cmd.Cmd):
     ### git
     
     def do_git_head(self, _):
+        """Display the current HEAD commit."""
         if self.git.is_empty():
             logging.warning("Git has no commits")
         else:
             logging.info(f"HEAD is {self.git.head.commit_id}")
 
     def do_git_log(self, _):
+        """Display the list of all commits."""
         for commit in self.git.commits:
             logging.info(commit.commit_id)
 
     def do_git_checkout(self, commit_id):
+        """Checkout a specific commit by its ID."""
         self.git.checkout(commit_id)
         
     def do_git_undo(self, _):
+        """Undo the most recent commit."""
         self.git.undo()
 
     def do_git_redo(self, _):
+        """Redo the last undone commit."""
         self.git.redo()
 
     ### project management
 
     def do_clean_projects(self, _):
+        """Clean all temporary project directories."""
         while True:
             answer = input(f"Are you sure ?: ")
             if answer == "y":
@@ -255,9 +278,11 @@ class Euclid09CLI(cmd.Cmd):
     ### exit
         
     def do_exit(self, _):
+        """Exit the CLI."""
         return self.do_quit(None)
 
     def do_quit(self, _):
+        """Exit the CLI."""
         logging.info("Exiting ..")
         return True
 
