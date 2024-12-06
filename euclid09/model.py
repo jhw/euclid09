@@ -135,7 +135,7 @@ An alternative implementation might have a much larger value of n, but then not 
 class SamplerTrack(SynthTrack):
 
     @staticmethod
-    def randomise_params(track, pool, tags, cutoff,
+    def randomise_params(track, pool, tags,
                          n_sounds = 2,
                          **kwargs):
         # sounds
@@ -144,7 +144,6 @@ class SamplerTrack(SynthTrack):
         sounds = pool.match(lambda sample: tag in sample.tags)
         random.shuffle(sounds)
         base_kwargs["sounds"] = sounds[:n_sounds]
-        base_kwargs["cutoff"] = cutoff
         # seeds
         base_kwargs["seeds"]["sample"] = random_seed()
         return base_kwargs
@@ -159,10 +158,9 @@ class SamplerTrack(SynthTrack):
         track["sounds"] = [SVSample(**sample) for sample in track["sounds"]]
         return SamplerTrack(**track)
 
-    def __init__(self, sounds, cutoff, *args, **kwargs):
+    def __init__(self, sounds, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.sounds = sounds
-        self.cutoff = cutoff
 
     def clone(self):
         return SamplerTrack(**self.to_json())
@@ -183,13 +181,11 @@ class SamplerTrack(SynthTrack):
         return machine_class(container = container,
                              namespace = self.name.capitalize(),
                              colour = colour,
-                             sounds = self.sounds,
-                             sound_cutoff = self.cutoff) # NB name switch
+                             sounds = self.sounds)
         
     def to_json(self):
         base_json = super().to_json()
         base_json["sounds"] = copy.deepcopy(self.sounds)
-        base_json["cutoff"] = self.cutoff
         return base_json
 
 class Tracks(list):

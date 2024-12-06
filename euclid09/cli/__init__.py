@@ -35,6 +35,13 @@ def assert_head(fn):
             logging.warning(str(error))
     return wrapped
 
+def apply_sample_cutoff(fn):
+    def wrapped(self, *args, **kwargs):
+        for sample in self.pool:
+            sample.cutoff = self.cutoff
+        return fn(self, *args, **kwargs)
+    return wrapped
+
 def commit_and_render(fn):
     def wrapped(self, *args, **kwargs):
         project = fn(self, *args, **kwargs)
@@ -84,13 +91,13 @@ class Euclid09CLI(cmd.Cmd):
         self.do_show_tags(None)
 
     ### patch operations
-    
+
+    @apply_sample_cutoff
     @commit_and_render
     def do_randomise_project(self, _):
         return Project.randomise(tracks = self.tracks,
                                  pool = self.pool,
                                  tags = self.tags,
-                                 cutoff = self.cutoff,
                                  n = self.n_patches)
 
     @assert_head
@@ -120,6 +127,7 @@ class Euclid09CLI(cmd.Cmd):
             
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
+    @apply_sample_cutoff
     @commit_and_render
     def do_mutate_sounds(self, n):
         project = self.git.head.content.clone()
@@ -253,7 +261,7 @@ class Euclid09CLI(cmd.Cmd):
         logging.info("Exiting ..")
         return True
 
-def parse_args(default_cutoff = 0.5,
+def parse_args(default_cutoff = 250, # 2 * 2000 / 16 == two ticks @ 120 bpm
                default_n_patches = 16):
     parser = argparse.ArgumentParser(description="Run Euclid09CLI with specified parameters.")
     parser.add_argument(

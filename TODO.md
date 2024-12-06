@@ -1,19 +1,22 @@
 ### short
 
+- refactor seeds.sample as seeds.sound
 - tests failing due to density and temperature mutations
-
-- cli help descriptions
+- refactor model mutation tests as they seem to focus on density and temperature
 
 ### medium
 
-- replace global cutoff with per- sample value
+- cli help descriptions
+
 - new sv (drum?) synth track to extend track base
-- ability to vary cli density and temperature
-- track freezing
+- ability to vary cli cutoff, density, temperature
 - optional s3 bank loading
 - sample fx
 
 ### thoughts
+
+- track freezing?
+  - not clear what it achieves
 
 ### gists
 
@@ -28,6 +31,7 @@
 
 ### done
 
+- add cutoff to samples
 - add shuffle temperature, shuffle density
 - mutate pattern needs to switch tracks or otherwise change densities
 - tests for cli levels and tags
