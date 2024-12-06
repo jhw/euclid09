@@ -1,6 +1,5 @@
 ### short
 
-- tests failing due to density and temperature mutations
 - refactor model mutation tests as they seem to focus on density and temperature
 
 ### medium
@@ -30,6 +29,7 @@
 
 ### done
 
+- tests failing due to density and temperature mutations
 - refactor seeds.sample as seeds.sound
 - add cutoff to samples
 - add shuffle temperature, shuffle density
