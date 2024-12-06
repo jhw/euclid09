@@ -10,6 +10,8 @@
 
 ### thoughts
 
+- cli test?
+  - seems a bridge too far
 - track freezing?
   - not clear what it achieves
 
