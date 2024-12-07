@@ -1,10 +1,14 @@
 ### short
 
-- ability to vary cli cutoff, density, temperature
+- merge tracks into single entity supporting sounds attribute
+  - cast sound data to appropriate sound class based on track machine
+  
+- 240 bpm
+- add generator support for returning trig length
 
 ### medium
 
-- new sv (drum?) synth track to extend track base
+- ability to vary cli cutoff, density, temperature
 - optional s3 bank loading
 - sample fx
 
