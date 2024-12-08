@@ -1,10 +1,7 @@
 ### short [01-tbp-and-240-bpm]
 
-- pass tbp to track to be included as part of machine env
-- add tbp to generator kwargs
-- check tbp when rendering
-- adjust cutoff for tpb?
-- test 240bpm
+- pass bpm as part of environment
+- adjust echo delay for tpb
 
 ### medium
 
@@ -40,6 +37,11 @@
 
 ### done
 
+- pass tbp to track to be included as part of machine env
+- add tbp to generator kwargs
+- check tbp when rendering
+- adjust cutoff for tpb?
+- test 240bpm
 - add tbp cli variable
 - pass tbp to project rendering
 - project to multiply bpm and n_ticks by tpb during render

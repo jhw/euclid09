@@ -24,7 +24,7 @@ class GeneratorTest(unittest.TestCase):
         mock_self.note = Mock(return_value="trig_block")
         beat_generator = Beat(
             mock_self, self.n_steps, self.rand, pattern=pattern_fn, groove=groove_fn, 
-            temperature=self.temperature, density=self.density, dry_level=self.dry_level
+            temperature=self.temperature, density=self.density, dry_level=self.dry_level, tpb = 1
         )
         output = list(beat_generator)
         for i, trig_block in output:
@@ -36,7 +36,7 @@ class GeneratorTest(unittest.TestCase):
         mock_self = Mock()
         mock_self.modulation = Mock(return_value="echo_trig_block")
         echo_generator = GhostEcho(
-            mock_self, self.n_steps, self.rand, wet_level=self.wet_level, quantise=4
+            mock_self, self.n_steps, self.rand, wet_level=self.wet_level, quantise=4, tpb = 1
         )
         output = list(echo_generator)
         for i, trig_block in output:

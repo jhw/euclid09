@@ -87,7 +87,7 @@ class SynthTrack:
                              namespace = self.name.capitalize(),
                              colour = colour)
         
-    def render(self, container, generators, dry_level, colour, wet_level = 1):
+    def render(self, container, generators, dry_level, colour, tpb, wet_level = 1):
         machine = self.init_machine(container, colour)
         container.add_machine(machine)
         pattern = spawn_function(**self.pattern)(**self.pattern["args"])
@@ -97,7 +97,8 @@ class SynthTrack:
                "temperature": self.temperature,
                "density": self.density,
                "pattern": pattern,
-               "groove": groove}
+               "groove": groove,
+               "tpb": tpb}
         for generator in generators:
             machine.render(generator = generator,
                            seeds = self.seeds,
@@ -227,7 +228,7 @@ class Tracks(list):
         track = random.choice(tracks)
         getattr(track, f"shuffle_{attr}")(**kwargs)
 
-    def render(self, container, generators, levels, colours,
+    def render(self, container, generators, levels, colours, tpb,
                default_colour = DefaultColour,
                default_level = 1):
         for track in self:
@@ -236,7 +237,8 @@ class Tracks(list):
             track.render(container = container,
                          generators = generators,
                          dry_level = level,
-                         colour = colour)
+                         colour = colour,
+                         tpb = tpb)
         
     def to_json(self):
         return [track.to_json()
@@ -266,12 +268,13 @@ class Patch:
                                 filter_fn = filter_fn,
                                 **kwargs)
 
-    def render(self, container, generators, levels, machine_colours, patch_colour):
+    def render(self, container, generators, levels, machine_colours, patch_colour, tpb):
         container.spawn_patch(patch_colour)
         self.tracks.render(container = container,
                            generators = generators,
                            levels = levels,
-                           colours = machine_colours)
+                           colours = machine_colours,
+                           tpb = tpb)
         
     def to_json(self):
         return {"tracks": self.tracks.to_json(),
@@ -294,7 +297,7 @@ class Patches(list):
     def clone(self):
         return Patches([patch.clone() for patch in self])
         
-    def render(self, container, generators, levels, colours,
+    def render(self, container, generators, levels, colours, tpb,
                default_colour = DefaultColour):
         for i, patch in enumerate(self):
             machine_colours = colours["machines"] if "machines" in colours else {}
@@ -303,7 +306,8 @@ class Patches(list):
                          generators = generators,
                          levels = levels,
                          machine_colours = machine_colours,
-                         patch_colour = patch_colour)
+                         patch_colour = patch_colour,
+                         tpb = tpb)
 
     def freeze(self, n):
         for i, patch in enumerate(self):
@@ -336,7 +340,8 @@ class Project:
         self.patches.render(container = container,
                             generators = generators,
                             levels = levels,
-                            colours = colours)
+                            colours = colours,
+                            tpb = tpb)
         return container
 
     def freeze_patches(self, n):
