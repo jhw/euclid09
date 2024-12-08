@@ -1,12 +1,10 @@
 ### short
 
-### sv
-
-- latest rv branch
+- move pool and tag stuff from model to cli
+- collapse track subclassing
 
 ### medium
 
-- move generator tbp (i, j) adjustments into sv
 - add generator support for returning trig length
 
 ### features
