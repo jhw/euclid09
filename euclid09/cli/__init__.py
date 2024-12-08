@@ -54,7 +54,9 @@ def commit_and_render(fn):
                                     patches = project.patches)
         container = project.render(banks = self.banks,
                                    generators = self.generators,
-                                   colours = colours)
+                                   colours = colours,
+                                   bpm = self.bpm,
+                                   n_ticks = self.n_ticks)
         commit_id = self.git.commit(project)
         if not os.path.exists("tmp/sunvox"):
             os.makedirs("tmp/sunvox")
@@ -66,14 +68,16 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, tracks, banks, pool, generators, tags, cutoff, n_patches):
+    def __init__(self, tracks, banks, pool, generators, tags, cutoff, n_patches, bpm = 120, n_ticks = 16):
         super().__init__()
         self.tracks = tracks
         self.banks = banks
         self.pool = pool
         self.generators = generators                
         self.tags = tags
+        self.bpm = bpm
         self.n_patches = n_patches
+        self.n_ticks = n_ticks
         self.cutoff = cutoff
         self.git = Git("tmp/git")
 
@@ -212,7 +216,7 @@ class Euclid09CLI(cmd.Cmd):
         if not os.path.exists("tmp/wav"):
             os.makedirs("tmp/wav")
         commit_id = self.git.head.commit_id
-        zip_name = f"tmp/wav/{commit_id.slug}.zip"
+        zip_name = f"tmp/wav/{commit_id.slug}-{self.bpm}-{self.n_ticks}.zip"
         with zipfile.ZipFile(zip_name, 'w', zipfile.ZIP_DEFLATED) as zip_file:
             levels = [Levels(self.tracks)]
             for track in self.tracks:
@@ -221,7 +225,9 @@ class Euclid09CLI(cmd.Cmd):
             for levels_ in levels:
                 container = project.render(banks=self.banks,
                                            generators=self.generators,
-                                           levels=levels_)
+                                           levels=levels_,
+                                           bpm=self.bpm,
+                                           n_ticks=self.n_ticks)
                 sv_project = container.render_project()
                 wav_io = export_wav(project=sv_project)
                 wav_name = f"{commit_id.short_name}-{levels_.short_code}.wav"

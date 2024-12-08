@@ -262,8 +262,10 @@ class ModelTest(unittest.TestCase):
         def mock_generator(machine, *args, **kwargs):
             yield 0, SVMachineTrigs([])
         generators = [mock_generator]
-        container = project.render(banks=banks,
-                                   generators=generators)
+        container = project.render(banks = banks,
+                                   generators = generators,
+                                   bpm = 120,
+                                   n_ticks = 16)
         self.assertIsNotNone(container)
 
     def test_patches_freeze(self):

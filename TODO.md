@@ -1,15 +1,17 @@
 ### short
 
-- move bpm from model to cli
-- export bpm as part of stem name
-  
+- add profile args for bpm, n_ticks
+ 
 ### medium
 
 - merge tracks
-- run at 240 bpm
+- add cli tbp value for 240 bpm render
 - fix failing model tests
 - add generator support for returning trig length
-- ability to vary cli cutoff, density, temperature
+
+### features
+
+- ability to vary cli cutoff/density/temperature
 - optional s3 bank loading
 - sample fx
 
@@ -35,6 +37,8 @@
 
 ### done
 
+- move bpm from model to cli
+- export bpm as part of stem name
 - cli help descriptions
 - refactor model mutation tests as they seem to focus on density and temperature
 - tests failing due to density and temperature mutations
