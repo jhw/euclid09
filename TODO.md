@@ -1,11 +1,16 @@
-### short
+### short [01-tbp-and-240-bpm]
 
-- merge tracks
+- add tbp cli variable
+- pass tbp to project rendering
+- project to multiply bpm and n_ticks by tpb during render
+- pass tbp to track to be included as part of machine env
+- add tbp to generator kwargs
+- check tbp when rendering
 
 ### medium
 
+- merge tracks
 - fix failing model tests
-- add cli tbp value for 240 bpm render
 - add generator support for returning trig length
 
 ### features
