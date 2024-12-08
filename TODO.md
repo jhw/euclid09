@@ -1,15 +1,15 @@
+### short
+
+- merge tracks
+
 ### sv
 
-- echo delay and delay type should be generator parameters
-
-### short [01-tbp-and-240-bpm]
-
-- generators to pass echo delay and type
+- latest rv branch
 
 ### medium
 
-- merge tracks
 - fix failing model tests
+- move generator tbp (i, j) adjustments into sv
 - add generator support for returning trig length
 
 ### features
@@ -40,6 +40,7 @@
 
 ### done
 
+- generators to pass echo delay and type
 - pass bpm as part of environment
 - pass tbp to track to be included as part of machine env
 - add tbp to generator kwargs

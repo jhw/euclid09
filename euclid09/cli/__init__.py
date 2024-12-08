@@ -296,7 +296,7 @@ class Euclid09CLI(cmd.Cmd):
         return True
 
 def parse_args(default_bpm = 120,
-               default_tpb = 1,
+               default_tpb = 2,
                default_n_ticks = 16,
                default_n_patches = 16,
                default_cutoff = 250): # 2 * 2000 / 16 == two ticks @ 120 bpm
