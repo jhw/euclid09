@@ -68,7 +68,7 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, tracks, banks, pool, generators, tags, cutoff, n_patches, bpm = 120, n_ticks = 16):
+    def __init__(self, tracks, banks, pool, generators, tags, bpm, n_patches, n_ticks, cutoff):
         super().__init__()
         self.tracks = tracks
         self.banks = banks
@@ -292,14 +292,22 @@ class Euclid09CLI(cmd.Cmd):
         logging.info("Exiting ..")
         return True
 
-def parse_args(default_cutoff = 250, # 2 * 2000 / 16 == two ticks @ 120 bpm
-               default_n_patches = 16):
+def parse_args(default_bpm = 120,
+               default_n_ticks = 16,
+               default_n_patches = 16,
+               default_cutoff = 250): # 2 * 2000 / 16 == two ticks @ 120 bpm
     parser = argparse.ArgumentParser(description="Run Euclid09CLI with specified parameters.")
     parser.add_argument(
-        "--cutoff",
-        type=float,
-        default=default_cutoff,
-        help=f"A float > 0 specifying the cutoff value (default: {default_cutoff})."
+        "--bpm",
+        type=int,
+        default=default_bpm,
+        help=f"An integer > 0 specifying the beats per minute (default: {default_bpm})."
+    )
+    parser.add_argument(
+        "--n_ticks",
+        type=int,
+        default=default_n_ticks,
+        help=f"An integer > 0 specifying the number of ticks (default: {default_bpm})."
     )
     parser.add_argument(
         "--n_patches",
@@ -307,11 +315,21 @@ def parse_args(default_cutoff = 250, # 2 * 2000 / 16 == two ticks @ 120 bpm
         default=default_n_patches,
         help=f"An integer > 0 specifying the number of patches (default: {default_n_patches})."
     )
+    parser.add_argument(
+        "--cutoff",
+        type=float,
+        default=default_cutoff,
+        help=f"A float > 0 specifying the cutoff value (default: {default_cutoff})."
+    )  
     args = parser.parse_args()
-    if args.cutoff <= 0:
-        parser.error("cutoff must be a float greater than 0.")
+    if args.bpm <= 0:
+        parser.error("bpm must be an integer greater than 0.")
+    if args.n_ticks <= 0:
+        parser.error("n_ticks must be an integer greater than 0.")
     if args.n_patches <= 0:
         parser.error("n_patches must be an integer greater than 0.")
+    if args.cutoff <= 0:
+        parser.error("cutoff must be a float greater than 0.")
     return args
 
 if __name__ == "__main__":
@@ -327,8 +345,10 @@ if __name__ == "__main__":
                     pool = pool,
                     generators = [Beat, GhostEcho],
                     tags = tags,
-                    cutoff = args.cutoff,
-                    n_patches = args.n_patches).cmdloop()
+                    bpm = args.bpm,
+                    n_ticks = args.n_ticks,
+                    n_patches = args.n_patches,
+                    cutoff = args.cutoff).cmdloop()
     except RuntimeError as error:
         logging.error(str(error))
 

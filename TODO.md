@@ -1,12 +1,11 @@
 ### short
 
-- add profile args for bpm, n_ticks
- 
+- merge tracks
+
 ### medium
 
-- merge tracks
-- add cli tbp value for 240 bpm render
 - fix failing model tests
+- add cli tbp value for 240 bpm render
 - add generator support for returning trig length
 
 ### features
@@ -37,6 +36,7 @@
 
 ### done
 
+- add profile args for bpm, n_ticks
 - move bpm from model to cli
 - export bpm as part of stem name
 - cli help descriptions
