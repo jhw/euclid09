@@ -1,19 +1,22 @@
 ### short
 
-- merge tracks into single entity supporting sounds attribute
-  - cast sound data to appropriate sound class based on track machine
+- move bpm from model to cli
+- export bpm as part of stem name
   
-- 240 bpm
-- add generator support for returning trig length
-
 ### medium
 
+- merge tracks
+- run at 240 bpm
+- fix failing model tests
+- add generator support for returning trig length
 - ability to vary cli cutoff, density, temperature
 - optional s3 bank loading
 - sample fx
 
 ### thoughts
 
+- rename export_stems as export_wav?
+  - no as then conflicts with export_wav import
 - cli test?
   - seems a bridge too far
 - track freezing?
