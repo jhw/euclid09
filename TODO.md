@@ -1,7 +1,10 @@
+### sv
+
+- echo delay and delay type should be generator parameters
+
 ### short [01-tbp-and-240-bpm]
 
-- pass bpm as part of environment
-- adjust echo delay for tpb
+- generators to pass echo delay and type
 
 ### medium
 
@@ -37,6 +40,7 @@
 
 ### done
 
+- pass bpm as part of environment
 - pass tbp to track to be included as part of machine env
 - add tbp to generator kwargs
 - check tbp when rendering
