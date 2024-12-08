@@ -1,14 +1,11 @@
 ### short
 
-- merge tracks
-
 ### sv
 
 - latest rv branch
 
 ### medium
 
-- fix failing model tests
 - move generator tbp (i, j) adjustments into sv
 - add generator support for returning trig length
 
@@ -20,6 +17,8 @@
 
 ### thoughts
 
+- merge track classes?
+  - this seems like the wrong answer as pool and tags are going to have to be abstracted somehow, somewhere
 - rename export_stems as export_wav?
   - no as then conflicts with export_wav import
 - cli test?
@@ -40,6 +39,7 @@
 
 ### done
 
+- fix failing model tests
 - generators to pass echo delay and type
 - pass bpm as part of environment
 - pass tbp to track to be included as part of machine env
