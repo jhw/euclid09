@@ -327,12 +327,12 @@ class Project:
     def __init__(self, patches = None):
         self.patches = patches if patches else Patches()
 
-    def render(self, banks, generators, bpm, n_ticks,
+    def render(self, banks, generators, bpm, tpb, n_ticks,
                levels = {},
                colours = {}):
         container = SVContainer(banks = banks,
-                                bpm = bpm,
-                                n_ticks = n_ticks)
+                                bpm = bpm * tpb, # NB
+                                n_ticks = n_ticks * tpb) # NB
         self.patches.render(container = container,
                             generators = generators,
                             levels = levels,

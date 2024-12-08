@@ -1,11 +1,10 @@
 ### short [01-tbp-and-240-bpm]
 
-- add tbp cli variable
-- pass tbp to project rendering
-- project to multiply bpm and n_ticks by tpb during render
 - pass tbp to track to be included as part of machine env
 - add tbp to generator kwargs
 - check tbp when rendering
+- adjust cutoff for tpb?
+- test 240bpm
 
 ### medium
 
@@ -41,6 +40,9 @@
 
 ### done
 
+- add tbp cli variable
+- pass tbp to project rendering
+- project to multiply bpm and n_ticks by tpb during render
 - add profile args for bpm, n_ticks
 - move bpm from model to cli
 - export bpm as part of stem name

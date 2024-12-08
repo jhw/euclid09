@@ -265,6 +265,7 @@ class ModelTest(unittest.TestCase):
         container = project.render(banks = banks,
                                    generators = generators,
                                    bpm = 120,
+                                   tpb = 1,
                                    n_ticks = 16)
         self.assertIsNotNone(container)
 

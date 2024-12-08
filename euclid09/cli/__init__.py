@@ -56,6 +56,7 @@ def commit_and_render(fn):
                                    generators = self.generators,
                                    colours = colours,
                                    bpm = self.bpm,
+                                   tpb = self.tpb,
                                    n_ticks = self.n_ticks)
         commit_id = self.git.commit(project)
         if not os.path.exists("tmp/sunvox"):
@@ -68,7 +69,7 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, tracks, banks, pool, generators, tags, bpm, n_patches, n_ticks, cutoff):
+    def __init__(self, tracks, banks, pool, generators, tags, bpm, tpb, n_patches, n_ticks, cutoff):
         super().__init__()
         self.tracks = tracks
         self.banks = banks
@@ -76,6 +77,7 @@ class Euclid09CLI(cmd.Cmd):
         self.generators = generators                
         self.tags = tags
         self.bpm = bpm
+        self.tpb = tpb
         self.n_patches = n_patches
         self.n_ticks = n_ticks
         self.cutoff = cutoff
@@ -227,6 +229,7 @@ class Euclid09CLI(cmd.Cmd):
                                            generators=self.generators,
                                            levels=levels_,
                                            bpm=self.bpm,
+                                           tpb=self.tpb,
                                            n_ticks=self.n_ticks)
                 sv_project = container.render_project()
                 wav_io = export_wav(project=sv_project)
@@ -293,6 +296,7 @@ class Euclid09CLI(cmd.Cmd):
         return True
 
 def parse_args(default_bpm = 120,
+               default_tpb = 1,
                default_n_ticks = 16,
                default_n_patches = 16,
                default_cutoff = 250): # 2 * 2000 / 16 == two ticks @ 120 bpm
@@ -304,10 +308,16 @@ def parse_args(default_bpm = 120,
         help=f"An integer > 0 specifying the beats per minute (default: {default_bpm})."
     )
     parser.add_argument(
+        "--tpb",
+        type=int,
+        default=default_tpb,
+        help=f"An integer > 0 specifying the number of ticks per beat (default: {default_tpb})."
+    )
+    parser.add_argument(
         "--n_ticks",
         type=int,
         default=default_n_ticks,
-        help=f"An integer > 0 specifying the number of ticks (default: {default_bpm})."
+        help=f"An integer > 0 specifying the number of ticks (default: {default_n_ticks})."
     )
     parser.add_argument(
         "--n_patches",
@@ -324,6 +334,8 @@ def parse_args(default_bpm = 120,
     args = parser.parse_args()
     if args.bpm <= 0:
         parser.error("bpm must be an integer greater than 0.")
+    if args.tpb <= 0:
+        parser.error("tpb must be an integer greater than 0.")
     if args.n_ticks <= 0:
         parser.error("n_ticks must be an integer greater than 0.")
     if args.n_patches <= 0:
@@ -346,6 +358,7 @@ if __name__ == "__main__":
                     generators = [Beat, GhostEcho],
                     tags = tags,
                     bpm = args.bpm,
+                    tpb = args.tpb,
                     n_ticks = args.n_ticks,
                     n_patches = args.n_patches,
                     cutoff = args.cutoff).cmdloop()
