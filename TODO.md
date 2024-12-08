@@ -1,5 +1,6 @@
 ### short
 
+- capture ValueError thrown by sv
 - move pool and tag stuff from model to cli
 - collapse track subclassing
 
