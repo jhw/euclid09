@@ -34,7 +34,7 @@ def spawn_function(mod, fn, **kwargs):
 class Track:
 
     @staticmethod
-    def randomise_params(track, sounds, seed_keys="fx|volume|beat|sound".split("|"), **kwargs):
+    def randomise_params(track, sounds, seed_keys="fx|volume|beat|sound".split("|")):
         seeds = {key: random_seed() for key in seed_keys}
         base_kwargs = {
             "name": track["name"],
@@ -49,8 +49,8 @@ class Track:
         return base_kwargs
 
     @staticmethod
-    def randomise(track, sounds, **kwargs):
-        return Track(**Track.randomise_params(track=track, sounds=sounds, **kwargs))
+    def randomise(track, sounds):
+        return Track(**Track.randomise_params(track=track, sounds=sounds))
 
     @staticmethod
     def from_json(track):
@@ -132,12 +132,13 @@ class Track:
 class Tracks(list):
 
     @staticmethod
-    def randomise(tracks, **kwargs):
+    def randomise(tracks, sounds):
         track_instances = []
         for track in tracks:
             track_class = Track
             track_randomiser = getattr(track_class, "randomise")
-            track_instance = track_randomiser(track = track, **kwargs)
+            track_instance = track_randomiser(track = track,
+                                              sounds = sounds)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
 
@@ -188,8 +189,9 @@ class Tracks(list):
 class Patch:
 
     @staticmethod
-    def randomise(tracks, **kwargs):
-        return Patch(tracks = Tracks.randomise(tracks = tracks, **kwargs))
+    def randomise(tracks, sounds):
+        return Patch(tracks = Tracks.randomise(tracks = tracks,
+                                               sounds = sounds))
 
     @staticmethod
     def from_json(patch):
@@ -225,8 +227,9 @@ class Patch:
 class Patches(list):
 
     @staticmethod
-    def randomise(tracks, n, **kwargs):
-        return Patches([Patch.randomise(tracks = tracks, **kwargs)
+    def randomise(tracks, sounds, n):
+        return Patches([Patch.randomise(tracks = tracks,
+                                        sounds = sounds)
                         for i in range(n)])
 
     @staticmethod
@@ -263,10 +266,11 @@ class Patches(list):
 class Project:
 
     @staticmethod
-    def randomise(tracks, n, **kwargs):
+    def randomise(tracks, sounds, n):
         return Project(patches = Patches.randomise(tracks = tracks,
-                                                   n = n,
-                                                   **kwargs))
+                                                   sounds = sounds,
+                                                   n = n))
+    
     @staticmethod
     def from_json(project):
         return Project(patches = Patches.from_json(project["patches"]))

@@ -1,9 +1,8 @@
 ### short
 
-- ensure only 2 samples are passed during randomisation
-- check randomise() actually randomises sounds
-- remove n, n_samples arge being passed to randomise()
-- remove passing of **kwargs to track constructors
+- remove randomise_params
+
+- cli to randomise sounds and send 2 only
 
 ### medium
 
@@ -40,6 +39,7 @@
 
 ### done
 
+- remove passing of **kwargs to track constructors
 - collapse track subclassing
 - adjust cli to define sound_pool
 - fix failing model tests
