@@ -16,7 +16,6 @@ import argparse
 import cmd
 import logging
 import os
-import random # TEMP
 import sys
 import yaml
 import zipfile
@@ -107,21 +106,24 @@ class Euclid09CLI(cmd.Cmd):
 
     ### patch operations
 
-    @apply_sample_cutoff
-    @commit_and_render
-    def do_randomise_project(self, _):
-        """Create a randomised project with patches."""
+    @property
+    def detroit_sounds(self):
         sounds = {}
         for track in self.tracks:
             tag = self.tags[track["name"]]
             track_sounds = self.pool.match(lambda sample: tag in sample.tags)
-            random.shuffle(track_sounds)
-            track_sounds = track_sounds[:2]
             sounds[track["name"]] = track_sounds
+        return sounds
+    
+    @apply_sample_cutoff
+    @commit_and_render
+    def do_randomise_project(self, _):
+        """Create a randomised project with patches."""
         return Project.randomise(tracks=self.tracks,
-                                 sounds=sounds,
-                                 n=self.n_patches)
-
+                                 sounds=self.detroit_sounds,
+                                 n=self.n_patches,
+                                 n_sounds = 2)
+                                 
     @assert_head
     @parse_line([{"name": "I", "type": "hexstr"}])
     @commit_and_render
@@ -156,17 +158,12 @@ class Euclid09CLI(cmd.Cmd):
     def do_mutate_sounds(self, n):
         """Mutate the sounds of unfrozen patches in the project."""
         project = self.git.head.content.clone()
-        sounds = {}
-        for track in self.tracks:
-            tag = self.tags[track["name"]]
-            track_sounds = self.pool.match(lambda sample: tag in sample.tags)
-            sounds[track["name"]] = track_sounds
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
                     patch.mutate_attr(attr="sounds",
                                       filter_fn=lambda x: True,
-                                      sounds=sounds)
+                                      sounds=self.detroit_sounds)
         return project
 
     @assert_head
@@ -281,7 +278,7 @@ class Euclid09CLI(cmd.Cmd):
         while True:
             answer = input(f"Are you sure ?: ")
             if answer == "y":
-                for dir_name in ["tmp/git", "tmp/sunvox", "tmp/wav"]:
+                for dir_name in ["tmp/git", "tmp/sunvox"]:
                     if os.path.exists(dir_name):
                         logging.info(f"cleaning {dir_name}")
                         for filename in os.listdir(dir_name):
@@ -373,7 +370,10 @@ if __name__ == "__main__":
                     n_ticks = args.n_ticks,
                     n_patches = args.n_patches,
                     cutoff = args.cutoff).cmdloop()
+    except ValueError as error:
+        logging.error(str(error))
     except RuntimeError as error:
         logging.error(str(error))
+
 
 

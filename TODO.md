@@ -1,10 +1,7 @@
 ### short
 
-- abstract cli sound handling into something detroit specific
-
 ### medium
 
-- capture ValueError thrown by sv
 - add generator support for returning trig length
 
 ### features
@@ -37,6 +34,9 @@
 
 ### done
 
+- capture ValueError thrown by sv
+- randomise needs to shuffle sounds!
+- abstract cli sound handling into something detroit specific
 - remove randomise_params
 - remove passing of **kwargs to track constructors
 - collapse track subclassing

@@ -32,31 +32,36 @@ class ModelTest(unittest.TestCase):
 
     def test_mutate_pattern(self):
         track = Track.randomise(track=self.tracks[0],
-                                sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         initial_pattern = track.pattern
         track.mutate_pattern()
 
     def test_mutate_groove(self):
         track = Track.randomise(track=self.tracks[0],
-                                sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         initial_groove = track.groove
         track.mutate_groove()
 
     def test_mutate_seeds(self):
         track = Track.randomise(track=self.tracks[0],
-                                sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         initial_seeds = track.seeds.copy()
         track.mutate_seeds()
         self.assertNotEqual(initial_seeds, track.seeds)
 
     def test_mutate_sounds(self):
         track = Track.randomise(track=self.tracks[0],
-                                       sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         track.mutate_sounds(sounds=self.sounds)
 
     def test_mutate_attr_with_filter(self):
         tracks = Tracks.randomise(tracks=self.tracks,
-                                  sounds=self.sounds)
+                                  sounds=self.sounds,
+                                  n_sounds=2)
         for track in tracks:
             track.sounds = self.mock_sounds
         filter_fn = lambda t: t.name == "kick"
@@ -68,14 +73,16 @@ class ModelTest(unittest.TestCase):
 
     def test_mutate_attr_no_matches(self):
         tracks = Tracks.randomise(tracks=self.tracks,
-                                  sounds=self.sounds)
+                                  sounds=self.sounds,
+                                  n_sounds=2)
         filter_fn = lambda t: t.name == "nonexistent"
         with self.assertRaises(RuntimeError):
             tracks.mutate_attr(attr="density", filter_fn=filter_fn)
 
     def test_sample_track_creation(self):
         track = Track.randomise(track=self.tracks[0],
-                                       sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         self.assertIsInstance(track, Track)
         self.assertEqual(track.name, "kick")
         # self.assertEqual(len(track.sounds), 2)
@@ -84,7 +91,8 @@ class ModelTest(unittest.TestCase):
 
     def test_sample_track_clone(self):
         track = Track.randomise(track=self.tracks[0],
-                                       sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         track.sounds = self.mock_sounds
         clone = track.clone()
         self.assertEqual(track.name, clone.name)
@@ -94,7 +102,8 @@ class ModelTest(unittest.TestCase):
 
     def test_mutation_tracks(self):
         tracks = Tracks.randomise(tracks=self.tracks,
-                                  sounds=self.sounds)
+                                  sounds=self.sounds,
+                                  n_sounds=2)
         for track in tracks:
             track.sounds = self.mock_sounds
         initial_temperatures = [track.temperature for track in tracks]
@@ -107,7 +116,8 @@ class ModelTest(unittest.TestCase):
 
     def test_mutation_patch(self):
         patch = Patch.randomise(tracks=self.tracks,
-                                sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         for track in patch.tracks:
             track.sounds = self.mock_sounds
         initial_densities = [track.density for track in patch.tracks]
@@ -120,7 +130,8 @@ class ModelTest(unittest.TestCase):
 
     def test_tracks_randomisation(self):
         tracks = Tracks.randomise(tracks=self.tracks,
-                                  sounds=self.sounds)
+                                  sounds=self.sounds,
+                                  n_sounds=2)
         self.assertIsInstance(tracks, Tracks)
         self.assertEqual(len(tracks), len(self.tracks))
         clone = tracks.clone()
@@ -130,7 +141,8 @@ class ModelTest(unittest.TestCase):
 
     def test_tracks_serialization(self):
         tracks = Tracks.randomise(tracks=self.tracks,
-                                  sounds=self.sounds)
+                                  sounds=self.sounds,
+                                  n_sounds=2)
         for track in tracks:
             track.sounds = self.mock_sounds
         serialized = tracks.to_json()
@@ -141,7 +153,8 @@ class ModelTest(unittest.TestCase):
 
     def test_patch_creation(self):
         patch = Patch.randomise(tracks=self.tracks,
-                                sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         for track in patch.tracks:
             track.sounds = self.mock_sounds
         self.assertIsInstance(patch, Patch)
@@ -154,6 +167,7 @@ class ModelTest(unittest.TestCase):
     def test_patches_randomisation(self):
         patches = Patches.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
+                                    n_sounds=2,
                                     n=3)
         for patch in patches:
             for track in patch.tracks:
@@ -166,6 +180,7 @@ class ModelTest(unittest.TestCase):
     def test_patches_serialization(self):
         patches = Patches.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
+                                    n_sounds=2,
                                     n=3)
         for patch in patches:
             for track in patch.tracks:
@@ -178,7 +193,8 @@ class ModelTest(unittest.TestCase):
 
     def test_init_machine(self):
         track = Track.randomise(track=self.tracks[0],
-                                       sounds=self.sounds)
+                                sounds=self.sounds,
+                                n_sounds=2)
         track.sounds = self.mock_sounds
         container = Mock()
         machine = track.init_machine(container, [127, 127, 127])
@@ -188,12 +204,14 @@ class ModelTest(unittest.TestCase):
     def test_track_polymorphism(self):
         for klass in [Track, Track]:
             track = klass.randomise(track=self.tracks[0],
-                                    sounds=self.sounds)
+                                    sounds=self.sounds,
+                                    n_sounds=2)
             self.assertEqual(track.name, "kick")
 
     def test_project_creation(self):
         project = Project.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
+                                    n_sounds=2,
                                     n=3)
         for patch in project.patches:
             for track in patch.tracks:
@@ -206,6 +224,7 @@ class ModelTest(unittest.TestCase):
     def test_project_serialization(self):
         project = Project.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
+                                    n_sounds=2,
                                     n=3)
         for patch in project.patches:
             for track in patch.tracks:
@@ -219,6 +238,7 @@ class ModelTest(unittest.TestCase):
     def test_project_render(self):
         project = Project.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
+                                    n_sounds=2,
                                     n=2)
         for patch in project.patches:
             for track in patch.tracks:
@@ -237,6 +257,7 @@ class ModelTest(unittest.TestCase):
     def test_patches_freeze(self):
         patches = Patches.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
+                                    n_sounds=2,
                                     n=5)
         patches.freeze(3)
         for i, patch in enumerate(patches):
@@ -248,6 +269,7 @@ class ModelTest(unittest.TestCase):
     def test_project_freezing(self):
         project = Project.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
+                                    n_sounds=2,
                                     n=4)
         project.freeze_patches(2)
         frozen_count = sum(1 for patch in project.patches if patch.frozen)
@@ -256,6 +278,7 @@ class ModelTest(unittest.TestCase):
     def test_clone_maintains_frozen_state(self):
         patches = Patches.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
+                                    n_sounds=2,
                                     n=3)
         patches.freeze(2)
         cloned_patches = patches.clone()
