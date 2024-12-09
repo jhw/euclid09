@@ -149,13 +149,13 @@ class Euclid09CLI(cmd.Cmd):
     def do_mutate_sounds(self, n):
         """Mutate the sounds of unfrozen patches in the project."""
         project = self.git.head.content.clone()
+        sounds = {track["name"]:self.pool.match(lambda sample: self.tags[track["name"]] in sample.tags) for track in self.tracks}
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
                     patch.mutate_attr(attr="sounds",
                                       filter_fn=lambda x: True,
-                                      pool=self.pool,
-                                      tags=self.tags)
+                                      sounds=sounds)
         return project
 
     @assert_head
@@ -296,7 +296,7 @@ class Euclid09CLI(cmd.Cmd):
         return True
 
 def parse_args(default_bpm = 120,
-               default_tpb = 2,
+               default_tpb = 1,
                default_n_ticks = 16,
                default_n_patches = 16,
                default_cutoff = 250): # 2 * 2000 / 16 == two ticks @ 120 bpm

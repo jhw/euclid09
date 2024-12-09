@@ -30,29 +30,29 @@ class ModelTest(unittest.TestCase):
         }
         self.mock_sounds = [SVSample(**self.mock_sample) for _ in range(2)]
 
-    def test_shuffle_pattern(self):
+    def test_mutate_pattern(self):
         track = SynthTrack.randomise(track=self.tracks[0])
         initial_pattern = track.pattern
-        track.shuffle_pattern()
+        track.mutate_pattern()
 
-    def test_shuffle_groove(self):
+    def test_mutate_groove(self):
         track = SynthTrack.randomise(track=self.tracks[0])
         initial_groove = track.groove
-        track.shuffle_groove()
+        track.mutate_groove()
 
-    def test_shuffle_seeds(self):
+    def test_mutate_seeds(self):
         track = SynthTrack.randomise(track=self.tracks[0])
         initial_seeds = track.seeds.copy()
-        track.shuffle_seeds()
+        track.mutate_seeds()
         self.assertNotEqual(initial_seeds, track.seeds)
 
-    def test_shuffle_sounds(self):
+    def test_mutate_sounds(self):
         track = SamplerTrack.randomise(track=self.tracks[0],
                                        pool=self.pool,
                                        tags=self.tags,
                                        cutoff=self.cutoff)
-        initial_sounds = track.sounds.copy()
-        track.shuffle_sounds(pool=self.pool, tags=self.tags)
+        sounds = {track.name: track.sounds.copy()}
+        track.mutate_sounds(sounds = sounds)
 
     def test_mutate_attr_with_filter(self):
         tracks = Tracks.randomise(tracks=self.tracks,

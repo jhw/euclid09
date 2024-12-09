@@ -65,20 +65,20 @@ class SynthTrack:
     def clone(self):
         return SynthTrack(**self.to_json())
 
-    def shuffle_pattern(self, **kwargs):
+    def mutate_pattern(self, **kwargs):
         self.pattern = random_pattern()
 
-    def shuffle_groove(self, **kwargs):
+    def mutate_groove(self, **kwargs):
         self.groove = random_groove()
 
-    def shuffle_seeds(self, **kwargs):
+    def mutate_seeds(self, **kwargs):
         key = random.choice(list(self.seeds.keys()))
         self.seeds[key] = random_seed()
     
-    def shuffle_temperature(self, **kwargs):
+    def mutate_temperature(self, **kwargs):
         self.temperature = random.random()
 
-    def shuffle_density(self, **kwargs):
+    def mutate_density(self, **kwargs):
         self.density = random.random()
 
     def init_machine(self, container, colour):
@@ -114,25 +114,6 @@ class SynthTrack:
                 "temperature": self.temperature,
                 "density": self.density}
 
-"""
-Samplers are unique because a sampler's sound isn't generated internally, it has to come from an external source
-Each track has a machine bound to it; when a track is rendered, that machine is instantiated
-Sampler- based machines require sounds (samples) and also cutoff parameters; you can argue the latter is optional and could be a default arg, but the former is required
-Hence any machines which is sampler based needs its own track class, one that contains whatever elements are required for machine initialisation
-In the euclid09 implementation, a sampler's sounds come from pool and tags args
-Note that a sampler makes use of "sounds" rather than "samples', in an nod towards some kind of machine polymorphism
-"""
-
-"""
-Detroit unlikely to be the only sampler based class; can imagine one which uses pad/chord/drone samples as a base, and does stuttering
-Berlin is different case because the sample there is a "base sample" and not designed to be switched by a client (unless you had a series of base waveforms?)
-"""
-
-"""
-Note that this implementation of SamplerTrack has n_sounds = 2
-This has the advantage of reducing the number of samples stored in git, but the disadvantage of requiring pool and tags to be passed to shuffle_sounds
-An alternative implementation might have a much larger value of n, but then not need to pass pool and tags to shuffle sounds (although track samples would then not reflect current cli tags)
-"""
 
 class SamplerTrack(SynthTrack):
 
@@ -171,12 +152,9 @@ class SamplerTrack(SynthTrack):
     CLI may have randomised tags, hence pool and tags need to be re- passed to rack on shuffling
     """
     
-    def shuffle_sounds(self, pool, tags, **kwargs):
-        tag = tags[self.name]
-        sounds = pool.match(lambda sample: tag in sample.tags)
-        random.shuffle(sounds)
+    def mutate_sounds(self, sounds, **kwargs):
         i = int(random.random() > 0.5)
-        self.sounds[i] = sounds[0]
+        self.sounds[i] = random.choice(sounds[self.name])
 
     def init_machine(self, container, colour):
         machine_class = load_class(self.machine)
@@ -227,7 +205,7 @@ class Tracks(list):
         if tracks == []:
             raise RuntimeError("no tracks found to mutate")
         track = random.choice(tracks)
-        getattr(track, f"shuffle_{attr}")(**kwargs)
+        getattr(track, f"mutate_{attr}")(**kwargs)
 
     def render(self, container, generators, levels, colours, bpm, tpb,
                default_colour = DefaultColour,
