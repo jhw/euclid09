@@ -183,10 +183,8 @@ class Tracks(list):
 class Patch:
 
     @staticmethod
-    def randomise(tracks, sounds, n_sounds):
-        return Patch(tracks = Tracks.randomise(tracks = tracks,
-                                               sounds = sounds,
-                                               n_sounds = n_sounds))
+    def randomise(**kwargs):
+        return Patch(tracks = Tracks.randomise(**kwargs))
 
     @staticmethod
     def from_json(patch):
@@ -262,11 +260,8 @@ class Patches(list):
 class Project:
 
     @staticmethod
-    def randomise(tracks, sounds, n_patches, n_sounds):
-        return Project(patches = Patches.randomise(tracks = tracks,
-                                                   sounds = sounds,
-                                                   n_sounds = n_sounds,
-                                                   n_patches = n_patches))
+    def randomise(**kwargs):
+        return Project(patches = Patches.randomise(**kwargs))
     
     @staticmethod
     def from_json(project):

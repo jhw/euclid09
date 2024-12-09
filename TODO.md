@@ -1,7 +1,5 @@
 ### short
 
-- pass kwargs round model
-
 ### medium
 
 - add generator support for returning trig length
@@ -36,6 +34,7 @@
 
 ### done
 
+- pass kwargs round model
 - refactor n as n_patches
 - capture ValueError thrown by sv
 - randomise needs to shuffle sounds!
