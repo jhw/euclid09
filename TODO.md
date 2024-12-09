@@ -1,11 +1,15 @@
 ### short
 
-- capture ValueError thrown by sv
-- move pool and tag stuff from model to cli
+- adjust cli to define sound_pool
+- ensure only 2 samples are passed during randomisation
+- check randomise() actually randomises sounds
+- remove n, n_samples arge being passed to randomise()
 - collapse track subclassing
+- remove passing of **kwargs to track constructors
 
 ### medium
 
+- capture ValueError thrown by sv
 - add generator support for returning trig length
 
 ### features

@@ -110,9 +110,9 @@ class Euclid09CLI(cmd.Cmd):
     @commit_and_render
     def do_randomise_project(self, _):
         """Create a randomised project with patches."""
+        sounds = {track["name"]:self.pool.match(lambda sample: self.tags[track["name"]] in sample.tags) for track in self.tracks}
         return Project.randomise(tracks=self.tracks,
-                                 pool=self.pool,
-                                 tags=self.tags,
+                                 sounds=sounds,
                                  n=self.n_patches)
 
     @assert_head

@@ -118,22 +118,19 @@ class SynthTrack:
 class SamplerTrack(SynthTrack):
 
     @staticmethod
-    def randomise_params(track, pool, tags,
-                         n_sounds = 2,
+    def randomise_params(track, sounds,
                          **kwargs):
         # sounds
         base_kwargs = SynthTrack.randomise_params(track)
-        tag = tags[track["name"]]
-        sounds = pool.match(lambda sample: tag in sample.tags)
-        random.shuffle(sounds)
-        base_kwargs["sounds"] = sounds[:n_sounds]
+        base_kwargs["sounds"] = sounds[track["name"]]
         # seeds
         base_kwargs["seeds"]["sound"] = random_seed()
         return base_kwargs
 
     @staticmethod
-    def randomise(track, **kwargs):
+    def randomise(track, sounds, **kwargs):
         return SamplerTrack(**SamplerTrack.randomise_params(track = track,
+                                                            sounds = sounds,
                                                             **kwargs))
     
     @staticmethod
@@ -148,10 +145,6 @@ class SamplerTrack(SynthTrack):
     def clone(self):
         return SamplerTrack(**self.to_json())
 
-    """
-    CLI may have randomised tags, hence pool and tags need to be re- passed to rack on shuffling
-    """
-    
     def mutate_sounds(self, sounds, **kwargs):
         i = int(random.random() > 0.5)
         self.sounds[i] = random.choice(sounds[self.name])
