@@ -16,6 +16,7 @@ import argparse
 import cmd
 import logging
 import os
+import random # TEMP
 import sys
 import yaml
 import zipfile
@@ -110,7 +111,13 @@ class Euclid09CLI(cmd.Cmd):
     @commit_and_render
     def do_randomise_project(self, _):
         """Create a randomised project with patches."""
-        sounds = {track["name"]:self.pool.match(lambda sample: self.tags[track["name"]] in sample.tags) for track in self.tracks}
+        sounds = {}
+        for track in self.tracks:
+            tag = self.tags[track["name"]]
+            track_sounds = self.pool.match(lambda sample: tag in sample.tags)
+            random.shuffle(track_sounds)
+            track_sounds = track_sounds[:2]
+            sounds[track["name"]] = track_sounds
         return Project.randomise(tracks=self.tracks,
                                  sounds=sounds,
                                  n=self.n_patches)
@@ -149,7 +156,11 @@ class Euclid09CLI(cmd.Cmd):
     def do_mutate_sounds(self, n):
         """Mutate the sounds of unfrozen patches in the project."""
         project = self.git.head.content.clone()
-        sounds = {track["name"]:self.pool.match(lambda sample: self.tags[track["name"]] in sample.tags) for track in self.tracks}
+        sounds = {}
+        for track in self.tracks:
+            tag = self.tags[track["name"]]
+            track_sounds = self.pool.match(lambda sample: tag in sample.tags)
+            sounds[track["name"]] = track_sounds
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):

@@ -34,23 +34,16 @@ def spawn_function(mod, fn, **kwargs):
 class Track:
 
     @staticmethod
-    def randomise_params(track, sounds, seed_keys="fx|volume|beat|sound".split("|")):
+    def randomise(track, sounds, seed_keys="fx|volume|beat|sound".split("|")):
         seeds = {key: random_seed() for key in seed_keys}
-        base_kwargs = {
-            "name": track["name"],
-            "machine": track["machine"],
-            "pattern": random_pattern(),
-            "groove": random_groove(),
-            "seeds": seeds,
-            "temperature": track["temperature"],
-            "density": track["density"],
-            "sounds": sounds[track["name"]]
-        }
-        return base_kwargs
-
-    @staticmethod
-    def randomise(track, sounds):
-        return Track(**Track.randomise_params(track=track, sounds=sounds))
+        return Track(name = track["name"],
+                     machine = track["machine"],
+                     pattern = random_pattern(),
+                     groove =  random_groove(),
+                     seeds =  seeds,
+                     temperature =  track["temperature"],
+                     density = track["density"],
+                     sounds = sounds[track["name"]])
 
     @staticmethod
     def from_json(track):
@@ -135,10 +128,8 @@ class Tracks(list):
     def randomise(tracks, sounds):
         track_instances = []
         for track in tracks:
-            track_class = Track
-            track_randomiser = getattr(track_class, "randomise")
-            track_instance = track_randomiser(track = track,
-                                              sounds = sounds)
+            track_instance = Track.randomise(track = track,
+                                             sounds = sounds)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
 
@@ -150,8 +141,7 @@ class Tracks(list):
     def from_json(tracks):
         track_instances = []
         for track in tracks:
-            track_class = Track
-            track_instance = getattr(track_class, "from_json")(track)
+            track_instance = Track.from_json(track)
             track_instances.append(track_instance)        
         return Tracks(track_instances)
     

@@ -1,8 +1,6 @@
 ### short
 
-- remove randomise_params
-
-- cli to randomise sounds and send 2 only
+- abstract cli sound handling into something detroit specific
 
 ### medium
 
@@ -39,6 +37,7 @@
 
 ### done
 
+- remove randomise_params
 - remove passing of **kwargs to track constructors
 - collapse track subclassing
 - adjust cli to define sound_pool
