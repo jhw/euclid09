@@ -1,10 +1,8 @@
 ### short
 
-- adjust cli to define sound_pool
 - ensure only 2 samples are passed during randomisation
 - check randomise() actually randomises sounds
 - remove n, n_samples arge being passed to randomise()
-- collapse track subclassing
 - remove passing of **kwargs to track constructors
 
 ### medium
@@ -42,6 +40,8 @@
 
 ### done
 
+- collapse track subclassing
+- adjust cli to define sound_pool
 - fix failing model tests
 - generators to pass echo delay and type
 - pass bpm as part of environment

@@ -31,29 +31,33 @@ def random_seed():
 def spawn_function(mod, fn, **kwargs):
     return getattr(eval(mod), fn)
 
-class SynthTrack:
+class Track:
 
     @staticmethod
-    def randomise_params(track, seed_keys = "fx|volume|beat".split("|"), **kwargs):
-        seeds = {key: random_seed()
-                 for key in seed_keys}
-        return {"name": track["name"],
-                "machine": track["machine"],
-                "pattern": random_pattern(),
-                "groove": random_groove(),
-                "seeds": seeds,
-                "temperature": track["temperature"],
-                "density": track["density"]}
+    def randomise_params(track, sounds, seed_keys="fx|volume|beat|sound".split("|"), **kwargs):
+        seeds = {key: random_seed() for key in seed_keys}
+        base_kwargs = {
+            "name": track["name"],
+            "machine": track["machine"],
+            "pattern": random_pattern(),
+            "groove": random_groove(),
+            "seeds": seeds,
+            "temperature": track["temperature"],
+            "density": track["density"],
+            "sounds": sounds[track["name"]]
+        }
+        return base_kwargs
 
     @staticmethod
-    def randomise(track, **kwargs):
-        return SynthTrack(**SynthTrack.randomise_params(track, **kwargs))
+    def randomise(track, sounds, **kwargs):
+        return Track(**Track.randomise_params(track=track, sounds=sounds, **kwargs))
 
     @staticmethod
     def from_json(track):
-        return SynthTrack(**track)
+        track["sounds"] = [SVSample(**sample) for sample in track["sounds"]]
+        return Track(**track)
 
-    def __init__(self, name, machine, pattern, groove, seeds, temperature, density):
+    def __init__(self, name, machine, pattern, groove, seeds, temperature, density, sounds):
         self.name = name
         self.machine = machine
         self.pattern = pattern
@@ -61,9 +65,10 @@ class SynthTrack:
         self.seeds = seeds
         self.temperature = temperature
         self.density = density
+        self.sounds = sounds
 
     def clone(self):
-        return SynthTrack(**self.to_json())
+        return Track(**self.to_json())
 
     def mutate_pattern(self, **kwargs):
         self.pattern = random_pattern()
@@ -74,76 +79,12 @@ class SynthTrack:
     def mutate_seeds(self, **kwargs):
         key = random.choice(list(self.seeds.keys()))
         self.seeds[key] = random_seed()
-    
+
     def mutate_temperature(self, **kwargs):
         self.temperature = random.random()
 
     def mutate_density(self, **kwargs):
         self.density = random.random()
-
-    def init_machine(self, container, colour):
-        machine_class = load_class(self.machine)
-        return machine_class(container = container,
-                             namespace = self.name.capitalize(),
-                             colour = colour)
-        
-    def render(self, container, generators, dry_level, colour, bpm, tpb, wet_level = 1):
-        machine = self.init_machine(container, colour)
-        container.add_machine(machine)
-        pattern = spawn_function(**self.pattern)(**self.pattern["args"])
-        groove = spawn_function(**self.groove)
-        env = {"dry_level": dry_level,
-               "wet_level": wet_level,
-               "temperature": self.temperature,
-               "density": self.density,
-               "pattern": pattern,
-               "groove": groove,
-               "bpm": bpm,
-               "tpb": tpb}
-        for generator in generators:
-            machine.render(generator = generator,
-                           seeds = self.seeds,
-                           env = env)
-        
-    def to_json(self):
-        return {"name": self.name,
-                "machine": self.machine,
-                "pattern": copy.deepcopy(self.pattern),
-                "groove": copy.deepcopy(self.groove),
-                "seeds": copy.deepcopy(self.seeds),
-                "temperature": self.temperature,
-                "density": self.density}
-
-
-class SamplerTrack(SynthTrack):
-
-    @staticmethod
-    def randomise_params(track, sounds,
-                         **kwargs):
-        # sounds
-        base_kwargs = SynthTrack.randomise_params(track)
-        base_kwargs["sounds"] = sounds[track["name"]]
-        # seeds
-        base_kwargs["seeds"]["sound"] = random_seed()
-        return base_kwargs
-
-    @staticmethod
-    def randomise(track, sounds, **kwargs):
-        return SamplerTrack(**SamplerTrack.randomise_params(track = track,
-                                                            sounds = sounds,
-                                                            **kwargs))
-    
-    @staticmethod
-    def from_json(track):
-        track["sounds"] = [SVSample(**sample) for sample in track["sounds"]]
-        return SamplerTrack(**track)
-
-    def __init__(self, sounds, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.sounds = sounds
-
-    def clone(self):
-        return SamplerTrack(**self.to_json())
 
     def mutate_sounds(self, sounds, **kwargs):
         i = int(random.random() > 0.5)
@@ -151,15 +92,42 @@ class SamplerTrack(SynthTrack):
 
     def init_machine(self, container, colour):
         machine_class = load_class(self.machine)
-        return machine_class(container = container,
-                             namespace = self.name.capitalize(),
-                             colour = colour,
-                             sounds = self.sounds)
-        
+        return machine_class(
+            container=container,
+            namespace=self.name.capitalize(),
+            colour=colour,
+            sounds=self.sounds
+        )
+
+    def render(self, container, generators, dry_level, colour, bpm, tpb, wet_level=1):
+        machine = self.init_machine(container, colour)
+        container.add_machine(machine)
+        pattern = spawn_function(**self.pattern)(**self.pattern["args"])
+        groove = spawn_function(**self.groove)
+        env = {
+            "dry_level": dry_level,
+            "wet_level": wet_level,
+            "temperature": self.temperature,
+            "density": self.density,
+            "pattern": pattern,
+            "groove": groove,
+            "bpm": bpm,
+            "tpb": tpb
+        }
+        for generator in generators:
+            machine.render(generator=generator, seeds=self.seeds, env=env)
+
     def to_json(self):
-        base_json = super().to_json()
-        base_json["sounds"] = copy.deepcopy(self.sounds)
-        return base_json
+        return {
+            "name": self.name,
+            "machine": self.machine,
+            "pattern": copy.deepcopy(self.pattern),
+            "groove": copy.deepcopy(self.groove),
+            "seeds": copy.deepcopy(self.seeds),
+            "temperature": self.temperature,
+            "density": self.density,
+            "sounds": copy.deepcopy(self.sounds)
+        }
 
 class Tracks(list):
 
@@ -167,7 +135,7 @@ class Tracks(list):
     def randomise(tracks, **kwargs):
         track_instances = []
         for track in tracks:
-            track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else SynthTrack
+            track_class = Track
             track_randomiser = getattr(track_class, "randomise")
             track_instance = track_randomiser(track = track, **kwargs)
             track_instances.append(track_instance)        
@@ -181,7 +149,7 @@ class Tracks(list):
     def from_json(tracks):
         track_instances = []
         for track in tracks:
-            track_class = SamplerTrack if does_class_extend(load_class(track["machine"]), sv.machines.SVSamplerMachine) else SynthTrack
+            track_class = Track
             track_instance = getattr(track_class, "from_json")(track)
             track_instances.append(track_instance)        
         return Tracks(track_instances)

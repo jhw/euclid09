@@ -31,23 +31,26 @@ class ModelTest(unittest.TestCase):
         self.sound_pool = {track["name"]:self.pool.match(lambda sample: self.tags[track["name"]] in sample.tags) for track in self.tracks}
 
     def test_mutate_pattern(self):
-        track = SynthTrack.randomise(track=self.tracks[0])
+        track = Track.randomise(track=self.tracks[0],
+                                sounds=self.sound_pool)
         initial_pattern = track.pattern
         track.mutate_pattern()
 
     def test_mutate_groove(self):
-        track = SynthTrack.randomise(track=self.tracks[0])
+        track = Track.randomise(track=self.tracks[0],
+                                sounds=self.sound_pool)
         initial_groove = track.groove
         track.mutate_groove()
 
     def test_mutate_seeds(self):
-        track = SynthTrack.randomise(track=self.tracks[0])
+        track = Track.randomise(track=self.tracks[0],
+                                sounds=self.sound_pool)
         initial_seeds = track.seeds.copy()
         track.mutate_seeds()
         self.assertNotEqual(initial_seeds, track.seeds)
 
     def test_mutate_sounds(self):
-        track = SamplerTrack.randomise(track=self.tracks[0],
+        track = Track.randomise(track=self.tracks[0],
                                        sounds=self.sound_pool)
         track.mutate_sounds(sounds=self.sound_pool)
 
@@ -71,16 +74,16 @@ class ModelTest(unittest.TestCase):
             tracks.mutate_attr(attr="density", filter_fn=filter_fn)
 
     def test_sample_track_creation(self):
-        track = SamplerTrack.randomise(track=self.tracks[0],
+        track = Track.randomise(track=self.tracks[0],
                                        sounds=self.sound_pool)
-        self.assertIsInstance(track, SamplerTrack)
+        self.assertIsInstance(track, Track)
         self.assertEqual(track.name, "kick")
         # self.assertEqual(len(track.sounds), 2)
         self.assertIn("mod", track.pattern)
         self.assertIn("fn", track.groove)
 
     def test_sample_track_clone(self):
-        track = SamplerTrack.randomise(track=self.tracks[0],
+        track = Track.randomise(track=self.tracks[0],
                                        sounds=self.sound_pool)
         track.sounds = self.mock_sounds
         clone = track.clone()
@@ -174,7 +177,7 @@ class ModelTest(unittest.TestCase):
             self.assertEqual(len(p1.tracks), len(p2.tracks))
 
     def test_init_machine(self):
-        track = SamplerTrack.randomise(track=self.tracks[0],
+        track = Track.randomise(track=self.tracks[0],
                                        sounds=self.sound_pool)
         track.sounds = self.mock_sounds
         container = Mock()
@@ -183,7 +186,7 @@ class ModelTest(unittest.TestCase):
         self.assertEqual(machine.sounds, self.mock_sounds)
 
     def test_track_polymorphism(self):
-        for klass in [SamplerTrack, SynthTrack]:
+        for klass in [Track, Track]:
             track = klass.randomise(track=self.tracks[0],
                                     sounds=self.sound_pool)
             self.assertEqual(track.name, "kick")
