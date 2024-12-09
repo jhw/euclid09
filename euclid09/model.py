@@ -222,11 +222,11 @@ class Patch:
 class Patches(list):
 
     @staticmethod
-    def randomise(tracks, sounds, n, n_sounds):
+    def randomise(tracks, sounds, n_patches, n_sounds):
         return Patches([Patch.randomise(tracks = tracks,
                                         sounds = sounds,
                                         n_sounds = n_sounds)
-                        for i in range(n)])
+                        for i in range(n_patches)])
 
     @staticmethod
     def from_json(patches):
@@ -262,11 +262,11 @@ class Patches(list):
 class Project:
 
     @staticmethod
-    def randomise(tracks, sounds, n, n_sounds):
+    def randomise(tracks, sounds, n_patches, n_sounds):
         return Project(patches = Patches.randomise(tracks = tracks,
                                                    sounds = sounds,
                                                    n_sounds = n_sounds,
-                                                   n = n))
+                                                   n_patches = n_patches))
     
     @staticmethod
     def from_json(project):

@@ -1,5 +1,7 @@
 ### short
 
+- pass kwargs round model
+
 ### medium
 
 - add generator support for returning trig length
@@ -34,6 +36,7 @@
 
 ### done
 
+- refactor n as n_patches
 - capture ValueError thrown by sv
 - randomise needs to shuffle sounds!
 - abstract cli sound handling into something detroit specific

@@ -168,7 +168,7 @@ class ModelTest(unittest.TestCase):
         patches = Patches.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
                                     n_sounds=2,
-                                    n=3)
+                                    n_patches=3)
         for patch in patches:
             for track in patch.tracks:
                 track.sounds = self.mock_sounds
@@ -181,7 +181,7 @@ class ModelTest(unittest.TestCase):
         patches = Patches.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
                                     n_sounds=2,
-                                    n=3)
+                                    n_patches=3)
         for patch in patches:
             for track in patch.tracks:
                 track.sounds = self.mock_sounds
@@ -212,7 +212,7 @@ class ModelTest(unittest.TestCase):
         project = Project.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
                                     n_sounds=2,
-                                    n=3)
+                                    n_patches=3)
         for patch in project.patches:
             for track in patch.tracks:
                 track.sounds = self.mock_sounds
@@ -225,7 +225,7 @@ class ModelTest(unittest.TestCase):
         project = Project.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
                                     n_sounds=2,
-                                    n=3)
+                                    n_patches=3)
         for patch in project.patches:
             for track in patch.tracks:
                 track.sounds = self.mock_sounds
@@ -239,7 +239,7 @@ class ModelTest(unittest.TestCase):
         project = Project.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
                                     n_sounds=2,
-                                    n=2)
+                                    n_patches=2)
         for patch in project.patches:
             for track in patch.tracks:
                 track.sounds = self.mock_sounds
@@ -258,7 +258,7 @@ class ModelTest(unittest.TestCase):
         patches = Patches.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
                                     n_sounds=2,
-                                    n=5)
+                                    n_patches=5)
         patches.freeze(3)
         for i, patch in enumerate(patches):
             if i < 3:
@@ -270,7 +270,7 @@ class ModelTest(unittest.TestCase):
         project = Project.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
                                     n_sounds=2,
-                                    n=4)
+                                    n_patches=4)
         project.freeze_patches(2)
         frozen_count = sum(1 for patch in project.patches if patch.frozen)
         self.assertEqual(frozen_count, 2)
@@ -279,7 +279,7 @@ class ModelTest(unittest.TestCase):
         patches = Patches.randomise(tracks=self.tracks,
                                     sounds=self.sounds,
                                     n_sounds=2,
-                                    n=3)
+                                    n_patches=3)
         patches.freeze(2)
         cloned_patches = patches.clone()
         for i, patch in enumerate(cloned_patches):

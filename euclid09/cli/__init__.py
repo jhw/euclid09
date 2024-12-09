@@ -121,7 +121,7 @@ class Euclid09CLI(cmd.Cmd):
         """Create a randomised project with patches."""
         return Project.randomise(tracks=self.tracks,
                                  sounds=self.detroit_sounds,
-                                 n=self.n_patches,
+                                 n_patches=self.n_patches,
                                  n_sounds = 2)
                                  
     @assert_head
