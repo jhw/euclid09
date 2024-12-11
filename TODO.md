@@ -2,8 +2,6 @@
 
 ### medium
 
-- add generator support for returning trig length
-
 ### features
 
 - ability to vary cli cutoff/density/temperature
