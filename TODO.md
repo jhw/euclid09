@@ -1,12 +1,14 @@
 ### short
 
+- rename as eins/zwei/drei
+- add tag to track for mapping
+
 ### medium
 
 ### features
 
 - ability to vary cli cutoff/density/temperature
 - optional s3 bank loading
-- sample fx
 
 ### thoughts
 
@@ -32,6 +34,7 @@
 
 ### done
 
+- move m8 script to tools/m8
 - pass kwargs round model
 - refactor n as n_patches
 - capture ValueError thrown by sv
