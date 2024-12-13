@@ -274,8 +274,9 @@ class Project:
                levels = {},
                colours = {}):
         container = SVContainer(banks = banks,
-                                bpm = bpm * tpb, # NB
-                                n_ticks = n_ticks * tpb) # NB
+                                bpm = bpm,
+                                tpb = tpb,
+                                n_ticks = n_ticks)
         self.patches.render(container = container,
                             generators = generators,
                             levels = levels,

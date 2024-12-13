@@ -89,15 +89,15 @@ class Euclid09CLI(cmd.Cmd):
         self.do_show_tags(None)
 
     ### tags
+    
+    def do_randomise_tags(self, _):
+        """Randomise the tags associated with tracks."""
+        self.tags.randomise()
+        self.do_show_tags(None)
 
     def do_show_tags(self, _):
         """Display the current tag mappings for tracks."""
         logging.info(", ".join([f"{k}={v}" for k, v in self.tags.items()]))
-    
-    def do_shuffle_tags(self, _):
-        """Shuffle the tags associated with tracks."""
-        self.tags.randomise()
-        self.do_show_tags(None)
 
     def do_reset_tags(self, _):
         """Reset the tags to their default mappings."""

@@ -1,7 +1,9 @@
 ### short
 
+- move banks/pool/tag/term stuff into separate detroit plugin class with sounds api
+
 - rename as eins/zwei/drei
-- add tag to track for mapping
+  - add tag to track for mapping
 
 ### medium
 
