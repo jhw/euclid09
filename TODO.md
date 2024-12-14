@@ -1,9 +1,9 @@
 ### short
 
-- move banks/pool/tag/term stuff into separate detroit plugin class with sounds api
-
-- rename as eins/zwei/drei
-  - add tag to track for mapping
+- rename tracks as eins/zwei/drei
+  - add tags for pool mapping
+  
+- abstract banks/pool/tags/terms stuff into detroit plugin
 
 ### medium
 
@@ -25,7 +25,6 @@
 
 ### gists
 
-- 303 slide
 - echo freeze
 - polly vocals + vocoder
 - autotune
