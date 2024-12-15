@@ -1,8 +1,12 @@
 ### short
 
-- detroit sound plugin
+- move terms.yaml inline
+- move show_tags code to str(tags)
 
 ### medium
+
+- sample cutoff should be applied inside detroit plugin
+- plugins needs a wrapper containing banks and pool
 
 - rename tracks as eins/zwei/drei
   - add tags for pool mapping
@@ -39,6 +43,7 @@
 
 ### done
 
+- detroit sound plugin
 - export m8 to ignore existing directories
 - matthew
 - move m8 script to tools/m8

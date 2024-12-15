@@ -41,7 +41,7 @@ def assert_head(fn):
 def apply_sample_cutoff(fn):
     @wraps(fn)
     def wrapped(self, *args, **kwargs):
-        for sample in self.pool:
+        for sample in self.dsp.pool:
             sample.cutoff = self.cutoff
         return fn(self, *args, **kwargs)
     return wrapped
@@ -52,7 +52,7 @@ def commit_and_render(fn):
         project = fn(self, *args, **kwargs)
         colours = Colours.randomise(tracks = self.tracks,
                                     patches = project.patches)
-        container = project.render(banks = self.banks,
+        container = project.render(banks = self.dsp.banks,
                                    generators = self.generators,
                                    colours = colours,
                                    bpm = self.bpm,
@@ -64,18 +64,42 @@ def commit_and_render(fn):
         container.write_project(f"tmp/sunvox/{commit_id}.sunvox")
     return wrapped
 
+class DetroitSoundPlugin:
+
+    def __init__(self, tracks):
+        self.banks = SVBanks.load_zip(cache_dir="banks")
+        terms = load_yaml("terms.yaml")
+        self.pool, _ = self.banks.spawn_pool(tag_patterns=terms)
+        self.tags = Tags(tracks = tracks,
+                         terms = terms).validate().randomise()
+
+    def randomise_tags(self):
+        self.tags.randomise()
+
+    def show_tags(self):
+        return " ".join([f"{k}={v}" for k, v in self.tags.items()])
+
+    def reset_tags(self):
+        self.tags = Tags(tracks=self.tracks, terms=self.tags.terms)
+
+    def filter_sounds(self, tracks):
+        sounds = {}
+        for track in tracks:
+            tag = self.tags[track["name"]]
+            track_sounds = self.pool.match(lambda sample: tag in sample.tags)
+            sounds[track["name"]] = track_sounds
+        return sounds
+           
 class Euclid09CLI(cmd.Cmd):
 
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, tracks, banks, pool, generators, tags, bpm, tpb, n_patches, n_ticks, cutoff):
+    def __init__(self, tracks, dsp, generators, bpm, tpb, n_patches, n_ticks, cutoff):
         super().__init__()
         self.tracks = tracks
-        self.banks = banks
-        self.pool = pool
+        self.dsp = dsp
         self.generators = generators                
-        self.tags = tags
         self.bpm = bpm
         self.tpb = tpb
         self.n_patches = n_patches
@@ -86,41 +110,31 @@ class Euclid09CLI(cmd.Cmd):
     def preloop(self):
         logging.info("Fetching commits ...")
         self.git.fetch()
-        self.do_show_tags(None)
+        logging.info(self.dsp.show_tags())
 
     ### tags
     
     def do_randomise_tags(self, _):
         """Randomise the tags associated with tracks."""
-        self.tags.randomise()
-        self.do_show_tags(None)
-
+        self.dsp.randomise_tags()
+        logging.info(self.dsp.show_tags())
+        
     def do_show_tags(self, _):
-        """Display the current tag mappings for tracks."""
-        logging.info(", ".join([f"{k}={v}" for k, v in self.tags.items()]))
+        logging.info(self.dsp.show_tags())
 
     def do_reset_tags(self, _):
-        """Reset the tags to their default mappings."""
-        self.tags = Tags(tracks=self.tracks, terms=self.tags.terms)
-        self.do_show_tags(None)
+        self.dsp.reset_tags()
+        self.dsp.show_tags()
 
     ### patch operations
 
-    @property
-    def detroit_sounds(self):
-        sounds = {}
-        for track in self.tracks:
-            tag = self.tags[track["name"]]
-            track_sounds = self.pool.match(lambda sample: tag in sample.tags)
-            sounds[track["name"]] = track_sounds
-        return sounds
-    
     @apply_sample_cutoff
     @commit_and_render
     def do_randomise_project(self, _):
+        sounds = self.dsp.filter_sounds(self.tracks)
         """Create a randomised project with patches."""
         return Project.randomise(tracks=self.tracks,
-                                 sounds=self.detroit_sounds,
+                                 sounds=sounds,
                                  n_patches=self.n_patches,
                                  n_sounds = 2)
                                  
@@ -157,13 +171,14 @@ class Euclid09CLI(cmd.Cmd):
     @commit_and_render
     def do_mutate_sounds(self, n):
         """Mutate the sounds of unfrozen patches in the project."""
+        sounds = self.dsp.filter_sounds(self.tracks)
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
                     patch.mutate_attr(attr="sounds",
                                       filter_fn=lambda x: True,
-                                      sounds=self.detroit_sounds)
+                                      sounds=sounds)
         return project
 
     @assert_head
@@ -233,7 +248,7 @@ class Euclid09CLI(cmd.Cmd):
                 levels.append(Levels(self.tracks).solo(track["name"]))
             project = self.git.head.content
             for levels_ in levels:
-                container = project.render(banks=self.banks,
+                container = project.render(banks=self.dsp.banks,
                                            generators=self.generators,
                                            levels=levels_,
                                            bpm=self.bpm,
@@ -356,15 +371,10 @@ if __name__ == "__main__":
     try:
         args = parse_args()
         tracks = load_yaml("tracks.yaml")
-        banks = SVBanks.load_zip(cache_dir="banks")
-        terms = load_yaml("terms.yaml")
-        pool, _ = banks.spawn_pool(tag_patterns=terms)
-        tags = Tags(tracks = tracks, terms = terms).validate().randomise()
+        dsp = DetroitSoundPlugin(tracks)
         Euclid09CLI(tracks = tracks,
-                    banks = banks,
-                    pool = pool,
+                    dsp = dsp,
                     generators = [Beat, GhostEcho],
-                    tags = tags,
                     bpm = args.bpm,
                     tpb = args.tpb,
                     n_ticks = args.n_ticks,
