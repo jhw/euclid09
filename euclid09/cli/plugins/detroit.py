@@ -31,7 +31,7 @@ sweep: (swp)|(sweep)
 class Tags(dict):
 
     def __init__(self, tracks, terms):
-        dict.__init__(self, {track["name"]:track["name"] for track in tracks})
+        dict.__init__(self, {track["name"]:track["tag"] for track in tracks})
         self.terms = terms
 
     def validate(self):
@@ -63,8 +63,8 @@ class SoundPlugin:
     def show_tags(self):
         return str(self.tags)
 
-    def reset_tags(self):
-        self.tags = Tags(tracks=self.tracks,
+    def reset_tags(self, tracks):
+        self.tags = Tags(tracks=tracks,
                          terms=self.tags.terms)
 
     def filter_sounds(self, tracks):

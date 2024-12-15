@@ -1,13 +1,15 @@
-- name: kick
+- name: mid
   machine: sv.machines.beats.detroit.DetroitMachine
   temperature: 0.5
   density: 0.5
-- name: clap
+  tag: kick
+- name: lo
   machine: sv.machines.beats.detroit.DetroitMachine
   temperature: 0.25
   density: 0.25
-- name: hat
+  tag: clap
+- name: hi
   machine: sv.machines.beats.detroit.DetroitMachine
   temperature: 0.75
   density: 0.75
-
+  tag: hat

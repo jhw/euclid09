@@ -1,11 +1,8 @@
 ### short
 
-- rename tracks as eins/zwei/drei
-  - add tags for pool mapping
+- apply sample cutoff within sound plugin
 
 ### medium
-
-- apply sample cutoff within sound plugin
 
 - plugins need a wrapper class from which banks can be aggregated
 - cli need to call tag operations in a polymorphic manner
@@ -42,6 +39,8 @@
 
 ### done
 
+- rename tracks as eins/zwei/drei
+  - add tags for pool mapping
 - move show_tags code to str(tags)
 - refactor dsp as sound_plugin
 - move tags into plugin and remove tag test

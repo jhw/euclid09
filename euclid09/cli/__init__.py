@@ -95,8 +95,8 @@ class Euclid09CLI(cmd.Cmd):
         logging.info(self.sound_plugin.show_tags())
 
     def do_reset_tags(self, _):
-        self.sound_plugin.reset_tags()
-        self.sound_plugin.show_tags()
+        self.sound_plugin.reset_tags(self.tracks)
+        logging.info(self.sound_plugin.show_tags())
 
     ### patch operations
 
