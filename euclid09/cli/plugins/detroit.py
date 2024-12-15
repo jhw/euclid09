@@ -46,6 +46,9 @@ class Tags(dict):
             self[key] = random.choice(options)
         return self
 
+    def __str__(self):
+        return ", ".join([f"{k}={v}" for k, v in self.items()])
+    
 class SoundPlugin:
 
     def __init__(self, tracks, terms = Terms):
@@ -58,7 +61,7 @@ class SoundPlugin:
         self.tags.randomise()
 
     def show_tags(self):
-        return " ".join([f"{k}={v}" for k, v in self.tags.items()])
+        return str(self.tags)
 
     def reset_tags(self):
         self.tags = Tags(tracks=self.tracks,

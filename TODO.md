@@ -1,14 +1,14 @@
 ### short
 
-- move show_tags code to str(tags)
+- rename tracks as eins/zwei/drei
+  - add tags for pool mapping
 
 ### medium
 
-- sample cutoff should be applied inside detroit plugin
-- plugins needs a wrapper containing banks and pool
+- apply sample cutoff within sound plugin
 
-- rename tracks as eins/zwei/drei
-  - add tags for pool mapping
+- plugins need a wrapper class from which banks can be aggregated
+- cli need to call tag operations in a polymorphic manner
 
 - curate samples within detroit sound plugin
  - hats rev/ret
@@ -42,6 +42,7 @@
 
 ### done
 
+- move show_tags code to str(tags)
 - refactor dsp as sound_plugin
 - move tags into plugin and remove tag test
 - move terms.yaml inline
