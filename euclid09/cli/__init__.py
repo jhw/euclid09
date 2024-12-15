@@ -1,7 +1,7 @@
 from sv.utils.export import export_wav
 
 from euclid09.cli.levels import Levels
-from euclid09.cli.plugins.detroit import DetroitSoundPlugin
+from euclid09.cli.plugins.detroit import SoundPlugin
 from euclid09.colours import Colours
 from euclid09.generators import Beat, GhostEcho
 from euclid09.git import Git
@@ -39,7 +39,7 @@ def assert_head(fn):
 def apply_sample_cutoff(fn):
     @wraps(fn)
     def wrapped(self, *args, **kwargs):
-        for sample in self.dsp.pool:
+        for sample in self.sound_plugin.pool:
             sample.cutoff = self.cutoff
         return fn(self, *args, **kwargs)
     return wrapped
@@ -50,7 +50,7 @@ def commit_and_render(fn):
         project = fn(self, *args, **kwargs)
         colours = Colours.randomise(tracks = self.tracks,
                                     patches = project.patches)
-        container = project.render(banks = self.dsp.banks,
+        container = project.render(banks = self.sound_plugin.banks,
                                    generators = self.generators,
                                    colours = colours,
                                    bpm = self.bpm,
@@ -67,10 +67,10 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, tracks, dsp, generators, bpm, tpb, n_patches, n_ticks, cutoff):
+    def __init__(self, tracks, sound_plugin, generators, bpm, tpb, n_patches, n_ticks, cutoff):
         super().__init__()
         self.tracks = tracks
-        self.dsp = dsp
+        self.sound_plugin = sound_plugin
         self.generators = generators                
         self.bpm = bpm
         self.tpb = tpb
@@ -82,28 +82,28 @@ class Euclid09CLI(cmd.Cmd):
     def preloop(self):
         logging.info("Fetching commits ...")
         self.git.fetch()
-        logging.info(self.dsp.show_tags())
+        logging.info(self.sound_plugin.show_tags())
 
     ### tags
     
     def do_randomise_tags(self, _):
         """Randomise the tags associated with tracks."""
-        self.dsp.randomise_tags()
-        logging.info(self.dsp.show_tags())
+        self.sound_plugin.randomise_tags()
+        logging.info(self.sound_plugin.show_tags())
         
     def do_show_tags(self, _):
-        logging.info(self.dsp.show_tags())
+        logging.info(self.sound_plugin.show_tags())
 
     def do_reset_tags(self, _):
-        self.dsp.reset_tags()
-        self.dsp.show_tags()
+        self.sound_plugin.reset_tags()
+        self.sound_plugin.show_tags()
 
     ### patch operations
 
     @apply_sample_cutoff
     @commit_and_render
     def do_randomise_project(self, _):
-        sounds = self.dsp.filter_sounds(self.tracks)
+        sounds = self.sound_plugin.filter_sounds(self.tracks)
         """Create a randomised project with patches."""
         return Project.randomise(tracks=self.tracks,
                                  sounds=sounds,
@@ -143,7 +143,7 @@ class Euclid09CLI(cmd.Cmd):
     @commit_and_render
     def do_mutate_sounds(self, n):
         """Mutate the sounds of unfrozen patches in the project."""
-        sounds = self.dsp.filter_sounds(self.tracks)
+        sounds = self.sound_plugin.filter_sounds(self.tracks)
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
@@ -220,7 +220,7 @@ class Euclid09CLI(cmd.Cmd):
                 levels.append(Levels(self.tracks).solo(track["name"]))
             project = self.git.head.content
             for levels_ in levels:
-                container = project.render(banks=self.dsp.banks,
+                container = project.render(banks=self.sound_plugin.banks,
                                            generators=self.generators,
                                            levels=levels_,
                                            bpm=self.bpm,
@@ -343,9 +343,9 @@ if __name__ == "__main__":
     try:
         args = parse_args()
         tracks = load_yaml("tracks.yaml")
-        dsp = DetroitSoundPlugin(tracks)
+        sound_plugin = SoundPlugin(tracks)
         Euclid09CLI(tracks = tracks,
-                    dsp = dsp,
+                    sound_plugin = sound_plugin,
                     generators = [Beat, GhostEcho],
                     bpm = args.bpm,
                     tpb = args.tpb,

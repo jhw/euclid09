@@ -1,8 +1,6 @@
 ### short
 
-- move tags into plugin and remove tag test
 - move show_tags code to str(tags)
-- refactor dsp as sound_plugin
 
 ### medium
 
@@ -44,6 +42,8 @@
 
 ### done
 
+- refactor dsp as sound_plugin
+- move tags into plugin and remove tag test
 - move terms.yaml inline
 - detroit sound plugin
 - export m8 to ignore existing directories

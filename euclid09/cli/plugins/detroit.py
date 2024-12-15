@@ -1,8 +1,7 @@
 from sv.banks import SVBanks
 from sv.utils.banks import init_banks
 
-from euclid09.cli.tags import Tags
-
+import random
 import yaml
 
 Terms = yaml.safe_load("""
@@ -29,7 +28,25 @@ pad: (pad)
 sweep: (swp)|(sweep)
 """)
 
-class DetroitSoundPlugin:
+class Tags(dict):
+
+    def __init__(self, tracks, terms):
+        dict.__init__(self, {track["name"]:track["name"] for track in tracks})
+        self.terms = terms
+
+    def validate(self):
+        for key in self:
+            if key not in self:
+                raise RuntimeError(f"track '{key}' not present in terms")
+        return self
+
+    def randomise(self):
+        options = list(self.terms.keys())
+        for key in self:
+            self[key] = random.choice(options)
+        return self
+
+class SoundPlugin:
 
     def __init__(self, tracks, terms = Terms):
         self.banks = SVBanks.load_zip(cache_dir="banks")
