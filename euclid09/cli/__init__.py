@@ -36,14 +36,6 @@ def assert_head(fn):
             logging.warning(str(error))
     return wrapped
 
-def apply_sample_cutoff(fn):
-    @wraps(fn)
-    def wrapped(self, *args, **kwargs):
-        for sample in self.sound_plugin.pool:
-            sample.cutoff = self.cutoff
-        return fn(self, *args, **kwargs)
-    return wrapped
-
 def commit_and_render(fn):
     @wraps(fn)
     def wrapped(self, *args, **kwargs):
@@ -67,7 +59,7 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, tracks, sound_plugin, generators, bpm, tpb, n_patches, n_ticks, cutoff):
+    def __init__(self, tracks, sound_plugin, generators, bpm, tpb, n_patches, n_ticks):
         super().__init__()
         self.tracks = tracks
         self.sound_plugin = sound_plugin
@@ -76,7 +68,6 @@ class Euclid09CLI(cmd.Cmd):
         self.tpb = tpb
         self.n_patches = n_patches
         self.n_ticks = n_ticks
-        self.cutoff = cutoff
         self.git = Git("tmp/git")
 
     def preloop(self):
@@ -100,7 +91,6 @@ class Euclid09CLI(cmd.Cmd):
 
     ### patch operations
 
-    @apply_sample_cutoff
     @commit_and_render
     def do_randomise_project(self, _):
         sounds = self.sound_plugin.filter_sounds(self.tracks)
@@ -139,7 +129,6 @@ class Euclid09CLI(cmd.Cmd):
             
     @assert_head
     @parse_line([{"name": "n", "type": "int"}])
-    @apply_sample_cutoff
     @commit_and_render
     def do_mutate_sounds(self, n):
         """Mutate the sounds of unfrozen patches in the project."""
@@ -343,15 +332,15 @@ if __name__ == "__main__":
     try:
         args = parse_args()
         tracks = load_yaml("tracks.yaml")
-        sound_plugin = SoundPlugin(tracks)
+        sound_plugin = SoundPlugin(tracks = tracks,
+                                   cutoff = args.cutoff)
         Euclid09CLI(tracks = tracks,
                     sound_plugin = sound_plugin,
                     generators = [Beat, GhostEcho],
                     bpm = args.bpm,
                     tpb = args.tpb,
                     n_ticks = args.n_ticks,
-                    n_patches = args.n_patches,
-                    cutoff = args.cutoff).cmdloop()
+                    n_patches = args.n_patches).cmdloop()                
     except ValueError as error:
         logging.error(str(error))
     except RuntimeError as error:

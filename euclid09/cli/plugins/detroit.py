@@ -51,9 +51,11 @@ class Tags(dict):
     
 class SoundPlugin:
 
-    def __init__(self, tracks, terms = Terms):
+    def __init__(self, tracks, cutoff, terms = Terms):
         self.banks = SVBanks.load_zip(cache_dir="banks")
         self.pool, _ = self.banks.spawn_pool(tag_patterns=terms)
+        for sample in self.pool:
+            sample.cutoff = cutoff
         self.tags = Tags(tracks = tracks,
                          terms = terms).validate().randomise()
 

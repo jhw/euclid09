@@ -1,15 +1,21 @@
 ### short
 
-- apply sample cutoff within sound plugin
+- load and reference plugins polymorphically
+- add plugins class to aggregate banks
 
 ### medium
 
-- plugins need a wrapper class from which banks can be aggregated
+- model needs to cast to SVSample polymorphically
+- model tests failed to capture bad ref to SamplerTrack
 - cli need to call tag operations in a polymorphic manner
 
 - curate samples within detroit sound plugin
  - hats rev/ret
  - chord stutter
+
+### sv
+
+- implement stutter in similar manner to retrig
 
 ### features
 
@@ -39,6 +45,7 @@
 
 ### done
 
+- apply sample cutoff within sound plugin
 - rename tracks as eins/zwei/drei
   - add tags for pool mapping
 - move show_tags code to str(tags)

@@ -139,7 +139,7 @@ class Tracks(list):
 
     @staticmethod
     def from_json(tracks):
-        return Tracks([SamplerTrack.from_json(track) for track in tracks])
+        return Tracks([Track.from_json(track) for track in tracks])
 
     @staticmethod
     def from_json(tracks):
