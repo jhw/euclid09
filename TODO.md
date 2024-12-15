@@ -1,11 +1,16 @@
 ### short
 
-- rename tracks as eins/zwei/drei
-  - add tags for pool mapping
-  
-- abstract banks/pool/tags/terms stuff into detroit plugin
+- export m8 to ignore existing directories
+- detroit sound plugin
 
 ### medium
+
+- rename tracks as eins/zwei/drei
+  - add tags for pool mapping
+
+- curate samples within detroit sound plugin
+ - hats rev/ret
+ - chord stutter
 
 ### features
 
@@ -35,6 +40,7 @@
 
 ### done
 
+- matthew
 - move m8 script to tools/m8
 - pass kwargs round model
 - refactor n as n_patches
