@@ -1,9 +1,7 @@
-from sv.banks import SVBanks
-from sv.utils.banks import init_banks
 from sv.utils.export import export_wav
 
 from euclid09.cli.levels import Levels
-from euclid09.cli.tags import Tags
+from euclid09.cli.plugins.detroit import DetroitSoundPlugin
 from euclid09.colours import Colours
 from euclid09.generators import Beat, GhostEcho
 from euclid09.git import Git
@@ -63,32 +61,6 @@ def commit_and_render(fn):
             os.makedirs("tmp/sunvox")
         container.write_project(f"tmp/sunvox/{commit_id}.sunvox")
     return wrapped
-
-class DetroitSoundPlugin:
-
-    def __init__(self, tracks):
-        self.banks = SVBanks.load_zip(cache_dir="banks")
-        terms = load_yaml("terms.yaml")
-        self.pool, _ = self.banks.spawn_pool(tag_patterns=terms)
-        self.tags = Tags(tracks = tracks,
-                         terms = terms).validate().randomise()
-
-    def randomise_tags(self):
-        self.tags.randomise()
-
-    def show_tags(self):
-        return " ".join([f"{k}={v}" for k, v in self.tags.items()])
-
-    def reset_tags(self):
-        self.tags = Tags(tracks=self.tracks, terms=self.tags.terms)
-
-    def filter_sounds(self, tracks):
-        sounds = {}
-        for track in tracks:
-            tag = self.tags[track["name"]]
-            track_sounds = self.pool.match(lambda sample: tag in sample.tags)
-            sounds[track["name"]] = track_sounds
-        return sounds
            
 class Euclid09CLI(cmd.Cmd):
 
