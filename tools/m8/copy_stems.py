@@ -1,6 +1,5 @@
 import os
 import zipfile
-import shutil
 
 # Step a: Check if /Volumes/M8 exists
 m8_path = "/Volumes/M8"
@@ -24,8 +23,15 @@ for entry in os.listdir(tmp_wav_path):
         zip_file_path = os.path.join(tmp_wav_path, entry)
         file_name = os.path.splitext(entry)[0]  # Get the name without extension
 
-        # Step e: Create a subdirectory in /Volumes/M8/Stems/euclid09
+        # Step e: Define the target subdirectory path
         target_dir = os.path.join(stems_path, file_name)
+
+        # Skip if the directory already exists
+        if os.path.exists(target_dir):
+            print(f"Directory {target_dir} already exists. Skipping {entry}.")
+            continue
+
+        # Create the subdirectory
         os.makedirs(target_dir, exist_ok=True)
 
         # Step f: Load the zip file in memory and extract contents

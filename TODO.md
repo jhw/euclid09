@@ -1,6 +1,5 @@
 ### short
 
-- export m8 to ignore existing directories
 - detroit sound plugin
 
 ### medium
@@ -40,6 +39,7 @@
 
 ### done
 
+- export m8 to ignore existing directories
 - matthew
 - move m8 script to tools/m8
 - pass kwargs round model
