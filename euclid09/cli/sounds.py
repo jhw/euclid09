@@ -28,7 +28,7 @@ pad: (pad)
 sweep: (swp)|(sweep)
 """)
 
-class SoundPlugin:
+class Sounds:
 
     def __init__(self, tracks, cutoff, terms = Terms):
         self.banks = SVBanks.load_zip(cache_dir="banks")

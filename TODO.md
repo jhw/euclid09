@@ -1,10 +1,10 @@
 ### short
 
+- abstract sound class out of sounds
+- instantiate sounds polymorphically based on track class
+
 ### medium
 
-- mapping needs to be on per track basis
-- polymorphic plugins class
-- add plugins class to aggregate banks
 - combine mutate pattern and seeds 
 - model needs to cast to SVSample polymorphically
 - model tests failed to capture bad ref to SamplerTrack
@@ -46,6 +46,7 @@
 
 ### done
 
+- refactor plugins as sounds
 - tags to contain defaults
 - set cutoff as state variable
 - refactor handling of terms
