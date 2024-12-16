@@ -1,7 +1,5 @@
 ### short
 
-- tags to contain defaults
-
 ### medium
 
 - mapping needs to be on per track basis
@@ -48,6 +46,7 @@
 
 ### done
 
+- tags to contain defaults
 - set cutoff as state variable
 - refactor handling of terms
 - rename cli tags as mapping
