@@ -1,5 +1,7 @@
 ### short
 
+- set cutoff as state variable
+- tags to contain defaults
 
 ### medium
 
@@ -47,6 +49,7 @@
 
 ### done
 
+- refactor handling of terms
 - rename cli tags as mapping
 - apply sample cutoff within sound plugin
 - rename tracks as eins/zwei/drei

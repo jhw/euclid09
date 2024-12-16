@@ -30,7 +30,7 @@ sweep: (swp)|(sweep)
 
 class Tags(dict):
 
-    def __init__(self, tracks, terms):
+    def __init__(self, tracks, terms = Terms):
         dict.__init__(self, {track["name"]:track["tag"] for track in tracks})
         self.terms = terms
 
@@ -56,8 +56,7 @@ class SoundPlugin:
         self.pool, _ = self.banks.spawn_pool(tag_patterns=terms)
         for sample in self.pool:
             sample.cutoff = cutoff
-        self.mapping = Tags(tracks = tracks,
-                            terms = terms).validate().randomise()
+        self.mapping = Tags(tracks = tracks)
 
     def randomise_mapping(self):
         self.mapping.randomise()
