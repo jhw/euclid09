@@ -1,21 +1,15 @@
 ### short
 
-- model needs to cast to sound class polymorphically
+- why doesn't init_banks feature any more?
 
 ### medium
 
-- why doesn't init_banks feature any more?
 - instantiate sounds polymorphically based on track class
 - combine mutate pattern and seeds 
 
 - curate samples within detroit sound plugin
  - hats rev/ret
  - chord stutter
-
-### sv
-
-- single cycle waveforms
-- implement stutter as per to retrig
 
 ### features
 
@@ -45,6 +39,7 @@
 
 ### done
 
+- model needs to cast to sound class polymorphically
 - model tests failed to capture bad ref to SamplerTrack
 - sound to contain name, value fields
 - abstract sound class out of sounds

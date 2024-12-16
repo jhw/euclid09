@@ -4,8 +4,6 @@ import sv.algos.groove.perkons as perkons
 from sv.container import SVContainer
 from sv.project import load_class, does_class_extend
 
-from sv.machines.beats.detroit import DetroitSound
-
 from euclid09.colours import Colour
 
 import copy
@@ -51,7 +49,8 @@ class Track:
 
     @staticmethod
     def from_json(track):
-        track["sounds"] = [DetroitSound(**sound) for sound in track["sounds"]]
+        sound_class = load_class(track["machine"].replace("Machine", "Sound"))
+        track["sounds"] = [sound_class(**sound) for sound in track["sounds"]]
         return Track(**track)
 
     def __init__(self, name, machine, pattern, groove, seeds, temperature, density, sounds):

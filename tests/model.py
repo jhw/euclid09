@@ -1,4 +1,6 @@
 from sv.machines import SVMachineTrigs
+from sv.machines.beats.detroit import DetroitSound
+
 from euclid09.model import *
 
 from unittest.mock import Mock, patch
