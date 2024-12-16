@@ -50,7 +50,14 @@ class Track:
     @staticmethod
     def from_json(track):
         sound_class = load_class(track["machine"].replace("Machine", "Sound"))
-        track["sounds"] = [sound_class(**sound.as_dict()) for sound in track["sounds"]]
+        sound_instances = []
+        for sound in track["sounds"]:
+            if isinstance(sound, dict):
+                sound_instance = sound_class(**sound)
+            else:
+                sound_instance = sound_class(**sound.as_dict())
+            sound_instances.append(sound_instance)
+        track["sounds"] = sound_instances
         return Track(**track)
 
     def __init__(self, name, machine, pattern, groove, seeds, temperature, density, sounds):
@@ -122,7 +129,8 @@ class Track:
             "seeds": copy.deepcopy(self.seeds),
             "temperature": self.temperature,
             "density": self.density,
-            "sounds": copy.deepcopy(self.sounds)
+            "sounds": copy.deepcopy([sound.as_dict()
+                                     for sound in self.sounds])
         }
 
 class Tracks(list):

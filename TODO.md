@@ -1,11 +1,30 @@
 ### short
 
-- refactor Sounds as DetroitSoundFactory
+```
+>>> clone_patches 0
+ERROR: Unhandled exception
+Traceback (most recent call last):
+ {...}
+    for i, trig_block in generator(self,
+  File "/Users/jhw/work/euclid09/euclid09/generators.py", line 10, in Beat
+    trig_block = self.note(volume = volume,
+  File "/Users/jhw/work/euclid09/env/lib/python3.10/site-packages/sv/machines/beats/detroit.py", line 68, in note
+    sample = self.sound.clone()
+AttributeError: 'dict' object has no attribute 'clone'
+>>> 
+```
 
-- instantiate factories polymorphically
+- remove sound obj/dict duality
+
+### sv
+
+- berlin sound needs json serialisation methods
+- sample is still having null fx serialised
 
 ### medium
 
+- refactor Sounds as DetroitSoundFactory
+- instantiate factories polymorphically
 - combine mutate pattern and seeds 
 
 - curate samples within detroit sound plugin
