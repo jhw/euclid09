@@ -1,7 +1,5 @@
 ### short
 
-- why doesn't init_banks feature any more?
-
 ### medium
 
 - instantiate sounds polymorphically based on track class
