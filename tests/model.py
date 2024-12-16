@@ -98,7 +98,10 @@ class ModelTest(unittest.TestCase):
         track.sounds = self.mock_sounds
         clone = track.clone()
         self.assertEqual(track.name, clone.name)
-        self.assertEqual(track.sounds, clone.sounds)
+        self.assertEqual([sound.as_dict()
+                          for sound in track.sounds],
+                         [sound.as_dict()
+                          for sound in clone.sounds])
         self.assertEqual(track.pattern, clone.pattern)
         self.assertEqual(track.groove, clone.groove)
 

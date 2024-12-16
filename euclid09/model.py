@@ -50,7 +50,7 @@ class Track:
     @staticmethod
     def from_json(track):
         sound_class = load_class(track["machine"].replace("Machine", "Sound"))
-        track["sounds"] = [sound_class(**sound) for sound in track["sounds"]]
+        track["sounds"] = [sound_class(**sound.as_dict()) for sound in track["sounds"]]
         return Track(**track)
 
     def __init__(self, name, machine, pattern, groove, seeds, temperature, density, sounds):
