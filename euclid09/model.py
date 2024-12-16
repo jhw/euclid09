@@ -140,10 +140,6 @@ class Tracks(list):
 
     @staticmethod
     def from_json(tracks):
-        return Tracks([Track.from_json(track) for track in tracks])
-
-    @staticmethod
-    def from_json(tracks):
         track_instances = []
         for track in tracks:
             track_instance = Track.from_json(track)

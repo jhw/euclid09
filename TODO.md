@@ -1,6 +1,5 @@
 ### short
 
-- model tests failed to capture bad ref to SamplerTrack
 - model needs to cast to sound class polymorphically
 
 ### medium
@@ -46,6 +45,7 @@
 
 ### done
 
+- model tests failed to capture bad ref to SamplerTrack
 - sound to contain name, value fields
 - abstract sound class out of sounds
 - refactor plugins as sounds
