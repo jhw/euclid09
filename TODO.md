@@ -1,6 +1,5 @@
 ### short
 
-- set cutoff as state variable
 - tags to contain defaults
 
 ### medium
@@ -49,6 +48,7 @@
 
 ### done
 
+- set cutoff as state variable
 - refactor handling of terms
 - rename cli tags as mapping
 - apply sample cutoff within sound plugin

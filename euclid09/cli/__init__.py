@@ -93,7 +93,7 @@ class Euclid09CLI(cmd.Cmd):
 
     @commit_and_render
     def do_randomise_project(self, _):
-        sounds = self.sound_plugin.filter_sounds(self.tracks)
+        sounds = self.sound_plugin.render_sounds()
         """Create a randomised project with patches."""
         return Project.randomise(tracks=self.tracks,
                                  sounds=sounds,
@@ -132,7 +132,7 @@ class Euclid09CLI(cmd.Cmd):
     @commit_and_render
     def do_mutate_sounds(self, n):
         """Mutate the sounds of unfrozen patches in the project."""
-        sounds = self.sound_plugin.filter_sounds(self.tracks)
+        sounds = self.sound_plugin.render_sounds()
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:

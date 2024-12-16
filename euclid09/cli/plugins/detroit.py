@@ -54,9 +54,9 @@ class SoundPlugin:
     def __init__(self, tracks, cutoff, terms = Terms):
         self.banks = SVBanks.load_zip(cache_dir="banks")
         self.pool, _ = self.banks.spawn_pool(tag_patterns=terms)
-        for sample in self.pool:
-            sample.cutoff = cutoff
         self.mapping = Tags(tracks = tracks)
+        self.tracks = tracks
+        self.cutoff = cutoff
 
     def randomise_mapping(self):
         self.mapping.randomise()
@@ -68,11 +68,13 @@ class SoundPlugin:
         self.mapping = Tags(tracks=tracks,
                             terms=self.mapping.terms)
 
-    def filter_sounds(self, tracks):
+    def render_sounds(self):
         sounds = {}
-        for track in tracks:
+        for track in self.tracks:
             tag = self.mapping[track["name"]]
             track_sounds = self.pool.match(lambda sample: tag in sample.tags)
+            for sound in track_sounds:
+                sound.cutoff = self.cutoff
             sounds[track["name"]] = track_sounds
         return sounds
 
