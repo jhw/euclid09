@@ -1,6 +1,3 @@
-from sv.banks import SVBanks
-from sv.utils.banks import init_banks
-
 import random
 import yaml
 
@@ -28,37 +25,50 @@ pad: (pad)
 sweep: (swp)|(sweep)
 """)
 
+class DetroitSound:
+
+    def __init__(self, banks, track, cutoff, terms = Terms, **kwargs):
+        self.pool, _ = banks.spawn_pool(tag_patterns = terms)
+        self.track = track
+        self.cutoff = cutoff
+        self.options = list(terms.keys())
+        self.value = self.default_value = track["tag"]
+
+    def randomise(self):
+        self.value = random.choice(self.options)        
+
+    def reset(self):
+        self.value = self.default_value
+        
+    def render(self):
+        sounds = self.pool.match(lambda sample: self.value in sample.tags)
+        for sound in sounds:
+            sound.cutoff = self.cutoff
+        return sounds
+        
 class Sounds:
 
-    def __init__(self, tracks, cutoff, terms = Terms):
-        self.banks = SVBanks.load_zip(cache_dir="banks")
-        self.pool, _ = self.banks.spawn_pool(tag_patterns=terms)
-        self.tags = {track["name"]:track["tag"] for track in tracks}
-        self.default_tags = dict(self.tags)
-        self.options = list(terms.keys())
+    def __init__(self, banks, tracks, **kwargs):
         self.tracks = tracks
-        self.cutoff = cutoff
+        for track in tracks:
+            track["sound"] = DetroitSound(banks = banks,
+                                          track = track,
+                                          **kwargs)
 
     def show_mapping(self):
-        return ", ".join([f"{k}={v}" for k, v in self.tags.items()])
+        return ", ".join([f"{track['name']}={track['sound'].value}" for track in self.tracks])
 
     def randomise_mapping(self):
         for track in self.tracks:
-            self.tags[track["name"]] = random.choice(self.options)
+            track["sound"].randomise()
 
     def reset_mapping(self, tracks):
         for track in self.tracks:
-            self.tags[track["name"]] = self.default_tags[track["name"]]
+            track["sound"].reset()
 
-    def render_sounds(self):
-        sounds = {}
-        for track in self.tracks:
-            tag = self.tags[track["name"]]
-            track_sounds = self.pool.match(lambda sample: tag in sample.tags)
-            for sound in track_sounds:
-                sound.cutoff = self.cutoff
-            sounds[track["name"]] = track_sounds
-        return sounds
+    def render(self):
+        return {track["name"]: track["sound"].render()
+                for track in self.tracks}
 
 if __name__ == "___main__":
     pass

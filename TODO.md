@@ -1,13 +1,14 @@
 ### short
 
-- abstract sound class out of sounds
+- sound to contain name, value fields
 - instantiate sounds polymorphically based on track class
 
 ### medium
 
-- combine mutate pattern and seeds 
-- model needs to cast to SVSample polymorphically
+- why doesn't init_banks feature any more?
 - model tests failed to capture bad ref to SamplerTrack
+- model needs to cast to SVSample polymorphically
+- combine mutate pattern and seeds 
 
 - curate samples within detroit sound plugin
  - hats rev/ret
@@ -16,7 +17,7 @@
 ### sv
 
 - single cycle waveforms
-- implement stutter in similar manner to retrig
+- implement stutter as per to retrig
 
 ### features
 
@@ -46,6 +47,7 @@
 
 ### done
 
+- abstract sound class out of sounds
 - refactor plugins as sounds
 - tags to contain defaults
 - set cutoff as state variable

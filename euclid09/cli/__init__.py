@@ -1,3 +1,4 @@
+from sv.banks import SVBanks
 from sv.utils.export import export_wav
 
 from euclid09.cli.levels import Levels
@@ -42,7 +43,7 @@ def commit_and_render(fn):
         project = fn(self, *args, **kwargs)
         colours = Colours.randomise(tracks = self.tracks,
                                     patches = project.patches)
-        container = project.render(banks = self.sounds.banks,
+        container = project.render(banks = self.banks,
                                    generators = self.generators,
                                    colours = colours,
                                    bpm = self.bpm,
@@ -59,8 +60,9 @@ class Euclid09CLI(cmd.Cmd):
     prompt = ">>> "
     intro = "Welcome to the Euclid09 CLI ;)"
 
-    def __init__(self, tracks, sounds, generators, bpm, tpb, n_patches, n_ticks):
+    def __init__(self, banks, tracks, sounds, generators, bpm, tpb, n_patches, n_ticks):
         super().__init__()
+        self.banks = banks
         self.tracks = tracks
         self.sounds = sounds
         self.generators = generators                
@@ -93,7 +95,7 @@ class Euclid09CLI(cmd.Cmd):
 
     @commit_and_render
     def do_randomise_project(self, _):
-        sounds = self.sounds.render_sounds()
+        sounds = self.sounds.render()
         """Create a randomised project with patches."""
         return Project.randomise(tracks=self.tracks,
                                  sounds=sounds,
@@ -132,7 +134,7 @@ class Euclid09CLI(cmd.Cmd):
     @commit_and_render
     def do_mutate_sounds(self, n):
         """Mutate the sounds of unfrozen patches in the project."""
-        sounds = self.sounds.render_sounds()
+        sounds = self.sounds.render()
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
@@ -209,7 +211,7 @@ class Euclid09CLI(cmd.Cmd):
                 levels.append(Levels(self.tracks).solo(track["name"]))
             project = self.git.head.content
             for levels_ in levels:
-                container = project.render(banks=self.sounds.banks,
+                container = project.render(banks=self.banks,
                                            generators=self.generators,
                                            levels=levels_,
                                            bpm=self.bpm,
@@ -331,10 +333,13 @@ def parse_args(default_bpm = 120,
 if __name__ == "__main__":
     try:
         args = parse_args()
+        banks = SVBanks.load_zip(cache_dir="banks")          
         tracks = load_yaml("tracks.yaml")
-        sounds = Sounds(tracks = tracks,
+        sounds = Sounds(banks = banks,
+                        tracks = tracks,
                         cutoff = args.cutoff)
-        Euclid09CLI(tracks = tracks,
+        Euclid09CLI(banks = banks,
+                    tracks = tracks,
                     sounds = sounds,
                     generators = [Beat, GhostEcho],
                     bpm = args.bpm,
