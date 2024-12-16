@@ -32,20 +32,19 @@ class Tags(dict):
 
     def __init__(self, tracks, terms = Terms):
         dict.__init__(self, {track["name"]:track["tag"] for track in tracks})
-        self.terms = terms
-
-    def validate(self):
-        for key in self:
-            if key not in self:
-                raise RuntimeError(f"track '{key}' not present in terms")
-        return self
+        self.options = list(terms.keys())
+        self.default_values = dict(self)
 
     def randomise(self):
-        options = list(self.terms.keys())
         for key in self:
-            self[key] = random.choice(options)
+            self[key] = random.choice(self.options)
         return self
 
+    def reset(self):
+        for key in self:
+            self[key] = self.default_values[key]
+        return self
+    
     def __str__(self):
         return ", ".join([f"{k}={v}" for k, v in self.items()])
     
@@ -54,24 +53,23 @@ class SoundPlugin:
     def __init__(self, tracks, cutoff, terms = Terms):
         self.banks = SVBanks.load_zip(cache_dir="banks")
         self.pool, _ = self.banks.spawn_pool(tag_patterns=terms)
-        self.mapping = Tags(tracks = tracks)
+        self.tags = Tags(tracks = tracks)
         self.tracks = tracks
         self.cutoff = cutoff
 
-    def randomise_mapping(self):
-        self.mapping.randomise()
-
     def show_mapping(self):
-        return str(self.mapping)
+        return str(self.tags)
+        
+    def randomise_mapping(self):
+        self.tags.randomise()
 
     def reset_mapping(self, tracks):
-        self.mapping = Tags(tracks=tracks,
-                            terms=self.mapping.terms)
+        self.tags.reset()
 
     def render_sounds(self):
         sounds = {}
         for track in self.tracks:
-            tag = self.mapping[track["name"]]
+            tag = self.tags[track["name"]]
             track_sounds = self.pool.match(lambda sample: tag in sample.tags)
             for sound in track_sounds:
                 sound.cutoff = self.cutoff
