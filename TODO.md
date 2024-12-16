@@ -1,8 +1,11 @@
 ### short
 
+- refactor Sounds as DetroitSoundFactory
+
+- instantiate factories polymorphically
+
 ### medium
 
-- instantiate sounds polymorphically based on track class
 - combine mutate pattern and seeds 
 
 - curate samples within detroit sound plugin
