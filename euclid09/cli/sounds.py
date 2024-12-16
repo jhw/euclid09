@@ -28,11 +28,10 @@ sweep: (swp)|(sweep)
 class DetroitSound:
 
     def __init__(self, banks, track, cutoff, terms = Terms, **kwargs):
-        self.pool, _ = banks.spawn_pool(tag_patterns = terms)
-        self.track = track
-        self.cutoff = cutoff
-        self.options = list(terms.keys())
         self.value = self.default_value = track["tag"]
+        self.options = list(terms.keys())
+        self.pool, _ = banks.spawn_pool(tag_patterns = terms)
+        self.cutoff = cutoff
 
     def randomise(self):
         self.value = random.choice(self.options)        

@@ -1,12 +1,12 @@
 ### short
 
-- sound to contain name, value fields
+- model tests failed to capture bad ref to SamplerTrack
+
 - instantiate sounds polymorphically based on track class
 
 ### medium
 
 - why doesn't init_banks feature any more?
-- model tests failed to capture bad ref to SamplerTrack
 - model needs to cast to SVSample polymorphically
 - combine mutate pattern and seeds 
 
@@ -47,6 +47,7 @@
 
 ### done
 
+- sound to contain name, value fields
 - abstract sound class out of sounds
 - refactor plugins as sounds
 - tags to contain defaults
