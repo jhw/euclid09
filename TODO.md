@@ -1,13 +1,14 @@
 ### short
 
-- load and reference plugins polymorphically
-- add plugins class to aggregate banks
 
 ### medium
 
+- mapping needs to be on per track basis
+- polymorphic plugins class
+- add plugins class to aggregate banks
+- combine mutate pattern and seeds 
 - model needs to cast to SVSample polymorphically
 - model tests failed to capture bad ref to SamplerTrack
-- cli need to call tag operations in a polymorphic manner
 
 - curate samples within detroit sound plugin
  - hats rev/ret
@@ -15,6 +16,7 @@
 
 ### sv
 
+- single cycle waveforms
 - implement stutter in similar manner to retrig
 
 ### features
@@ -45,6 +47,7 @@
 
 ### done
 
+- rename cli tags as mapping
 - apply sample cutoff within sound plugin
 - rename tracks as eins/zwei/drei
   - add tags for pool mapping

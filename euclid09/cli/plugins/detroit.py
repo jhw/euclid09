@@ -56,23 +56,23 @@ class SoundPlugin:
         self.pool, _ = self.banks.spawn_pool(tag_patterns=terms)
         for sample in self.pool:
             sample.cutoff = cutoff
-        self.tags = Tags(tracks = tracks,
-                         terms = terms).validate().randomise()
+        self.mapping = Tags(tracks = tracks,
+                            terms = terms).validate().randomise()
 
-    def randomise_tags(self):
-        self.tags.randomise()
+    def randomise_mapping(self):
+        self.mapping.randomise()
 
-    def show_tags(self):
-        return str(self.tags)
+    def show_mapping(self):
+        return str(self.mapping)
 
-    def reset_tags(self, tracks):
-        self.tags = Tags(tracks=tracks,
-                         terms=self.tags.terms)
+    def reset_mapping(self, tracks):
+        self.mapping = Tags(tracks=tracks,
+                            terms=self.mapping.terms)
 
     def filter_sounds(self, tracks):
         sounds = {}
         for track in tracks:
-            tag = self.tags[track["name"]]
+            tag = self.mapping[track["name"]]
             track_sounds = self.pool.match(lambda sample: tag in sample.tags)
             sounds[track["name"]] = track_sounds
         return sounds

@@ -73,21 +73,21 @@ class Euclid09CLI(cmd.Cmd):
     def preloop(self):
         logging.info("Fetching commits ...")
         self.git.fetch()
-        logging.info(self.sound_plugin.show_tags())
+        logging.info(self.sound_plugin.show_mapping())
 
-    ### tags
+    ### mapping
     
-    def do_randomise_tags(self, _):
-        """Randomise the tags associated with tracks."""
-        self.sound_plugin.randomise_tags()
-        logging.info(self.sound_plugin.show_tags())
+    def do_randomise_mapping(self, _):
+        """Randomise the mapping associated with tracks."""
+        self.sound_plugin.randomise_mapping()
+        logging.info(self.sound_plugin.show_mapping())
         
-    def do_show_tags(self, _):
-        logging.info(self.sound_plugin.show_tags())
+    def do_show_mapping(self, _):
+        logging.info(self.sound_plugin.show_mapping())
 
-    def do_reset_tags(self, _):
-        self.sound_plugin.reset_tags(self.tracks)
-        logging.info(self.sound_plugin.show_tags())
+    def do_reset_mapping(self, _):
+        self.sound_plugin.reset_mapping(self.tracks)
+        logging.info(self.sound_plugin.show_mapping())
 
     ### patch operations
 
