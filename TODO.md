@@ -1,13 +1,12 @@
 ### short
 
 - model tests failed to capture bad ref to SamplerTrack
-
-- instantiate sounds polymorphically based on track class
+- model needs to cast to sound class polymorphically
 
 ### medium
 
 - why doesn't init_banks feature any more?
-- model needs to cast to SVSample polymorphically
+- instantiate sounds polymorphically based on track class
 - combine mutate pattern and seeds 
 
 - curate samples within detroit sound plugin

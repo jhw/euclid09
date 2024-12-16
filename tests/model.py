@@ -27,7 +27,7 @@ class ModelTest(unittest.TestCase):
             "note": 36,
             "tags": ["kick"]
         }
-        self.mock_sounds = [SVSample(**self.mock_sample) for _ in range(2)]
+        self.mock_sounds = [DetroitSound(**self.mock_sample) for _ in range(2)]
         self.sounds = {track["name"]:self.pool.match(lambda sample: self.tags[track["name"]] in sample.tags) for track in self.tracks}
 
     def test_mutate_pattern(self):
