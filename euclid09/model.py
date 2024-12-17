@@ -71,7 +71,16 @@ class Track:
         self.sounds = sounds
 
     def clone(self):
-        return Track(**self.to_json())
+        return Track(
+            name = self.name,
+            machine = self.machine,
+            pattern = copy.deepcopy(self.pattern),
+            groove = copy.deepcopy(self.groove),
+            seeds = copy.deepcopy(self.seeds),
+            temperature = self.temperature,
+            density = self.density,
+            sounds = [sound.clone() for sound in self.sounds]
+        )
 
     def mutate_pattern(self, **kwargs):
         self.pattern = random_pattern()
@@ -124,13 +133,12 @@ class Track:
         return {
             "name": self.name,
             "machine": self.machine,
-            "pattern": copy.deepcopy(self.pattern),
-            "groove": copy.deepcopy(self.groove),
-            "seeds": copy.deepcopy(self.seeds),
+            "pattern": self.pattern,
+            "groove": self.groove,
+            "seeds": self.seeds,
             "temperature": self.temperature,
             "density": self.density,
-            "sounds": copy.deepcopy([sound.as_dict()
-                                     for sound in self.sounds])
+            "sounds": [sound.as_dict() for sound in self.sounds]
         }
 
 class Tracks(list):

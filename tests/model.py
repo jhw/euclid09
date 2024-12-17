@@ -87,7 +87,7 @@ class ModelTest(unittest.TestCase):
                                 n_sounds=2)
         self.assertIsInstance(track, Track)
         self.assertEqual(track.name, "kick")
-        # self.assertEqual(len(track.sounds), 2)
+        self.assertEqual(len(track.sounds), 2)
         self.assertIn("mod", track.pattern)
         self.assertIn("fn", track.groove)
 
@@ -100,7 +100,8 @@ class ModelTest(unittest.TestCase):
         self.assertEqual(track.name, clone.name)
         self.assertEqual([sound.as_dict()
                           for sound in track.sounds],
-                         clone.sounds)
+                         [sound.as_dict()
+                          for sound in clone.sounds])
         self.assertEqual(track.pattern, clone.pattern)
         self.assertEqual(track.groove, clone.groove)
 
