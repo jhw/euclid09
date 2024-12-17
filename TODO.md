@@ -1,18 +1,16 @@
 ### short
 
-### sv
+- combine mutate pattern and seeds 
 
-- remove detroit reverb and distortion
-- sample is still having null fx serialised
-- add berlin dict/json/str methods
+- fx null is still being serialised
 
 ### medium
 
-- combine mutate pattern and seeds 
+- add hats rev/rep to detroit sound plugin
 
-- curate samples within detroit sound plugin
- - hats rev/ret
- - chord stutter
+### sv
+
+- fx stutter
 
 ### features
 
