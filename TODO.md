@@ -1,17 +1,18 @@
 ### short
 
-- remove sound obj/dict duality
+- refactor sounds as factories
+- instantiate factories polymorphically
 
 ### sv
 
 - remove detroit reverb and distortion
-- add berlin dict, json methods
+- add berlin dict, json, str methods
 - sample is still having null fx serialised
 
 ### medium
 
-- refactor Sounds as DetroitSoundFactory
-- instantiate factories polymorphically
+- banks to be initialised by factories and aggregated by cli
+
 - combine mutate pattern and seeds 
 
 - curate samples within detroit sound plugin
@@ -46,6 +47,7 @@
 
 ### done
 
+- remove sound obj/dict duality
 - sample packing needs to use as_dict() during comparison
 
 ```

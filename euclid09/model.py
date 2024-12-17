@@ -50,13 +50,7 @@ class Track:
     @staticmethod
     def from_json(track):
         sound_class = load_class(track["machine"].replace("Machine", "Sound"))
-        sound_instances = []
-        for sound in track["sounds"]:
-            if isinstance(sound, dict):
-                sound_instance = sound_class(**sound)
-            else:
-                sound_instance = sound_class(**sound.as_dict())
-            sound_instances.append(sound_instance)
+        sound_instances = [sound_class(**sound) for sound in track["sounds"]]
         track["sounds"] = sound_instances
         return Track(**track)
 
