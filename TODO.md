@@ -1,7 +1,7 @@
 ### short
 
+- instantiate sounds polymorphically
 - refactor sounds as factories
-- instantiate factories polymorphically
 
 ### sv
 
@@ -10,8 +10,6 @@
 - sample is still having null fx serialised
 
 ### medium
-
-- banks to be initialised by factories and aggregated by cli
 
 - combine mutate pattern and seeds 
 
@@ -47,6 +45,7 @@
 
 ### done
 
+- banks to be initialised by factories and aggregated by cli
 - remove sound obj/dict duality
 - sample packing needs to use as_dict() during comparison
 

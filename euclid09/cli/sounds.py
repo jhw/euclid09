@@ -1,3 +1,5 @@
+from sv.banks import SVBanks
+
 import random
 import yaml
 
@@ -25,12 +27,15 @@ pad: (pad)
 sweep: (swp)|(sweep)
 """)
 
+Banks = SVBanks.load_zip(cache_dir="banks")          
+
 class DetroitSound:
 
-    def __init__(self, banks, track, cutoff, terms = Terms, **kwargs):
+    def __init__(self, track, cutoff, banks = Banks, terms = Terms, **kwargs):
+        self.banks = banks
+        self.pool, _ = self.banks.spawn_pool(tag_patterns = terms)
         self.value = self.default_value = track["tag"]
         self.options = list(terms.keys())
-        self.pool, _ = banks.spawn_pool(tag_patterns = terms)
         self.cutoff = cutoff
 
     def randomise(self):
@@ -47,11 +52,10 @@ class DetroitSound:
         
 class Sounds:
 
-    def __init__(self, banks, tracks, **kwargs):
+    def __init__(self, tracks, **kwargs):
         self.tracks = tracks
         for track in tracks:
-            track["sound"] = DetroitSound(banks = banks,
-                                          track = track,
+            track["sound"] = DetroitSound(track = track,
                                           **kwargs)
 
     def show_mapping(self):
@@ -65,6 +69,15 @@ class Sounds:
         for track in self.tracks:
             track["sound"].reset()
 
+    @property
+    def banks(self):
+        banks = SVBanks()
+        for track in self.tracks:
+            sound = track["sound"]
+            if hasattr(sound, "banks"):
+                banks += sound.banks
+        return banks        
+            
     def render(self):
         return {track["name"]: track["sound"].render()
                 for track in self.tracks}
