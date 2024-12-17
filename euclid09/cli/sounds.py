@@ -1,4 +1,5 @@
 from sv.banks import SVBanks
+from sv.project import load_class
 
 import random
 import yaml
@@ -29,7 +30,7 @@ sweep: (swp)|(sweep)
 
 Banks = SVBanks.load_zip(cache_dir="banks")          
 
-class DetroitSound:
+class DetroitSoundFactory:
 
     def __init__(self, track, cutoff, banks = Banks, terms = Terms, **kwargs):
         self.banks = banks
@@ -55,8 +56,9 @@ class Sounds:
     def __init__(self, tracks, **kwargs):
         self.tracks = tracks
         for track in tracks:
-            track["sound"] = DetroitSound(track = track,
-                                          **kwargs)
+            factory_class = load_class("euclid09.cli.sounds.%s" % track["machine"].split(".")[-1].replace("Machine", "SoundFactory"))
+            track["sound"] = factory_class(track = track,
+                                           **kwargs)
 
     def show_mapping(self):
         return ", ".join([f"{track['name']}={track['sound'].value}" for track in self.tracks])

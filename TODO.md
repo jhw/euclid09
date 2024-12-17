@@ -11,6 +11,8 @@
 
 ### medium
 
+- refactor xxx_json as xxx_dict
+
 - combine mutate pattern and seeds 
 
 - curate samples within detroit sound plugin
