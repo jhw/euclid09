@@ -1,17 +1,12 @@
 ### short
 
-- instantiate sounds polymorphically
-- refactor sounds as factories
-
 ### sv
 
 - remove detroit reverb and distortion
-- add berlin dict, json, str methods
 - sample is still having null fx serialised
+- add berlin dict/json/str methods
 
 ### medium
-
-- refactor xxx_json as xxx_dict
 
 - combine mutate pattern and seeds 
 
@@ -26,6 +21,8 @@
 
 ### thoughts
 
+- refactor xxx_json as xxx_dict
+  - what about lists?
 - merge track classes?
   - this seems like the wrong answer as pool and tags are going to have to be abstracted somehow, somewhere
 - rename export_stems as export_wav?
@@ -47,6 +44,8 @@
 
 ### done
 
+- instantiate sounds polymorphically
+- refactor sounds as factories
 - banks to be initialised by factories and aggregated by cli
 - remove sound obj/dict duality
 - sample packing needs to use as_dict() during comparison
