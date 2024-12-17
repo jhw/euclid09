@@ -1,15 +1,11 @@
 ### short
 
-```
-ERROR: sampler max slots exceeded
-```
-
 - remove sound obj/dict duality
 
 ### sv
 
-- sample packing needs to use as_dict() during comparison
-- berlin sound needs json serialisation methods
+- remove detroit reverb and distortion
+- add berlin dict, json methods
 - sample is still having null fx serialised
 
 ### medium
@@ -49,6 +45,12 @@ ERROR: sampler max slots exceeded
 - kicker
 
 ### done
+
+- sample packing needs to use as_dict() during comparison
+
+```
+ERROR: sampler max slots exceeded
+```
 
 ```
 >>> clone_patches 0
