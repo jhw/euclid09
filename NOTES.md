@@ -1,3 +1,8 @@
+### M8 directories 18/12/24
+
+- Renders
+- Samples/Recordings
+
 ### sound shuffling 04/12/24
 
 - in the sampler case the track instantiates the machine with the sounds

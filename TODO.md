@@ -2,9 +2,9 @@
 
 - investigate why fx null is still being serialised
 
-- script to clean M8 instruments
-
 ### medium
+
+- script to clean M8 instruments
 
 - consider how berlin factory relates to detroit
 
