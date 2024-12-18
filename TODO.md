@@ -1,7 +1,7 @@
 ### short
 
+- add back mute tracks for export
 - combine mutate pattern and seeds 
-
 - fx null is still being serialised
 
 ### medium
