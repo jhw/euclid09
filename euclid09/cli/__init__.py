@@ -195,7 +195,7 @@ class Euclid09CLI(cmd.Cmd):
         return project
         
     ### export
-    
+
     @assert_head
     def do_export_stems(self, _):
         """Export the current project as stems in a zip file."""
@@ -207,6 +207,7 @@ class Euclid09CLI(cmd.Cmd):
             levels = [Levels(self.tracks)]
             for track in self.tracks:
                 levels.append(Levels(self.tracks).solo(track["name"]))
+                levels.append(Levels(self.tracks).mute(track["name"]))
             project = self.git.head.content
             for levels_ in levels:
                 container = project.render(banks=self.sounds.banks,

@@ -1,6 +1,5 @@
 ### short
 
-- add back mute tracks for export
 - combine mutate pattern and seeds 
 - fx null is still being serialised
 
@@ -42,6 +41,7 @@
 
 ### done
 
+- add back mute tracks for export
 - instantiate sounds polymorphically
 - refactor sounds as factories
 - banks to be initialised by factories and aggregated by cli
