@@ -1,20 +1,21 @@
 ### short
 
-- combine mutate pattern and seeds 
-- fx null is still being serialised
+- investigate why fx null is still being serialised
+
+- script to clean M8 instruments
 
 ### medium
 
+- consider how berlin factory relates to detroit
+
+### long
+
+- lostlvls perkons, analog rtym; dataline juno60
 - add hats rev/rep to detroit sound plugin
 
 ### sv
 
 - fx stutter
-
-### features
-
-- ability to vary cli cutoff/density/temperature
-- optional s3 bank loading
 
 ### thoughts
 
@@ -41,6 +42,7 @@
 
 ### done
 
+- combine mutate pattern and seeds 
 - add back mute tracks for export
 - instantiate sounds polymorphically
 - refactor sounds as factories

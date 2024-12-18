@@ -14,6 +14,7 @@ import argparse
 import cmd
 import logging
 import os
+import random
 import sys
 import yaml
 import zipfile
@@ -92,7 +93,7 @@ class Euclid09CLI(cmd.Cmd):
     ### patch operations
 
     @commit_and_render
-    def do_randomise_project(self, _):
+    def do_randomise_patches(self, _):
         sounds = self.sounds.render()
         """Create a randomised project with patches."""
         return Project.randomise(tracks=self.tracks,
@@ -104,19 +105,6 @@ class Euclid09CLI(cmd.Cmd):
     @parse_line([{"name": "I", "type": "hexstr"}])
     @commit_and_render
     def do_select_patches(self, I):
-        """Select specific patches from the latest project by index."""
-        roots = self.git.head.content.patches
-        project = Project()
-        for i in I:
-            patch = roots[i].clone()
-            project.patches.append(patch)
-        project.freeze_patches(len(I))
-        return project
-
-    @assert_head
-    @parse_line([{"name": "I", "type": "hexstr"}])
-    @commit_and_render
-    def do_clone_patches(self, I):
         """Clone selected patches to create new ones."""
         roots = self.git.head.content.patches
         project = Project()
@@ -146,51 +134,13 @@ class Euclid09CLI(cmd.Cmd):
     @parse_line([{"name": "n", "type": "int"}])
     @commit_and_render
     def do_mutate_patterns(self, n):
-        """Mutate the patterns of unfrozen patches in the project."""
-        project = self.git.head.content.clone()
-        for patch in project.patches:
-            if not patch.frozen:
-                for _ in range(n):
-                    patch.mutate_attr(attr="pattern",
-                                      filter_fn=lambda x: True)
-        return project
-
-    @assert_head
-    @parse_line([{"name": "n", "type": "int"}])
-    @commit_and_render
-    def do_mutate_seeds(self, n):
         """Mutate the seeds of unfrozen patches in the project."""
         project = self.git.head.content.clone()
         for patch in project.patches:
             if not patch.frozen:
                 for _ in range(n):
-                    patch.mutate_attr(attr="seeds",
-                                      filter_fn=lambda x: True)
-        return project
-
-    @assert_head
-    @parse_line([{"name": "n", "type": "int"}])
-    @commit_and_render
-    def do_mutate_density(self, n):
-        """Mutate the density values of unfrozen patches in the project."""
-        project = self.git.head.content.clone()
-        for patch in project.patches:
-            if not patch.frozen:
-                for _ in range(n):
-                    patch.mutate_attr(attr="density",
-                                      filter_fn=lambda x: True)
-        return project
-
-    @assert_head
-    @parse_line([{"name": "n", "type": "int"}])
-    @commit_and_render
-    def do_mutate_temperature(self, n):
-        """Mutate the temperature values of unfrozen patches in the project."""
-        project = self.git.head.content.clone()
-        for patch in project.patches:
-            if not patch.frozen:
-                for _ in range(n):
-                    patch.mutate_attr(attr="temperature",
+                    attr = "pattern" if random.random() < 0.5 else "seeds"
+                    patch.mutate_attr(attr=attr,
                                       filter_fn=lambda x: True)
         return project
         
