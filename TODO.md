@@ -1,21 +1,29 @@
 ### short
 
-- investigate why fx null is still being serialised
+- include script to download pico patches
+- pre- rationalise pico stuff into per- sound banks
+- remove sv pools (and tags?) [0.4.x]
+- simplify detroit factory
 
 ### medium
 
 - script to clean M8 instruments
-
-- consider how berlin factory relates to detroit
+- consider how a berlin factory might relate to detroit
 
 ### long
 
-- lostlvls perkons, analog rtym; dataline juno60
 - add hats rev/rep to detroit sound plugin
+
+### banks
+
+- lostlvls // perkons
+- lostlvls // analog rytm
+- dataline // dsl-juno60
 
 ### sv
 
-- fx stutter
+- remove s3 banks stuff, you don't need it
+- init banks from sample chains (lostlvls)
 
 ### thoughts
 
@@ -42,6 +50,7 @@
 
 ### done
 
+- investigate why fx null is still being serialised
 - combine mutate pattern and seeds 
 - add back mute tracks for export
 - instantiate sounds polymorphically
